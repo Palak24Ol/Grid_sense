@@ -1,0 +1,15 @@
+{
+  "recommended_station": "Yeshwanthpura",
+  "secondary_station": "Peenya",
+  "recommended_officer_count": 5,
+  "officer_count_rationale": "Yeshwanthpura average concurrent load at 20:00 on Thursday is 3.1 incidents. Adding 2 for High priority closure risk.",
+  "escalation_tier": "Elevated",
+  "escalation_rationale": "High priority, closure probability 41%, predicted duration under 2 hours.",
+  "deployment_duration_mins": 43,
+  "suggested_junctions": [
+    "JalahalliCross",
+    "YeshwanthpuraCircle"
+  ],
+  "corridor_risk_score": 81.2,
+  "historical_station_incidents": 239
+}

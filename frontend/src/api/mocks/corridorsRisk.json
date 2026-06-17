@@ -1,0 +1,14 @@
+{
+  "corridors": [
+    {
+      "corridor": "Mysore Road",
+      "total_incidents": 743,
+      "high_priority_rate": 0.997,
+      "closure_rate": 0.113,
+      "composite_risk_score": 87.4,
+      "top_junction": "SilkBoardJunc",
+      "top_police_station": "Halasuru Gate",
+      "median_duration_mins": 42.1
+    }
+  ]
+}

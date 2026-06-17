@@ -1,0 +1,31 @@
+{
+  "junction": "MekhriCircle",
+  "corridor": "Bellary Road 1",
+  "historical_daily_avg": 0.43,
+  "forecast": [
+    {
+      "datetime": "2024-06-16T18:00:00Z",
+      "hour_of_day": 18,
+      "predicted_incident_count": 0.6,
+      "yhat_lower": 0.1,
+      "yhat_upper": 1.2,
+      "is_peak_hour": false
+    },
+    {
+      "datetime": "2024-06-16T20:00:00Z",
+      "hour_of_day": 20,
+      "predicted_incident_count": 2.1,
+      "yhat_lower": 1.4,
+      "yhat_upper": 2.9,
+      "is_peak_hour": true
+    }
+  ],
+  "peak_windows": [
+    {
+      "start_hour": 19,
+      "end_hour": 22,
+      "label": "evening peak"
+    }
+  ],
+  "model_mae": 1.2
+}

@@ -1,0 +1,222 @@
+{
+  "surge_day": "2024-03-07",
+  "baseline_day": "2024-03-06",
+  "surge_stats": {
+    "march6_total": 58,
+    "march7_total": 250,
+    "surge_multiplier": 4.3,
+    "peak_hour": 6,
+    "peak_hour_count": 83,
+    "total_closures": 58,
+    "water_logging_count": 85,
+    "tree_fall_count": 71
+  },
+  "march7_hourly_timeline": [
+    {
+      "hour_of_day": 0,
+      "total": 4,
+      "water_logging": 0,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "Bellary Road 2"
+    },
+    {
+      "hour_of_day": 2,
+      "total": 1,
+      "water_logging": 0,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "Varthur Road"
+    },
+    {
+      "hour_of_day": 3,
+      "total": 2,
+      "water_logging": 0,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "Tumkur Road"
+    },
+    {
+      "hour_of_day": 4,
+      "total": 6,
+      "water_logging": 0,
+      "tree_fall": 0,
+      "closures": 1,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 5,
+      "total": 42,
+      "water_logging": 21,
+      "tree_fall": 16,
+      "closures": 9,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 6,
+      "total": 83,
+      "water_logging": 43,
+      "tree_fall": 23,
+      "closures": 24,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 7,
+      "total": 23,
+      "water_logging": 10,
+      "tree_fall": 4,
+      "closures": 7,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 8,
+      "total": 13,
+      "water_logging": 2,
+      "tree_fall": 7,
+      "closures": 3,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 9,
+      "total": 6,
+      "water_logging": 1,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "Bellary Road 1"
+    },
+    {
+      "hour_of_day": 10,
+      "total": 2,
+      "water_logging": 0,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 11,
+      "total": 3,
+      "water_logging": 2,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "ORR East 2"
+    },
+    {
+      "hour_of_day": 12,
+      "total": 1,
+      "water_logging": 0,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 17,
+      "total": 2,
+      "water_logging": 0,
+      "tree_fall": 1,
+      "closures": 1,
+      "top_corridor": "Tumkur Road"
+    },
+    {
+      "hour_of_day": 18,
+      "total": 3,
+      "water_logging": 2,
+      "tree_fall": 0,
+      "closures": 0,
+      "top_corridor": "ORR East 2"
+    },
+    {
+      "hour_of_day": 19,
+      "total": 11,
+      "water_logging": 1,
+      "tree_fall": 2,
+      "closures": 1,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 20,
+      "total": 12,
+      "water_logging": 0,
+      "tree_fall": 7,
+      "closures": 3,
+      "top_corridor": "Bellary Road 1"
+    },
+    {
+      "hour_of_day": 21,
+      "total": 17,
+      "water_logging": 0,
+      "tree_fall": 6,
+      "closures": 5,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 22,
+      "total": 13,
+      "water_logging": 2,
+      "tree_fall": 2,
+      "closures": 0,
+      "top_corridor": "Non-corridor"
+    },
+    {
+      "hour_of_day": 23,
+      "total": 6,
+      "water_logging": 1,
+      "tree_fall": 3,
+      "closures": 4,
+      "top_corridor": "Non-corridor"
+    }
+  ],
+  "top_corridors_hit": {
+    "Non-corridor": 129,
+    "Mysore Road": 19,
+    "Bellary Road 1": 19,
+    "Tumkur Road": 11,
+    "Bannerghata Road": 10,
+    "ORR East 2": 9,
+    "Bellary Road 2": 7,
+    "ORR East 1": 7,
+    "West of Chord Road": 6,
+    "ORR West 1": 6
+  },
+  "pre_deployment_plan": [
+    {
+      "corridor": "Mysore Road",
+      "recommended_station": "Unknown",
+      "recommended_officers": 8,
+      "escalation_tier": "Critical",
+      "surge_reason": "Water logging + tree fall historical vulnerability",
+      "recommended_action_time": "2024-03-06T23:00:00Z"
+    },
+    {
+      "corridor": "Bellary Road 1",
+      "recommended_station": "Unknown",
+      "recommended_officers": 8,
+      "escalation_tier": "Critical",
+      "surge_reason": "Water logging + tree fall historical vulnerability",
+      "recommended_action_time": "2024-03-06T23:00:00Z"
+    },
+    {
+      "corridor": "Bannerghata Road",
+      "recommended_station": "Unknown",
+      "recommended_officers": 8,
+      "escalation_tier": "Critical",
+      "surge_reason": "Water logging + tree fall historical vulnerability",
+      "recommended_action_time": "2024-03-06T23:00:00Z"
+    },
+    {
+      "corridor": "ORR East 1",
+      "recommended_station": "Unknown",
+      "recommended_officers": 8,
+      "escalation_tier": "Critical",
+      "surge_reason": "Water logging + tree fall historical vulnerability",
+      "recommended_action_time": "2024-03-06T23:00:00Z"
+    },
+    {
+      "corridor": "ORR East 2",
+      "recommended_station": "Unknown",
+      "recommended_officers": 8,
+      "escalation_tier": "Critical",
+      "surge_reason": "Water logging + tree fall historical vulnerability",
+      "recommended_action_time": "2024-03-06T23:00:00Z"
+    }
+  ]
+}

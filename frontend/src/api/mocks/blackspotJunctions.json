@@ -1,0 +1,21 @@
+{
+  "total": 1,
+  "chronic_count": 1,
+  "critical_count": 0,
+  "junctions": [
+    {
+      "junction": "MekhriCircle",
+      "total_incidents": 64,
+      "recurrence_weeks": 12,
+      "closures": 4,
+      "high_priority": 60,
+      "corridor": "Bellary Road 1",
+      "top_cause": "vehicle_breakdown",
+      "peak_hour": 20,
+      "latitude": 13.0056,
+      "longitude": 77.581,
+      "blackspot_score": 63.4,
+      "blackspot_tier": "Chronic"
+    }
+  ]
+}

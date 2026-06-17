@@ -1,0 +1,27 @@
+{
+  "event_cause": "protest",
+  "primary_corridor": "Mysore Road",
+  "cascade_multiplier": 5.3,
+  "risk_level": "critical",
+  "data_confidence": "high",
+  "sample_count": 3,
+  "primary_junctions_at_risk": [
+    {
+      "junction": "SilkBoardJunc",
+      "blackspot_score": 48.2,
+      "latitude": 12.9172,
+      "longitude": 77.6228,
+      "risk_reason": "Chronic blackspot (10 weeks active)"
+    }
+  ],
+  "adjacent_corridor_spillover": [
+    {
+      "corridor": "Hosur Road",
+      "spillover_multiplier": 2.12,
+      "risk_level": "moderate"
+    }
+  ],
+  "recommended_officer_buffer": 2,
+  "cascade_window_hours": 3,
+  "interpretation": "Historical data shows planned protest events on Mysore Road trigger 5.3x more unplanned incidents in the following 3 hours. Pre-position 2 additional officers at at-risk junctions."
+}

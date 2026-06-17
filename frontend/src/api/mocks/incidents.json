@@ -1,0 +1,22 @@
+{
+  "total": 1,
+  "filtered": 1,
+  "incidents": [
+    {
+      "id": "FKID000042",
+      "event_type": "unplanned",
+      "event_cause": "vehicle_breakdown",
+      "latitude": 12.9718,
+      "longitude": 77.5946,
+      "corridor": "Mysore Road",
+      "junction": "SilkBoardJunc",
+      "police_station": "Halasuru Gate",
+      "priority": "High",
+      "requires_road_closure": false,
+      "start_datetime": "2024-01-15T19:42:00Z",
+      "duration_mins": 87,
+      "status": "closed",
+      "is_stale_active": false
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "CBD 2": [
+    "ORR North 1",
+    "Tumkur Road",
+    "Bellary Road 1",
+    "Old Madras Road",
+    "Magadi Road",
+    "Bellary Road 2"
+  ],
+  "ORR West 1": [
+    "Mysore Road"
+  ],
+  "ORR North 1": [
+    "Airport New South Road",
+    "CBD 2",
+    "Bellary Road 2",
+    "Bellary Road 1",
+    "Hennur Main Road",
+    "Magadi Road",
+    "Tumkur Road"
+  ],
+  "ORR East 1": [
+    "ORR East 2",
+    "Hosur Road",
+    "Varthur Road",
+    "Old Airport Road"
+  ],
+  "ORR North 2": [
+    "Tumkur Road"
+  ],
+  "Magadi Road": [
+    "ORR North 1",
+    "CBD 2",
+    "Bellary Road 2",
+    "Bellary Road 1",
+    "Tumkur Road"
+  ],
+  "Old Madras Road": [
+    "Mysore Road",
+    "CBD 2",
+    "CBD 1"
+  ],
+  "Bellary Road 1": [
+    "ORR North 1",
+    "CBD 2",
+    "West of Chord Road",
+    "Tumkur Road",
+    "Magadi Road",
+    "Bellary Road 2"
+  ],
+  "Mysore Road": [
+    "West of Chord Road",
+    "Hosur Road",
+    "ORR West 1",
+    "Old Madras Road"
+  ],
+  "Hosur Road": [
+    "Mysore Road",
+    "IRR(Thanisandra road)",
+    "ORR East 1"
+  ],
+  "Bellary Road 2": [
+    "ORR North 1",
+    "CBD 2",
+    "Bellary Road 1",
+    "Magadi Road",
+    "Tumkur Road"
+  ],
+  "West of Chord Road": [
+    "Mysore Road",
+    "Tumkur Road",
+    "Bellary Road 1"
+  ],
+  "Bannerghata Road": [],
+  "Tumkur Road": [
+    "ORR North 1",
+    "ORR North 2",
+    "CBD 2",
+    "West of Chord Road",
+    "Bellary Road 1",
+    "Magadi Road",
+    "Bellary Road 2"
+  ],
+  "IRR(Thanisandra road)": [
+    "Hosur Road"
+  ],
+  "Old Airport Road": [
+    "ORR East 2",
+    "ORR East 1",
+    "Varthur Road"
+  ],
+  "Varthur Road": [
+    "ORR East 2",
+    "ORR East 1",
+    "Old Airport Road"
+  ],
+  "CBD 1": [
+    "Old Madras Road"
+  ],
+  "Hennur Main Road": [
+    "ORR North 1"
+  ],
+  "Airport New South Road": [
+    "ORR North 1"
+  ],
+  "ORR East 2": [
+    "Varthur Road",
+    "ORR East 1",
+    "Old Airport Road"
+  ]
+}

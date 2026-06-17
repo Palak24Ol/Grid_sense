@@ -1,0 +1,344 @@
+{
+  "Airport New South Road": [
+    {
+      "police_station": "Hennuru",
+      "incident_count": 38,
+      "rank": 1
+    },
+    {
+      "police_station": "K.G. Halli",
+      "incident_count": 9,
+      "rank": 2
+    },
+    {
+      "police_station": "Pulikeshinagar(F.Town)",
+      "incident_count": 9,
+      "rank": 3
+    }
+  ],
+  "Bannerghata Road": [
+    {
+      "police_station": "Mico Layout",
+      "incident_count": 66,
+      "rank": 1
+    },
+    {
+      "police_station": "J.P. Nagar",
+      "incident_count": 36,
+      "rank": 2
+    },
+    {
+      "police_station": "Hulimavu",
+      "incident_count": 31,
+      "rank": 3
+    }
+  ],
+  "Bellary Road 1": [
+    {
+      "police_station": "Sadashivanagar",
+      "incident_count": 213,
+      "rank": 1
+    },
+    {
+      "police_station": "Kodigehalli",
+      "incident_count": 125,
+      "rank": 2
+    },
+    {
+      "police_station": "High ground",
+      "incident_count": 102,
+      "rank": 3
+    }
+  ],
+  "Bellary Road 2": [
+    {
+      "police_station": "Yelahanka",
+      "incident_count": 281,
+      "rank": 1
+    },
+    {
+      "police_station": "Chikkajala",
+      "incident_count": 49,
+      "rank": 2
+    },
+    {
+      "police_station": "Kodigehalli",
+      "incident_count": 31,
+      "rank": 3
+    }
+  ],
+  "CBD 1": [
+    {
+      "police_station": "Shivajinagar",
+      "incident_count": 18,
+      "rank": 1
+    }
+  ],
+  "CBD 2": [
+    {
+      "police_station": "Cubbon Park",
+      "incident_count": 76,
+      "rank": 1
+    },
+    {
+      "police_station": "Shivajinagar",
+      "incident_count": 20,
+      "rank": 2
+    },
+    {
+      "police_station": "High ground",
+      "incident_count": 1,
+      "rank": 3
+    }
+  ],
+  "Hennur Main Road": [
+    {
+      "police_station": "Hennuru",
+      "incident_count": 67,
+      "rank": 1
+    },
+    {
+      "police_station": "K.G. Halli",
+      "incident_count": 13,
+      "rank": 2
+    },
+    {
+      "police_station": "Chikkajala",
+      "incident_count": 4,
+      "rank": 3
+    }
+  ],
+  "Hosur Road": [
+    {
+      "police_station": "Madiwala",
+      "incident_count": 84,
+      "rank": 1
+    },
+    {
+      "police_station": "HSR Layout",
+      "incident_count": 66,
+      "rank": 2
+    },
+    {
+      "police_station": "Electronic City",
+      "incident_count": 37,
+      "rank": 3
+    }
+  ],
+  "IRR(Thanisandra road)": [
+    {
+      "police_station": "Adugodi",
+      "incident_count": 34,
+      "rank": 1
+    },
+    {
+      "police_station": "Jeevanbheemanagar",
+      "incident_count": 12,
+      "rank": 2
+    },
+    {
+      "police_station": "Ashok Nagar",
+      "incident_count": 9,
+      "rank": 3
+    }
+  ],
+  "Magadi Road": [
+    {
+      "police_station": "Kamakshipalya",
+      "incident_count": 181,
+      "rank": 1
+    },
+    {
+      "police_station": "Magadi Road",
+      "incident_count": 51,
+      "rank": 2
+    },
+    {
+      "police_station": "Vijayanagara",
+      "incident_count": 2,
+      "rank": 3
+    }
+  ],
+  "Mysore Road": [
+    {
+      "police_station": "Halasuru Gate",
+      "incident_count": 213,
+      "rank": 1
+    },
+    {
+      "police_station": "Byatarayanapura",
+      "incident_count": 206,
+      "rank": 2
+    },
+    {
+      "police_station": "Chamarajpet",
+      "incident_count": 124,
+      "rank": 3
+    }
+  ],
+  "ORR East 1": [
+    {
+      "police_station": "HAL Old Airport",
+      "incident_count": 109,
+      "rank": 1
+    },
+    {
+      "police_station": "Bellandur",
+      "incident_count": 64,
+      "rank": 2
+    },
+    {
+      "police_station": "HSR Layout",
+      "incident_count": 35,
+      "rank": 3
+    }
+  ],
+  "ORR East 2": [
+    {
+      "police_station": "HAL Old Airport",
+      "incident_count": 134,
+      "rank": 1
+    },
+    {
+      "police_station": "Mahadevapura",
+      "incident_count": 17,
+      "rank": 2
+    },
+    {
+      "police_station": "K.R. Pura",
+      "incident_count": 16,
+      "rank": 3
+    }
+  ],
+  "ORR North 1": [
+    {
+      "police_station": "Banaswadi",
+      "incident_count": 97,
+      "rank": 1
+    },
+    {
+      "police_station": "Hennuru",
+      "incident_count": 72,
+      "rank": 2
+    },
+    {
+      "police_station": "Hebbala",
+      "incident_count": 39,
+      "rank": 3
+    }
+  ],
+  "ORR North 2": [
+    {
+      "police_station": "Jalahalli",
+      "incident_count": 149,
+      "rank": 1
+    },
+    {
+      "police_station": "Kodigehalli",
+      "incident_count": 69,
+      "rank": 2
+    },
+    {
+      "police_station": "Yeshwanthpura",
+      "incident_count": 14,
+      "rank": 3
+    }
+  ],
+  "ORR West 1": [
+    {
+      "police_station": "Banashankari",
+      "incident_count": 61,
+      "rank": 1
+    },
+    {
+      "police_station": "J.P. Nagar",
+      "incident_count": 37,
+      "rank": 2
+    },
+    {
+      "police_station": "Byatarayanapura",
+      "incident_count": 27,
+      "rank": 3
+    }
+  ],
+  "Old Airport Road": [
+    {
+      "police_station": "Jeevanbheemanagar",
+      "incident_count": 36,
+      "rank": 1
+    },
+    {
+      "police_station": "HAL Old Airport",
+      "incident_count": 26,
+      "rank": 2
+    },
+    {
+      "police_station": "Halasur",
+      "incident_count": 12,
+      "rank": 3
+    }
+  ],
+  "Old Madras Road": [
+    {
+      "police_station": "Banaswadi",
+      "incident_count": 69,
+      "rank": 1
+    },
+    {
+      "police_station": "Halasur",
+      "incident_count": 51,
+      "rank": 2
+    },
+    {
+      "police_station": "Jeevanbheemanagar",
+      "incident_count": 43,
+      "rank": 3
+    }
+  ],
+  "Tumkur Road": [
+    {
+      "police_station": "Yeshwanthpura",
+      "incident_count": 235,
+      "rank": 1
+    },
+    {
+      "police_station": "Peenya",
+      "incident_count": 129,
+      "rank": 2
+    },
+    {
+      "police_station": "Chikkabanavara",
+      "incident_count": 59,
+      "rank": 3
+    }
+  ],
+  "Varthur Road": [
+    {
+      "police_station": "HAL Old Airport",
+      "incident_count": 39,
+      "rank": 1
+    },
+    {
+      "police_station": "Whitefield",
+      "incident_count": 35,
+      "rank": 2
+    }
+  ],
+  "West of Chord Road": [
+    {
+      "police_station": "Vijayanagara",
+      "incident_count": 40,
+      "rank": 1
+    },
+    {
+      "police_station": "Byatarayanapura",
+      "incident_count": 36,
+      "rank": 2
+    },
+    {
+      "police_station": "Rajajinagar",
+      "incident_count": 33,
+      "rank": 3
+    }
+  ]
+}

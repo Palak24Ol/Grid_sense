@@ -1,0 +1,86 @@
+{
+  "accident": {
+    "median": 41.4,
+    "p25": 26.9,
+    "p75": 62.2,
+    "count": 89
+  },
+  "congestion": {
+    "median": 71.5,
+    "p25": 41.5,
+    "p75": 113.9,
+    "count": 22
+  },
+  "construction": {
+    "median": 631.9,
+    "p25": 72.4,
+    "p75": 779.9,
+    "count": 283
+  },
+  "others": {
+    "median": 96.2,
+    "p25": 33.5,
+    "p75": 541.9,
+    "count": 284
+  },
+  "pot_holes": {
+    "median": 1293.5,
+    "p25": 18.4,
+    "p75": 1872.7,
+    "count": 57
+  },
+  "procession": {
+    "median": 61.0,
+    "p25": 17.5,
+    "p75": 165.9,
+    "count": 39
+  },
+  "protest": {
+    "median": 10.5,
+    "p25": 1.2,
+    "p75": 27.6,
+    "count": 6
+  },
+  "public_event": {
+    "median": 409.7,
+    "p25": 180.1,
+    "p75": 1155.0,
+    "count": 70
+  },
+  "road_conditions": {
+    "median": 285.8,
+    "p25": 54.4,
+    "p75": 1086.8,
+    "count": 36
+  },
+  "tree_fall": {
+    "median": 148.7,
+    "p25": 56.7,
+    "p75": 1124.6,
+    "count": 128
+  },
+  "vehicle_breakdown": {
+    "median": 40.7,
+    "p25": 20.3,
+    "p75": 73.0,
+    "count": 1792
+  },
+  "vip_movement": {
+    "median": 300.0,
+    "p25": 300.0,
+    "p75": 300.0,
+    "count": 11
+  },
+  "water_logging": {
+    "median": 199.0,
+    "p25": 48.9,
+    "p75": 1421.5,
+    "count": 132
+  },
+  "__default__": {
+    "median": 54.5,
+    "p25": 23.6,
+    "p75": 118.7,
+    "count": 2951
+  }
+}

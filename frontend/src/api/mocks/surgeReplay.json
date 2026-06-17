@@ -1,0 +1,39 @@
+{
+  "replay_date": "2024-03-07",
+  "total_incidents": 250,
+  "baseline_incidents": 58,
+  "surge_multiplier": 4.31,
+  "timeline": [
+    {
+      "hour": 5,
+      "incident_count": 42,
+      "closure_count": 8,
+      "top_cause": "water_logging",
+      "active_corridors": [
+        "ORR South",
+        "Hosur Road"
+      ]
+    },
+    {
+      "hour": 6,
+      "incident_count": 83,
+      "closure_count": 16,
+      "top_cause": "tree_fall",
+      "active_corridors": [
+        "ORR South",
+        "Hosur Road",
+        "Mysore Road"
+      ]
+    }
+  ],
+  "pre_deployment_plan": [
+    {
+      "police_station": "HSR Layout",
+      "corridor": "ORR South",
+      "surge_expected_incidents": 30,
+      "baseline_capacity": 5,
+      "recommended_officer_surge": 15,
+      "priority_action": "Pre-position tow trucks at SilkBoardJunc for water logging"
+    }
+  ]
+}

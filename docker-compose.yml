@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: gridsense-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gridsense
+      POSTGRES_PASSWORD: gridsense
+      POSTGRES_DB: gridsense
+    ports:
+      - "5433:5432"
+    volumes:
+      - gridsense_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gridsense -d gridsense"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  gridsense_pgdata:

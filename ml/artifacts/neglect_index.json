@@ -1,0 +1,373 @@
+[
+  {
+    "police_station": "Adugodi",
+    "total_incidents": 30,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Ashok Nagar",
+    "total_incidents": 56,
+    "neglected_count": 3,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.054
+  },
+  {
+    "police_station": "Banashankari",
+    "total_incidents": 48,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Banaswadi",
+    "total_incidents": 54,
+    "neglected_count": 1,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.019
+  },
+  {
+    "police_station": "Basavanagudi",
+    "total_incidents": 16,
+    "neglected_count": 2,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.125
+  },
+  {
+    "police_station": "Bellandur",
+    "total_incidents": 34,
+    "neglected_count": 5,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.147
+  },
+  {
+    "police_station": "Byatarayanapura",
+    "total_incidents": 120,
+    "neglected_count": 9,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.075
+  },
+  {
+    "police_station": "Chamarajpet",
+    "total_incidents": 90,
+    "neglected_count": 6,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.067
+  },
+  {
+    "police_station": "Chikkabanavara",
+    "total_incidents": 7,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Chikkajala",
+    "total_incidents": 29,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "City Market",
+    "total_incidents": 12,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Cubbon Park",
+    "total_incidents": 53,
+    "neglected_count": 4,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.075
+  },
+  {
+    "police_station": "Devanahalli Airport",
+    "total_incidents": 6,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Electronic City",
+    "total_incidents": 62,
+    "neglected_count": 3,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.048
+  },
+  {
+    "police_station": "HAL Old Airport",
+    "total_incidents": 83,
+    "neglected_count": 9,
+    "top_neglected_cause": "construction",
+    "neglect_rate": 0.108
+  },
+  {
+    "police_station": "HSR Layout",
+    "total_incidents": 18,
+    "neglected_count": 1,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.056
+  },
+  {
+    "police_station": "Halasur",
+    "total_incidents": 50,
+    "neglected_count": 7,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.14
+  },
+  {
+    "police_station": "Halasuru Gate",
+    "total_incidents": 122,
+    "neglected_count": 4,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.033
+  },
+  {
+    "police_station": "Hebbala",
+    "total_incidents": 37,
+    "neglected_count": 1,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.027
+  },
+  {
+    "police_station": "Hennuru",
+    "total_incidents": 54,
+    "neglected_count": 7,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.13
+  },
+  {
+    "police_station": "High ground",
+    "total_incidents": 74,
+    "neglected_count": 8,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.108
+  },
+  {
+    "police_station": "Hulimavu",
+    "total_incidents": 12,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "J.P. Nagar",
+    "total_incidents": 23,
+    "neglected_count": 9,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.391
+  },
+  {
+    "police_station": "Jalahalli",
+    "total_incidents": 82,
+    "neglected_count": 6,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.073
+  },
+  {
+    "police_station": "Jayanagara",
+    "total_incidents": 43,
+    "neglected_count": 4,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.093
+  },
+  {
+    "police_station": "Jeevanbheemanagar",
+    "total_incidents": 48,
+    "neglected_count": 2,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.042
+  },
+  {
+    "police_station": "Jnanabharathi",
+    "total_incidents": 61,
+    "neglected_count": 1,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.016
+  },
+  {
+    "police_station": "K.G. Halli",
+    "total_incidents": 19,
+    "neglected_count": 2,
+    "top_neglected_cause": "construction",
+    "neglect_rate": 0.105
+  },
+  {
+    "police_station": "K.R. Pura",
+    "total_incidents": 94,
+    "neglected_count": 4,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.043
+  },
+  {
+    "police_station": "K.S. Layout",
+    "total_incidents": 19,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Kamakshipalya",
+    "total_incidents": 88,
+    "neglected_count": 3,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.034
+  },
+  {
+    "police_station": "Kengeri",
+    "total_incidents": 12,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Kodigehalli",
+    "total_incidents": 46,
+    "neglected_count": 9,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.196
+  },
+  {
+    "police_station": "Madiwala",
+    "total_incidents": 56,
+    "neglected_count": 2,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.036
+  },
+  {
+    "police_station": "Magadi Road",
+    "total_incidents": 32,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Mahadevapura",
+    "total_incidents": 42,
+    "neglected_count": 4,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.095
+  },
+  {
+    "police_station": "Malleshwaram",
+    "total_incidents": 23,
+    "neglected_count": 3,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.13
+  },
+  {
+    "police_station": "Mico Layout",
+    "total_incidents": 39,
+    "neglected_count": 6,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.154
+  },
+  {
+    "police_station": "Peenya",
+    "total_incidents": 98,
+    "neglected_count": 4,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.041
+  },
+  {
+    "police_station": "Pulikeshinagar(F.Town)",
+    "total_incidents": 21,
+    "neglected_count": 1,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.048
+  },
+  {
+    "police_station": "R.T. Nagar",
+    "total_incidents": 18,
+    "neglected_count": 1,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.056
+  },
+  {
+    "police_station": "Rajajinagar",
+    "total_incidents": 18,
+    "neglected_count": 1,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.056
+  },
+  {
+    "police_station": "Sadashivanagar",
+    "total_incidents": 138,
+    "neglected_count": 10,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.072
+  },
+  {
+    "police_station": "Sheshadripuram",
+    "total_incidents": 36,
+    "neglected_count": 1,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.028
+  },
+  {
+    "police_station": "Shivajinagar",
+    "total_incidents": 21,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Thalagattapura",
+    "total_incidents": 11,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Upparpet",
+    "total_incidents": 31,
+    "neglected_count": 2,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.065
+  },
+  {
+    "police_station": "V.V.Puram (C.Pet)",
+    "total_incidents": 13,
+    "neglected_count": 0,
+    "top_neglected_cause": "none",
+    "neglect_rate": 0.0
+  },
+  {
+    "police_station": "Vijayanagara",
+    "total_incidents": 18,
+    "neglected_count": 1,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.056
+  },
+  {
+    "police_station": "Whitefield",
+    "total_incidents": 61,
+    "neglected_count": 4,
+    "top_neglected_cause": "water_logging",
+    "neglect_rate": 0.066
+  },
+  {
+    "police_station": "Wilson Garden",
+    "total_incidents": 51,
+    "neglected_count": 1,
+    "top_neglected_cause": "tree_fall",
+    "neglect_rate": 0.02
+  },
+  {
+    "police_station": "Yelahanka",
+    "total_incidents": 138,
+    "neglected_count": 21,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.152
+  },
+  {
+    "police_station": "Yeshwanthpura",
+    "total_incidents": 149,
+    "neglected_count": 7,
+    "top_neglected_cause": "others",
+    "neglect_rate": 0.047
+  }
+]

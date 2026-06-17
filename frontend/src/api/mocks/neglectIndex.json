@@ -1,0 +1,11 @@
+{
+  "stations": [
+    {
+      "police_station": "Halasuru Gate",
+      "total_incidents": 50,
+      "neglected_count": 10,
+      "neglect_rate": 0.2,
+      "top_neglected_cause": "pot_holes"
+    }
+  ]
+}

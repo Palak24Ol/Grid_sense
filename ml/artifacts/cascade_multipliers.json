@@ -1,0 +1,42 @@
+{
+  "public_event": {
+    "cause": "public_event",
+    "sample_count": 42,
+    "avg_unplanned_3h_window": 0.595,
+    "avg_baseline_3h": 0.222,
+    "cascade_multiplier": 2.68,
+    "risk_level": "high"
+  },
+  "construction": {
+    "cause": "construction",
+    "sample_count": 207,
+    "avg_unplanned_3h_window": 0.246,
+    "avg_baseline_3h": 0.16,
+    "cascade_multiplier": 1.54,
+    "risk_level": "moderate"
+  },
+  "vip_movement": {
+    "cause": "vip_movement",
+    "sample_count": 7,
+    "avg_unplanned_3h_window": 0.429,
+    "avg_baseline_3h": 0.519,
+    "cascade_multiplier": 0.83,
+    "risk_level": "low"
+  },
+  "procession": {
+    "cause": "procession",
+    "sample_count": 12,
+    "avg_unplanned_3h_window": 0.083,
+    "avg_baseline_3h": 0.295,
+    "cascade_multiplier": 0.28,
+    "risk_level": "low"
+  },
+  "protest": {
+    "cause": "protest",
+    "sample_count": 3,
+    "avg_unplanned_3h_window": 1.0,
+    "avg_baseline_3h": 0.596,
+    "cascade_multiplier": 1.68,
+    "risk_level": "moderate"
+  }
+}

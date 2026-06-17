@@ -1,0 +1,17 @@
+{
+  "closure_probability": 0.85,
+  "closure_flag": true,
+  "priority_probability": 0.95,
+  "predicted_priority": "High",
+  "disagreement_flag": true,
+  "disagreement_reason": "This incident is off the named corridors. The current system defaults these to Low priority. Our model predicts High based on cause, vehicle type, and time pattern.",
+  "predicted_duration_mins": 90.0,
+  "duration_bucket": "long",
+  "duration_p25": 45.0,
+  "duration_p75": 120.0,
+  "model_versions": {
+    "closure_model": "v1.0",
+    "priority_model": "v1.0"
+  },
+  "inference_ms": 42
+}
