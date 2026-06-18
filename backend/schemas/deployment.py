@@ -1,6 +1,15 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+
+class DiversionRoute(BaseModel):
+    from_junction: str
+    to_junction: str
+    via_road: str
+    estimated_extra_mins: int
+    rationale: str
+
+
 class DeploymentRequest(BaseModel):
     corridor: str
     event_cause: str
@@ -10,6 +19,7 @@ class DeploymentRequest(BaseModel):
     closure_probability: float
     predicted_priority: str
     predicted_duration_mins: float
+
 
 class DeploymentResponse(BaseModel):
     recommended_station: str
@@ -22,3 +32,4 @@ class DeploymentResponse(BaseModel):
     suggested_junctions: List[str]
     corridor_risk_score: float
     historical_station_incidents: int
+    diversion_routes: List[DiversionRoute]
