@@ -135,15 +135,15 @@ def get_junction_forecast(
 
         points = []
         for _, row in forecast.iterrows():
-            hour_of_day = row["ds"].hour
+            yhat = round(float(row["yhat"]), 3)
             points.append(
                 JunctionForecastPoint(
                     datetime=row["ds"].isoformat() + "Z",
-                    hour_of_day=hour_of_day,
-                    predicted_incident_count=max(0.0, round(float(row["yhat"]), 3)),
+                    hour_of_day=int(row["ds"].hour),
+                    predicted_incident_count=yhat,
                     yhat_lower=max(0.0, round(float(row["yhat_lower"]), 3)),
                     yhat_upper=max(0.0, round(float(row["yhat_upper"]), 3)),
-                    is_peak_hour=row["yhat"] > 1.5,
+                    is_peak_hour=yhat > 0.03,
                 )
             )
 
