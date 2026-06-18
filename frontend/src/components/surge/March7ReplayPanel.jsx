@@ -29,18 +29,18 @@ export default function March7ReplayPanel() {
 
   return (
     <div className="bg-card border border-border rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-[400px]">
-      <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between">
-        <h2 className="font-semibold flex items-center gap-2">
-          <BarChart2 className="w-5 h-5 text-primary" />
+      <div className="p-4 border-b border-border bg-card flex items-center justify-between">
+        <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+          <BarChart2 className="w-4 h-4 text-primary" />
           Historical Replay: March 7, 2024
         </h2>
         <div className="flex items-center gap-4">
-          <span className="text-xs font-mono text-muted-foreground">
+          <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">
             {activeHour}:00 - {activeHour + 1}:00
           </span>
           <button 
             onClick={() => setIsPlaying(!isPlaying)}
-            className="p-1.5 rounded-full bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
+            className="p-1.5 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors glow-yellow"
           >
             {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </button>
@@ -51,18 +51,18 @@ export default function March7ReplayPanel() {
         
         {/* Main Stats */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="p-3 bg-muted/20 border border-border rounded-lg text-center">
-            <div className="text-xs text-muted-foreground">Total Surge</div>
+          <div className="p-3 bg-muted/20 border border-border rounded-xl text-center flex flex-col items-center justify-center gap-1">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Total Surge</span>
             <div className="text-2xl font-bold text-destructive mt-1">{replayData.surge_stats.march7_total}</div>
             <div className="text-[10px] text-muted-foreground mt-1">vs {replayData.surge_stats.march6_total} baseline</div>
           </div>
-          <div className="p-3 bg-muted/20 border border-border rounded-lg text-center">
-            <div className="text-xs text-muted-foreground">Active Hour</div>
-            <div className="text-2xl font-bold text-amber-500 mt-1">{currentTimelineData.total}</div>
+          <div className="p-3 bg-muted/20 border border-border rounded-xl text-center flex flex-col items-center justify-center gap-1">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Active Hour</span>
+            <div className="text-2xl font-bold text-warning mt-1">{currentTimelineData.total}</div>
             <div className="text-[10px] text-muted-foreground mt-1">incidents</div>
           </div>
-          <div className="p-3 bg-muted/20 border border-border rounded-lg text-center">
-            <div className="text-xs text-muted-foreground">Top Cause</div>
+          <div className="p-3 bg-muted/20 border border-border rounded-xl text-center flex flex-col items-center justify-center gap-1">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Top Cause</span>
             <div className="text-sm font-bold text-foreground mt-2 capitalize truncate px-1">
               {topCause.replace('_', ' ')}
             </div>
@@ -71,7 +71,7 @@ export default function March7ReplayPanel() {
 
         {/* Timeline Chart */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-muted-foreground">Incident Timeline</h3>
+          <h3 className="section-label">Incident Timeline</h3>
           <div className="h-32 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={replayData.march7_hourly_timeline} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
@@ -82,7 +82,7 @@ export default function March7ReplayPanel() {
                   {replayData.march7_hourly_timeline.map((entry, index) => (
                     <Cell 
                       key={`cell-${index}`} 
-                      fill={entry.hour_of_day === activeHour ? '#f59e0b' : '#334155'} 
+                      fill={entry.hour_of_day === activeHour ? 'hsl(54 95% 51%)' : 'hsl(220 14% 16%)'} 
                       style={{ cursor: 'pointer', transition: 'fill 0.3s ease' }}
                       onClick={() => setActiveHour(entry.hour_of_day)}
                     />
@@ -95,7 +95,7 @@ export default function March7ReplayPanel() {
 
         {/* Pre-Deployment Plan */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-primary">Generated Pre-Deployment Plan</h3>
+          <h3 className="section-label text-primary">Generated Pre-Deployment Plan</h3>
           <div className="border border-primary/20 rounded-lg overflow-hidden bg-primary/5">
             <table className="w-full text-left text-sm">
               <thead className="bg-primary/10 text-primary text-xs uppercase">
@@ -109,7 +109,7 @@ export default function March7ReplayPanel() {
                 {replayData.pre_deployment_plan.slice(0, 5).map((plan, i) => (
                   <tr key={i}>
                     <td className="p-3 font-medium">{plan.recommended_station}</td>
-                    <td className="p-3 font-mono text-amber-500">+{plan.recommended_officers}</td>
+                    <td className="p-3 font-mono text-warning">+{plan.recommended_officers}</td>
                     <td className="p-3 text-xs text-right text-muted-foreground">{plan.surge_reason}</td>
                   </tr>
                 ))}

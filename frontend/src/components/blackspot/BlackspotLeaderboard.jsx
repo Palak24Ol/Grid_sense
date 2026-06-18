@@ -9,9 +9,9 @@ export default function BlackspotLeaderboard() {
 
   return (
     <div className="bg-card/90 backdrop-blur-md border border-border rounded-xl shadow-lg flex flex-col h-2/3 overflow-hidden">
-      <div className="p-4 border-b border-border bg-muted/30">
-        <h2 className="font-semibold flex items-center gap-2 mb-3">
-          <Target className="w-5 h-5 text-destructive" />
+      <div className="p-4 border-b border-border bg-card">
+        <h2 className="text-sm font-bold text-foreground flex items-center gap-2 mb-3">
+          <Target className="w-4 h-4 text-primary" />
           Chronic Blackspot Engine
         </h2>
         
@@ -56,9 +56,9 @@ export default function BlackspotLeaderboard() {
             
             <div className={clsx(
               "px-2.5 py-1 rounded-md text-xs font-bold border",
-              b.blackspot_tier === 'Chronic' ? "bg-destructive/10 text-destructive border-destructive/20" :
-              b.blackspot_tier === 'Critical' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
-              "bg-muted text-muted-foreground border-border"
+              b.blackspot_tier === 'Chronic' ? "badge-critical" :
+              b.blackspot_tier === 'Critical' ? "badge-warning" :
+              "badge-medium"
             )}>
               {b.blackspot_score.toFixed(1)}
             </div>

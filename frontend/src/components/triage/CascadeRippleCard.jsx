@@ -40,14 +40,14 @@ export default function CascadeRippleCard({ result }) {
     <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
       <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between">
         <h2 className="font-semibold flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-amber-500" />
+          <TrendingUp className="w-5 h-5 text-warning" />
           Cascade Ripple Predictor
         </h2>
         <span className={clsx(
           "px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider",
-          result.risk_level === 'critical' ? "bg-destructive/20 text-destructive" :
-          result.risk_level === 'high' ? "bg-amber-500/20 text-amber-500" :
-          "bg-primary/20 text-primary"
+          result.risk_level === 'critical' ? "badge-critical" :
+          result.risk_level === 'high' ? "badge-warning" :
+          "badge-medium"
         )}>
           {result.risk_level} Risk
         </span>
@@ -56,15 +56,15 @@ export default function CascadeRippleCard({ result }) {
       <div className="p-6 flex-1 overflow-y-auto space-y-6">
         
         {/* Interpretation Box */}
-        <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 text-sm leading-relaxed">
+        <div className="p-4 rounded-xl border border-primary/30 bg-primary/8 text-sm leading-relaxed">
           {result.interpretation}
         </div>
 
         {/* Top Metrics Row */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col items-center justify-center text-center">
-            <span className="text-sm text-muted-foreground mb-1">Incident Multiplier</span>
-            <span className="text-3xl font-bold text-amber-500">
+          <div className="rounded-xl p-4 border border-border bg-muted/20 flex flex-col items-center justify-center text-center gap-1">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Incident Multiplier</span>
+            <span className="text-3xl font-bold text-warning">
               {result.cascade_multiplier}x
             </span>
             <span className="text-xs text-muted-foreground mt-2">
@@ -72,8 +72,8 @@ export default function CascadeRippleCard({ result }) {
             </span>
           </div>
 
-          <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col items-center justify-center text-center">
-            <span className="text-sm text-muted-foreground mb-1">Required Buffer</span>
+          <div className="rounded-xl p-4 border border-border bg-muted/20 flex flex-col items-center justify-center text-center gap-1">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Required Buffer</span>
             <span className="text-3xl font-bold text-primary flex items-center gap-2">
               <Users className="w-6 h-6" /> +{result.recommended_officer_buffer}
             </span>
@@ -97,14 +97,14 @@ export default function CascadeRippleCard({ result }) {
         {/* Adjacent Spillover */}
         {result.adjacent_corridor_spillover && result.adjacent_corridor_spillover.length > 0 && (
           <div className="space-y-3">
-            <h3 className="font-medium text-sm text-muted-foreground">Adjacent Corridor Spillover</h3>
+            <h3 className="section-label">Adjacent Corridor Spillover</h3>
             <div className="grid grid-cols-2 gap-3">
               {result.adjacent_corridor_spillover.map((adj) => (
                 <div key={adj.corridor} className="p-3 border border-border rounded-lg bg-muted/10 flex justify-between items-center">
                   <span className="text-sm font-medium">{adj.corridor}</span>
                   <span className={clsx(
                     "text-xs font-bold px-2 py-0.5 rounded-full",
-                    adj.risk_level === 'moderate' ? 'bg-amber-500/20 text-amber-500' : 'bg-primary/20 text-primary'
+                    adj.risk_level === 'moderate' ? 'badge-warning' : 'badge-medium'
                   )}>
                     {adj.spillover_multiplier}x
                   </span>

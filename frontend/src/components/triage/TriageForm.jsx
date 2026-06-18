@@ -30,7 +30,7 @@ export default function TriageForm() {
         
         {/* Event Type Toggle */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+          <label className="section-label flex items-center gap-2">
             Mode
           </label>
           <div className="flex bg-muted p-1 rounded-lg">
@@ -63,7 +63,7 @@ export default function TriageForm() {
 
         {/* Cause Select */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+          <label className="section-label flex items-center gap-2">
             <AlertCircle className="w-4 h-4" />
             Event Cause
           </label>
@@ -71,7 +71,7 @@ export default function TriageForm() {
             <select 
               value={formData.event_cause}
               onChange={(e) => setFormData({ event_cause: e.target.value })}
-              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full bg-muted/30 border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/60 focus:bg-muted/50 transition-colors appearance-none cursor-pointer"
             >
               <option value="vehicle_breakdown">Vehicle Breakdown</option>
               <option value="accident">Accident</option>
@@ -84,7 +84,7 @@ export default function TriageForm() {
             <select 
               value={formData.event_cause}
               onChange={(e) => setFormData({ event_cause: e.target.value })}
-              className="w-full bg-background border border-primary/50 text-primary rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full bg-primary/10 border border-primary/50 text-primary rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
             >
               <option value="public_event">Public Event</option>
               <option value="protest">Protest</option>
@@ -96,14 +96,14 @@ export default function TriageForm() {
 
         {/* Corridor Select */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+          <label className="section-label flex items-center gap-2">
             <MapPin className="w-4 h-4" />
             Location (Corridor)
           </label>
           <select 
             value={formData.corridor}
             onChange={(e) => setFormData({ corridor: e.target.value })}
-            className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full bg-muted/30 border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/60 focus:bg-muted/50 transition-colors appearance-none cursor-pointer"
           >
             <option value="Hosur Road">Hosur Road</option>
             <option value="Mysore Road">Mysore Road</option>
@@ -116,14 +116,14 @@ export default function TriageForm() {
         {/* Vehicle Type (Only for Unplanned) */}
         {formData.event_type === 'unplanned' && (
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <label className="section-label flex items-center gap-2">
               <Car className="w-4 h-4" />
               Involved Vehicle
             </label>
             <select 
               value={formData.vehicle_type}
               onChange={(e) => setFormData({ vehicle_type: e.target.value })}
-              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full bg-muted/30 border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/60 focus:bg-muted/50 transition-colors appearance-none cursor-pointer"
             >
               <option value="none">None / N/A</option>
               <option value="heavy_truck">Heavy Truck</option>
@@ -137,14 +137,14 @@ export default function TriageForm() {
         {/* Time Inputs */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <label className="section-label flex items-center gap-2">
               <CalendarDays className="w-4 h-4" />
               Day of Week
             </label>
             <select 
               value={formData.day_of_week}
               onChange={(e) => setFormData({ day_of_week: e.target.value })}
-              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full bg-muted/30 border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/60 focus:bg-muted/50 transition-colors appearance-none cursor-pointer"
             >
               <option value="0">Monday</option>
               <option value="1">Tuesday</option>
@@ -156,7 +156,7 @@ export default function TriageForm() {
             </select>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <label className="section-label flex items-center gap-2">
               <CalendarClock className="w-4 h-4" />
               Hour
             </label>
@@ -166,7 +166,7 @@ export default function TriageForm() {
               max="23"
               value={formData.hour_of_day}
               onChange={(e) => setFormData({ hour_of_day: e.target.value })}
-              className="w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full bg-muted/30 border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/60 focus:bg-muted/50 transition-colors"
             />
           </div>
         </div>
@@ -176,7 +176,7 @@ export default function TriageForm() {
         <button 
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 rounded-lg transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded-xl transition-all flex justify-center items-center gap-2 disabled:opacity-50 text-sm glow-yellow"
         >
           {loading ? (
             <>

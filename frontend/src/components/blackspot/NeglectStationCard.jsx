@@ -10,9 +10,9 @@ export default function NeglectStationCard() {
 
   return (
     <div className="bg-card/90 backdrop-blur-md border border-border rounded-xl shadow-lg flex-1 overflow-hidden flex flex-col">
-      <div className="p-4 border-b border-border bg-muted/30">
-        <h2 className="font-semibold flex items-center gap-2">
-          <Clock className="w-5 h-5 text-amber-500" />
+      <div className="p-4 border-b border-border bg-card">
+        <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+          <Clock className="w-4 h-4 text-primary" />
           Resolution Neglect Index
         </h2>
         <p className="text-xs text-muted-foreground mt-1">
@@ -35,14 +35,14 @@ export default function NeglectStationCard() {
             
             <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
               <div 
-                className="h-full bg-destructive" 
+                className="h-full bg-primary" 
                 style={{ width: `${station.neglect_rate * 100}%` }}
               />
             </div>
             
             <div className="text-xs text-muted-foreground flex justify-between">
               <span>{station.neglected_count} neglected</span>
-              <span className="capitalize text-amber-500/80 text-right max-w-[150px] truncate">
+              <span className="capitalize text-primary/80 text-right max-w-[150px] truncate">
                 Top: {station.top_neglected_cause.replace('_', ' ')}
               </span>
             </div>

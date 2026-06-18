@@ -2,33 +2,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: hsl(224 71% 4%);
-  --color-foreground: hsl(213 31% 91%);
+  /* ── Core backgrounds ── */
+  --color-background: hsl(220 18% 8%);        /* near-black charcoal */
+  --color-foreground: hsl(45 10% 92%);         /* warm off-white */
 
-  --color-card: hsl(224 71% 4%);
-  --color-card-foreground: hsl(213 31% 91%);
+  --color-card: hsl(220 16% 11%);              /* slightly lifted surface */
+  --color-card-foreground: hsl(45 10% 92%);
 
-  --color-popover: hsl(224 71% 4%);
-  --color-popover-foreground: hsl(215 20.2% 65.1%);
+  --color-popover: hsl(220 16% 11%);
+  --color-popover-foreground: hsl(45 10% 80%);
 
-  --color-primary: hsl(210 40% 98%);
-  --color-primary-foreground: hsl(222.2 47.4% 1.2%);
+  /* ── Flipkart Yellow as PRIMARY ── */
+  --color-primary: hsl(54 95% 51%);            /* #F9E107 Flipkart yellow */
+  --color-primary-foreground: hsl(220 18% 8%); /* dark text on yellow */
 
-  --color-secondary: hsl(222.2 47.4% 11.2%);
-  --color-secondary-foreground: hsl(210 40% 98%);
+  --color-secondary: hsl(220 14% 16%);
+  --color-secondary-foreground: hsl(45 10% 92%);
 
-  --color-muted: hsl(223 47% 11%);
-  --color-muted-foreground: hsl(215.4 16.3% 56.9%);
+  --color-muted: hsl(220 14% 14%);
+  --color-muted-foreground: hsl(220 8% 55%);
 
-  --color-accent: hsl(216 34% 17%);
-  --color-accent-foreground: hsl(210 40% 98%);
+  --color-accent: hsl(54 95% 51%);             /* yellow accent */
+  --color-accent-foreground: hsl(220 18% 8%);
 
-  --color-destructive: hsl(0 63% 31%);
-  --color-destructive-foreground: hsl(210 40% 98%);
+  /* ── Status colors ── */
+  --color-destructive: hsl(0 72% 55%);
+  --color-destructive-foreground: hsl(0 0% 100%);
 
-  --color-border: hsl(216 34% 17%);
-  --color-input: hsl(216 34% 17%);
-  --color-ring: hsl(216 34% 17%);
+  --color-warning: hsl(38 95% 54%);            /* orange-amber */
+  --color-warning-foreground: hsl(220 18% 8%);
+
+  --color-success: hsl(142 70% 45%);
+  --color-success-foreground: hsl(0 0% 100%);
+
+  /* ── Borders / inputs ── */
+  --color-border: hsl(220 14% 20%);
+  --color-input: hsl(220 14% 16%);
+  --color-ring: hsl(54 95% 51%);
 
   --radius: 0.5rem;
 }
@@ -41,16 +51,74 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Scrollbar — dark + yellow thumb */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: hsl(220 18% 8%); }
+  ::-webkit-scrollbar-thumb { background: hsl(220 14% 25%); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(54 95% 51% / 0.6); }
 }
 
-/* Leaflet Dark Mode Fixes */
+/* ── Gridlock-style yellow glow on active elements ── */
+.glow-yellow {
+  box-shadow: 0 0 0 1px hsl(54 95% 51% / 0.4),
+              0 0 16px 0 hsl(54 95% 51% / 0.15);
+}
+
+/* ── Status badge variants ── */
+.badge-critical { @apply bg-red-500/15 text-red-400 border border-red-500/30; }
+.badge-high     { @apply bg-orange-500/15 text-orange-400 border border-orange-500/30; }
+.badge-medium   { @apply bg-yellow-400/15 text-yellow-400 border border-yellow-400/30; }
+.badge-low      { @apply bg-emerald-500/15 text-emerald-400 border border-emerald-500/30; }
+
+/* ── Section header text ── */
+.section-label {
+  @apply text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground;
+}
+
+/* ── Yellow underline on active nav ── */
+.nav-active-bar {
+  position: relative;
+}
+.nav-active-bar::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: hsl(54 95% 51%);
+}
+
+/* ── Leaflet dark mode ── */
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-  background-color: var(--color-card) !important;
-  color: var(--color-foreground) !important;
-  border: 1px solid var(--color-border) !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
+  background-color: hsl(220 16% 11%) !important;
+  color: hsl(45 10% 92%) !important;
+  border: 1px solid hsl(220 14% 20%) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important;
 }
 .leaflet-container {
-  background-color: var(--color-background) !important;
+  background-color: hsl(220 18% 8%) !important;
 }
+.leaflet-control-zoom a {
+  background-color: hsl(220 16% 11%) !important;
+  color: hsl(45 10% 92%) !important;
+  border-color: hsl(220 14% 20%) !important;
+}
+.leaflet-control-zoom a:hover {
+  background-color: hsl(54 95% 51%) !important;
+  color: hsl(220 18% 8%) !important;
+}
+
+/* ── Pulse animation for live indicators ── */
+@keyframes pulse-yellow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 hsl(54 95% 51% / 0.4); }
+  50%       { opacity: 0.8; box-shadow: 0 0 0 6px hsl(54 95% 51% / 0); }
+}
+.pulse-live {
+  animation: pulse-yellow 2s ease-in-out infinite;
+}
+
+/* ── Recharts dark overrides ── */
+.recharts-text { fill: hsl(220 8% 55%) !important; }
+.recharts-cartesian-grid line { stroke: hsl(220 14% 20%) !important; }

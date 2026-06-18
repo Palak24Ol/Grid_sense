@@ -12,12 +12,12 @@ export default function SurgeDashboard() {
 
   return (
     <div className="bg-card border border-border rounded-xl shadow-sm flex flex-col overflow-hidden">
-      <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between">
-        <h2 className="font-semibold flex items-center gap-2">
-          <CloudLightning className="w-5 h-5 text-amber-500" />
+      <div className="p-4 border-b border-border bg-card flex items-center justify-between">
+        <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+          <CloudLightning className="w-4 h-4 text-warning" />
           Live Weather Vulnerability
         </h2>
-        <span className="text-xs text-muted-foreground">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
           {new Date().toLocaleTimeString()}
         </span>
       </div>
@@ -27,18 +27,18 @@ export default function SurgeDashboard() {
         {/* Trigger Card */}
         <div className={clsx(
           "p-4 rounded-xl border flex gap-4 items-start",
-          overallRisk === 'critical' ? "bg-destructive/10 border-destructive/30" : "bg-amber-500/10 border-amber-500/30"
+          overallRisk === 'critical' ? "bg-destructive/10 border-destructive/30" : "bg-warning/10 border-warning/30"
         )}>
           {overallRisk === 'critical' ? (
             <ShieldAlert className="w-8 h-8 text-destructive shrink-0 mt-1" />
           ) : (
-            <AlertTriangle className="w-8 h-8 text-amber-500 shrink-0 mt-1" />
+            <AlertTriangle className="w-8 h-8 text-warning shrink-0 mt-1" />
           )}
           
           <div>
             <h3 className={clsx(
               "font-bold text-lg mb-1 uppercase tracking-wider",
-              overallRisk === 'critical' ? "text-destructive" : "text-amber-500"
+              overallRisk === 'critical' ? "text-destructive" : "text-warning"
             )}>
               {overallRisk} SURGE RISK DETECTED
             </h3>
@@ -52,7 +52,7 @@ export default function SurgeDashboard() {
 
         {/* Vulnerable Corridors Table */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-muted-foreground">Corridor Vulnerability Index</h3>
+          <h3 className="section-label">Corridor Vulnerability Index</h3>
           <div className="border border-border rounded-lg overflow-hidden bg-muted/10">
             <table className="w-full text-left text-sm">
               <thead className="bg-muted text-muted-foreground text-xs uppercase">
@@ -73,7 +73,7 @@ export default function SurgeDashboard() {
                     <td className="p-3">
                       <span className={clsx(
                         "px-2 py-0.5 rounded-full text-xs font-bold",
-                        multiplier >= 4 ? "bg-destructive/20 text-destructive" : "bg-amber-500/20 text-amber-500"
+                        multiplier >= 4 ? "badge-critical" : "badge-warning"
                       )}>
                         {multiplier}x
                       </span>

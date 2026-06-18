@@ -16,8 +16,8 @@ export default function PredictionResultCard({ result }) {
         
         {/* Top Metrics Row */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col items-center justify-center text-center">
-            <span className="text-sm text-muted-foreground mb-1">Predicted Priority</span>
+          <div className="rounded-xl p-4 border border-border bg-muted/20 flex flex-col items-center justify-center text-center gap-1">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Predicted Priority</span>
             <span className={`text-3xl font-bold ${result.predicted_priority === 'High' ? 'text-destructive' : 'text-primary'}`}>
               {result.predicted_priority}
             </span>
@@ -26,8 +26,8 @@ export default function PredictionResultCard({ result }) {
             </span>
           </div>
 
-          <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col items-center justify-center text-center">
-            <span className="text-sm text-muted-foreground mb-1">Road Closure Risk</span>
+          <div className="rounded-xl p-4 border border-border bg-muted/20 flex flex-col items-center justify-center text-center gap-1">
+            <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Road Closure Risk</span>
             <span className={`text-3xl font-bold ${result.closure_flag ? 'text-destructive' : 'text-primary'}`}>
               {result.closure_flag ? 'Yes' : 'No'}
             </span>
@@ -38,9 +38,9 @@ export default function PredictionResultCard({ result }) {
         </div>
 
         {/* Predicted Duration */}
-        <div className="p-4 rounded-xl border border-border flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
-            <Clock className="w-6 h-6 text-blue-500" />
+        <div className="p-4 rounded-xl border border-border bg-muted/20 flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border border-primary/25">
+            <Clock className="w-6 h-6 text-primary" />
           </div>
           <div className="flex-1">
             <h3 className="font-semibold text-lg">
@@ -54,11 +54,11 @@ export default function PredictionResultCard({ result }) {
 
         {/* Disagreement Flag Alert */}
         {result.disagreement_flag && (
-          <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 flex gap-3 items-start">
-            <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-xl border border-warning/30 bg-warning/10 flex gap-3 items-start">
+            <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-semibold text-amber-500 mb-1">System Override Warning</h4>
-              <p className="text-sm text-amber-500/80 leading-relaxed">
+              <h4 className="font-semibold text-warning mb-1">System Override Warning</h4>
+              <p className="text-sm text-warning/80 leading-relaxed">
                 {result.disagreement_reason}
               </p>
             </div>

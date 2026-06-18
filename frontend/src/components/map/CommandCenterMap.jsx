@@ -51,7 +51,7 @@ export default function CommandCenterMap({ incidents = [], className = "h-full w
                 <h3 className="font-bold text-sm mb-1">{inc.junction || "Unknown Junction"}</h3>
                 <p className="text-xs text-muted-foreground capitalize">{inc.event_cause.replace('_', ' ')}</p>
                 <div className="mt-2 text-xs">
-                  <span className={`px-2 py-0.5 rounded-full ${inc.priority === 'High' ? 'bg-destructive/20 text-destructive' : 'bg-primary/20 text-primary'}`}>
+                  <span className={`px-2 py-0.5 rounded-full font-bold uppercase tracking-wider text-[10px] ${inc.priority === 'High' ? 'badge-critical' : inc.priority === 'Medium' ? 'badge-warning' : 'badge-medium'}`}>
                     {inc.priority} Priority
                   </span>
                 </div>

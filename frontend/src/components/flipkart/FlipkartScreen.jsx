@@ -12,11 +12,11 @@ const CORRIDOR_COORDS = {
   'Bellary Road 2': [[13.050, 77.590], [13.072, 77.601]],
 };
 
-const RISK_COLORS = { high: '#ef4444', medium: '#f97316', low: '#22c55e' };
+const RISK_COLORS = { high: '#ef4444', medium: '#F9E107', low: '#22c55e' };
 const RISK_BADGE = {
-  high:   'bg-red-500/20 text-red-400 border-red-500/30',
-  medium: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  low:    'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  high:   'badge-critical',
+  medium: 'badge-warning',
+  low:    'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
 };
 
 export default function FlipkartScreen() {
@@ -74,9 +74,9 @@ export default function FlipkartScreen() {
       {/* Panel */}
       <div className="w-full md:w-1/2 h-1/2 md:h-full bg-background border-l border-border overflow-y-auto flex flex-col z-10">
 
-        <div className="p-4 border-b border-border bg-muted/30 shrink-0 flex items-center justify-between">
-          <h2 className="font-semibold flex items-center gap-2">
-            <Package className="w-5 h-5 text-primary" />
+        <div className="p-4 border-b border-border bg-card shrink-0 flex items-center justify-between">
+          <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <Package className="w-4 h-4 text-primary" />
             LCV Logistics Intelligence
           </h2>
           <button onClick={load} className="text-muted-foreground hover:text-foreground transition-colors">
@@ -96,24 +96,24 @@ export default function FlipkartScreen() {
 
             {/* Summary stats */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-muted/20 border border-border rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-red-400">{data.high_risk_corridors}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">High Risk</p>
+              <div className="bg-muted/20 border border-border rounded-xl p-3 text-center flex flex-col items-center justify-center gap-1">
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">High Risk</span>
+                <p className="text-2xl font-bold text-destructive">{data.high_risk_corridors}</p>
               </div>
-              <div className="bg-muted/20 border border-border rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold text-orange-400">{data.active_disruptions}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Active Disruptions</p>
+              <div className="bg-muted/20 border border-border rounded-xl p-3 text-center flex flex-col items-center justify-center gap-1">
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Active Disruptions</span>
+                <p className="text-2xl font-bold text-warning">{data.active_disruptions}</p>
               </div>
-              <div className="bg-muted/20 border border-border rounded-lg p-3 text-center">
-                <p className="text-2xl font-bold">{data.weekly_avg_lcv_incidents}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">Incidents/Week</p>
+              <div className="bg-muted/20 border border-border rounded-xl p-3 text-center flex flex-col items-center justify-center gap-1">
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Incidents/Week</span>
+                <p className="text-2xl font-bold text-foreground">{data.weekly_avg_lcv_incidents}</p>
               </div>
             </div>
 
             {/* Surge day callout */}
             {data.surge_day_reference && (
-              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
-                <p className="text-xs font-semibold text-red-400 flex items-center gap-1.5 mb-2">
+              <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-xl">
+                <p className="text-xs font-bold uppercase tracking-wider text-destructive flex items-center gap-1.5 mb-2">
                   <AlertTriangle className="w-3.5 h-3.5" />
                   Worst-Case Reference — {data.surge_day_reference.date}
                 </p>
@@ -127,7 +127,7 @@ export default function FlipkartScreen() {
 
             {/* Corridor list */}
             <div>
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+              <p className="section-label mb-3">
                 Corridor Risk Breakdown
               </p>
               <div className="space-y-2">
@@ -156,7 +156,7 @@ export default function FlipkartScreen() {
                         <TrendingUp className="w-3 h-3" />{c.incident_count} incidents
                       </span>
                       <span>{c.active_lcv_incidents} active</span>
-                      <span className="text-orange-400">+{c.avg_delay_mins} min avg</span>
+                      <span className="text-warning">+{c.avg_delay_mins} min avg</span>
                     </div>
                   </button>
                 ))}
@@ -165,8 +165,8 @@ export default function FlipkartScreen() {
 
             {/* Selected corridor detail */}
             {selected && (
-              <div className="border border-primary/30 bg-primary/5 rounded-xl p-4 space-y-3">
-                <p className="font-semibold text-sm">{selected.corridor} — Detail</p>
+              <div className="border border-primary/30 bg-primary/10 rounded-xl p-4 space-y-3">
+                <p className="font-bold text-sm text-foreground">{selected.corridor} — Detail</p>
 
                 <div>
                   <p className="text-xs text-muted-foreground mb-1.5">Impacted Hubs</p>

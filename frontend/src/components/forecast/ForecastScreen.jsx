@@ -24,9 +24,9 @@ const RISK_COLOR = { critical: '#ef4444', high: '#f97316', medium: '#eab308' };
 
 function RiskBadge({ level }) {
   const colors = {
-    critical: 'bg-red-500/20 text-red-400 border-red-500/30',
-    high:     'bg-orange-500/20 text-orange-400 border-orange-500/30',
-    medium:   'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+    critical: 'badge-critical',
+    high:     'badge-warning',
+    medium:   'badge-medium',
   };
   return (
     <span className={clsx('px-2 py-0.5 rounded-full text-xs font-bold border uppercase tracking-wider', colors[level])}>
@@ -43,7 +43,7 @@ function CustomTooltip({ active, payload, label }) {
       <p className="font-semibold mb-1">{label}:00</p>
       <p className="text-primary">Predicted: {d?.predicted_incident_count?.toFixed(2)}</p>
       <p className="text-muted-foreground">Range: {d?.yhat_lower?.toFixed(2)} – {d?.yhat_upper?.toFixed(2)}</p>
-      {d?.is_peak_hour && <p className="text-orange-400 font-medium mt-1">⚠ Peak hour</p>}
+      {d?.is_peak_hour && <p className="text-warning font-medium mt-1">⚠ Peak hour</p>}
     </div>
   );
 }
@@ -119,11 +119,16 @@ export default function ForecastScreen() {
       <div className="w-full md:w-1/2 h-1/2 md:h-full bg-background border-l border-border overflow-y-auto flex flex-col z-10">
 
         {/* Header */}
-        <div className="p-4 border-b border-border bg-muted/30 flex items-center justify-between shrink-0">
-          <h2 className="font-semibold flex items-center gap-2">
-            <CloudRain className="w-5 h-5 text-primary" />
-            72-Hour Corridor Forecast
-          </h2>
+        <div className="px-5 py-4 border-b border-border bg-card flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/25 flex items-center justify-center">
+              <CloudRain className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-sm font-bold text-foreground">72-Hour Corridor Forecast</h2>
+              <p className="text-[10px] text-muted-foreground">Prophet time-series predictions</p>
+            </div>
+          </div>
           <span className="text-xs text-muted-foreground">{new Date().toLocaleTimeString()}</span>
         </div>
 
@@ -131,7 +136,7 @@ export default function ForecastScreen() {
 
           {/* Top Corridors */}
           <div>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+            <p className="section-label mb-3">
               Top Risk Corridors — Next 24h
             </p>
             {loadingCorridors ? (
@@ -178,7 +183,7 @@ export default function ForecastScreen() {
               <span className="text-sm font-medium">Corridor Detail</span>
               <div className="relative flex-1">
                 <select
-                  className="w-full bg-background border border-border rounded-md px-2 py-1.5 text-xs appearance-none focus:outline-none focus:ring-1 focus:ring-primary pr-6"
+                  className="w-full bg-muted/30 border border-border rounded-lg px-3 py-1.5 text-xs appearance-none focus:outline-none focus:border-primary/60 transition-colors pr-6"
                   value={selJunction || ''}
                   onChange={e => setSelJunction(e.target.value)}
                 >
@@ -206,19 +211,19 @@ export default function ForecastScreen() {
               {selJunction && !loadingChart && chartData.length > 0 && (
                 <>
                   {junctionMeta && (
-                    <div className="flex gap-4 mb-4 text-xs">
-                      <div className="bg-muted/30 rounded-lg px-3 py-2">
-                        <p className="text-muted-foreground">Corridor</p>
-                        <p className="font-semibold">{junctionMeta.corridor}</p>
+                    <div className="flex gap-2.5 mb-4 text-xs">
+                      <div className="bg-muted/20 border border-border rounded-xl px-3 py-2 flex-1">
+                        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-0.5">Corridor</p>
+                        <p className="font-bold text-foreground text-sm">{junctionMeta.corridor}</p>
                       </div>
-                      <div className="bg-muted/30 rounded-lg px-3 py-2">
-                        <p className="text-muted-foreground">Hist. Daily Avg</p>
-                        <p className="font-semibold">{junctionMeta.historical_daily_avg} incidents</p>
+                      <div className="bg-muted/20 border border-border rounded-xl px-3 py-2 flex-1">
+                        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-0.5">Hist. Daily Avg</p>
+                        <p className="font-bold text-foreground text-sm">{junctionMeta.historical_daily_avg} incidents</p>
                       </div>
                       {junctionMeta.model_mae && (
-                        <div className="bg-muted/30 rounded-lg px-3 py-2">
-                          <p className="text-muted-foreground">Model MAE</p>
-                          <p className="font-semibold">{junctionMeta.model_mae}</p>
+                        <div className="bg-primary/8 border border-primary/30 rounded-xl px-3 py-2 flex-1">
+                          <p className="text-[10px] font-medium text-primary uppercase tracking-wider mb-0.5">Model MAE</p>
+                          <p className="font-bold text-primary text-sm">{junctionMeta.model_mae}</p>
                         </div>
                       )}
                     </div>
@@ -228,12 +233,12 @@ export default function ForecastScreen() {
                     <AreaChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
                       <defs>
                         <linearGradient id="bandGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%"  stopColor="#6366f1" stopOpacity={0.15} />
-                          <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0}  />
+                          <stop offset="5%"  stopColor="hsl(54 95% 51%)" stopOpacity={0.15} />
+                          <stop offset="95%" stopColor="hsl(54 95% 51%)" stopOpacity={0.0}  />
                         </linearGradient>
                         <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%"  stopColor="#6366f1" stopOpacity={0.35} />
-                          <stop offset="95%" stopColor="#6366f1" stopOpacity={0.05} />
+                          <stop offset="5%"  stopColor="hsl(54 95% 51%)" stopOpacity={0.35} />
+                          <stop offset="95%" stopColor="hsl(54 95% 51%)" stopOpacity={0.05} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -248,7 +253,7 @@ export default function ForecastScreen() {
                       <Area
                         type="monotone"
                         dataKey="predicted_incident_count"
-                        stroke="#6366f1"
+                        stroke="hsl(54 95% 51%)"
                         strokeWidth={2}
                         fill="url(#lineGrad)"
                         dot={false}
@@ -259,8 +264,8 @@ export default function ForecastScreen() {
                   {junctionMeta?.peak_windows?.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {junctionMeta.peak_windows.map((w, i) => (
-                        <span key={i} className="text-xs bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <AlertTriangle className="w-3 h-3" />
+                        <span key={i} className="text-xs badge-warning px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium">
+                          <AlertTriangle className="w-3.5 h-3.5" />
                           {w.label}: {String(w.start_hour).padStart(2,'0')}:00 – {String(w.end_hour).padStart(2,'0')}:00
                         </span>
                       ))}
