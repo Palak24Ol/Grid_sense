@@ -175,15 +175,15 @@ export default function ForecastScreen() {
           {/* Junction Chart */}
           <div className="border border-border rounded-xl overflow-hidden">
             <div className="p-3 bg-muted/30 border-b border-border flex items-center gap-3">
-              <span className="text-sm font-medium">Junction Detail</span>
+              <span className="text-sm font-medium">Corridor Detail</span>
               <div className="relative flex-1">
                 <select
                   className="w-full bg-background border border-border rounded-md px-2 py-1.5 text-xs appearance-none focus:outline-none focus:ring-1 focus:ring-primary pr-6"
                   value={selJunction || ''}
                   onChange={e => setSelJunction(e.target.value)}
                 >
-                  <option value="">— select junction —</option>
-                  {junctions.map(j => <option key={j} value={j}>{j.replace(/_/g, ' ')}</option>)}
+                  <option value="">— select corridor —</option>
+                  {junctions.map(c => <option key={c} value={c}>{c.replace(/_/g, ' ')}</option>)}
                 </select>
                 <ChevronDown className="w-3 h-3 absolute right-2 top-2 text-muted-foreground pointer-events-none" />
               </div>
@@ -192,14 +192,14 @@ export default function ForecastScreen() {
             <div className="p-4">
               {!selJunction && (
                 <p className="text-xs text-muted-foreground text-center py-6">
-                  Select a junction above to view its 72-hour Prophet forecast
+                  Select a corridor above to view its 72-hour Prophet forecast
                 </p>
               )}
 
               {selJunction && loadingChart && (
                 <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm py-8">
                   <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  Running Prophet model…
+                  Running corridor forecast…
                 </div>
               )}
 
