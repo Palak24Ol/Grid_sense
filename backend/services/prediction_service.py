@@ -47,15 +47,21 @@ HIGH_PRIORITY_CORRIDORS = frozenset([
     "West of Chord Road", "CBD 2", "ORR West 1", "ORR West 2",
 ])
 
+_NO_VALUE = {"", "null", "nan", "none", "n/a", "na"}
+
 def _safe_encode(encoders: dict, col: str, value: Optional[str]) -> int:
-    if value is None or str(value).strip().lower() in ("", "null", "nan", "none"):
-        return -1
     le = encoders.get(col)
     if le is None:
+        return -1
+    if value is None or str(value).strip().lower() in _NO_VALUE:
+        if "__MISSING__" in le.classes_:
+            return int(le.transform(["__MISSING__"])[0])
         return -1
     try:
         return int(le.transform([str(value)])[0])
     except ValueError:
+        if "__MISSING__" in le.classes_:
+            return int(le.transform(["__MISSING__"])[0])
         return -1
 
 def run_prediction(req: PredictionRequest) -> PredictionResponse:
@@ -83,7 +89,7 @@ def run_prediction(req: PredictionRequest) -> PredictionResponse:
         "hour_cos": hour_cos,
         "is_high_priority_corridor": is_high_priority_corridor,
         "is_non_corridor": is_non_corridor,
-        "has_vehicle_type": int(req.vehicle_type is not None and req.vehicle_type != ""),
+        "has_vehicle_type": int(req.vehicle_type is not None and str(req.vehicle_type).strip().lower() not in _NO_VALUE),
         "has_zone": 0,  # zone is not in request
     }
 
