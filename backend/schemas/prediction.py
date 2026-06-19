@@ -7,6 +7,12 @@ class PredictionRequest(BaseModel):
     vehicle_type: Optional[str] = None
     hour_of_day: int
     day_of_week: int
+    month: Optional[int] = None
+    zone: Optional[str] = None
+    police_station: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    is_planned: Optional[bool] = None
 
 class PredictionResponse(BaseModel):
     closure_probability: float

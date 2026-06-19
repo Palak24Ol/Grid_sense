@@ -247,6 +247,21 @@ def main():
     with open(OUT_META, "w") as f:
         json.dump(meta, f, indent=2)
 
+    # Export target-encoding lookups so inference doesn't need the raw CSV
+    train_labels_full = fm_labels.iloc[train_idx]
+    cause_lookup = train_labels_full.groupby("event_cause")["y_closure"].mean().to_dict()
+    cause_lookup["__default__"] = float(train_labels_full["y_closure"].mean())
+    station_lookup = train_labels_full.groupby("corridor")["y_priority"].mean().to_dict()
+    station_lookup["__default__"] = 0.5
+
+    encoding_lookups = {
+        "cause_closure_rate":    {k: round(float(v), 4) for k, v in cause_lookup.items()},
+        "station_priority_rate": {k: round(float(v), 4) for k, v in station_lookup.items()},
+    }
+    with open(ARTIFACT_DIR / "closure_encoding_lookups.json", "w") as f:
+        json.dump(encoding_lookups, f, indent=2)
+    print(f"Encoding lookups → {ARTIFACT_DIR / 'closure_encoding_lookups.json'}")
+
     print(f"\nModel saved → {OUT_MODEL}  ({OUT_MODEL.stat().st_size/1024:.1f} KB)")
     print(f"Meta saved  → {OUT_META}")
     print("\n✅ Done.")

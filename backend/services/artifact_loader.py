@@ -34,6 +34,10 @@ class Artifacts:
     station_map: Optional[dict] = None
     station_concurrency: Optional[dict] = None
     prophet_models: dict = field(default_factory=dict)   # junction → {model, mae}
+    closure_meta: Optional[dict] = None
+    priority_meta: Optional[dict] = None
+    closure_encoding_lookups: Optional[dict] = None
+    priority_encoding_lookups: Optional[dict] = None
 
     @property
     def all_core_loaded(self) -> bool:
@@ -46,6 +50,10 @@ class Artifacts:
             self.corridor_risk_index is not None,
             self.station_map is not None,
             self.station_concurrency is not None,
+            self.closure_meta is not None,
+            self.priority_meta is not None,
+            self.closure_encoding_lookups is not None,
+            self.priority_encoding_lookups is not None,
         ])
 
     def get_artifact_status(self) -> dict:
@@ -57,6 +65,10 @@ class Artifacts:
             "corridor_risk_index": self.corridor_risk_index is not None,
             "station_map": self.station_map is not None,
             "station_concurrency": self.station_concurrency is not None,
+            "closure_meta": self.closure_meta is not None,
+            "priority_meta": self.priority_meta is not None,
+            "closure_encoding_lookups": self.closure_encoding_lookups is not None,
+            "priority_encoding_lookups": self.priority_encoding_lookups is not None,
             "prophet_models_count": len(self.prophet_models),
         }
 
@@ -122,6 +134,10 @@ def get_artifacts() -> Artifacts:
         station_map=_load_json(artifact_dir / "station_map.json"),
         station_concurrency=_load_json(artifact_dir / "station_concurrency.json"),
         prophet_models=_load_prophet_models(artifact_dir / "prophet_models"),
+        closure_meta=_load_json(artifact_dir / "closure_meta.json"),
+        priority_meta=_load_json(artifact_dir / "priority_meta.json"),
+        closure_encoding_lookups=_load_json(artifact_dir / "closure_encoding_lookups.json"),
+        priority_encoding_lookups=_load_json(artifact_dir / "priority_encoding_lookups.json"),
     )
 
     if arts.all_core_loaded:

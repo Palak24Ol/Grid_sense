@@ -259,6 +259,24 @@ def main():
     with open(OUT_META, "w") as f:
         json.dump(meta, f, indent=2)
 
+    # Export cause_closure_rate + corridor_density lookups for inference
+    train_labels_full = fm_labels.iloc[train_idx]
+    cause_lookup = train_labels_full.groupby("event_cause")["y_closure"].mean().to_dict()
+    cause_lookup["__default__"] = float(train_labels_full["y_closure"].mean())
+
+    corridor_density_lookup = (
+        clean.groupby("corridor").size().apply(lambda c: float(np.log1p(c))).to_dict()
+    )
+    corridor_density_lookup["__default__"] = 0.0
+
+    encoding_lookups = {
+        "cause_closure_rate":    {k: round(float(v), 4) for k, v in cause_lookup.items()},
+        "corridor_density_log":  {k: round(float(v), 4) for k, v in corridor_density_lookup.items()},
+    }
+    with open(ARTIFACT_DIR / "priority_encoding_lookups.json", "w") as f:
+        json.dump(encoding_lookups, f, indent=2)
+    print(f"Encoding lookups → {ARTIFACT_DIR / 'priority_encoding_lookups.json'}")
+
     print(f"\nModel → {OUT_MODEL} ({OUT_MODEL.stat().st_size/1024:.1f} KB)")
     print(f"Meta  → {OUT_META}")
     print("\n✅ Done.")
