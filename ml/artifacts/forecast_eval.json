@@ -1,0 +1,79 @@
+{
+  "version": "v2",
+  "corridors": [
+    {
+      "corridor": "Mysore Road",
+      "mae": 0.42512434811721045,
+      "smape": 178.92732226284863,
+      "incidents": 735
+    },
+    {
+      "corridor": "Bellary Road 1",
+      "mae": 0.3253870386592168,
+      "smape": 185.18864976720943,
+      "incidents": 581
+    },
+    {
+      "corridor": "Tumkur Road",
+      "mae": 0.2652785948787705,
+      "smape": 188.67273606989835,
+      "incidents": 447
+    },
+    {
+      "corridor": "Bellary Road 2",
+      "mae": 0.15546551852731105,
+      "smape": 196.93096312185568,
+      "incidents": 372
+    },
+    {
+      "corridor": "Hosur Road",
+      "mae": 0.11702672134760145,
+      "smape": 199.34869263662557,
+      "incidents": 243
+    },
+    {
+      "corridor": "ORR North 1",
+      "mae": 0.2211939425262123,
+      "smape": 195.97432689703126,
+      "incidents": 250
+    },
+    {
+      "corridor": "Old Madras Road",
+      "mae": 0.141535200222182,
+      "smape": 198.36574616141723,
+      "incidents": 235
+    },
+    {
+      "corridor": "Magadi Road",
+      "mae": 0.18129728810742782,
+      "smape": 193.6699234554574,
+      "incidents": 234
+    },
+    {
+      "corridor": "ORR East 1",
+      "mae": 0.20423949571781344,
+      "smape": 195.49568114877465,
+      "incidents": 226
+    },
+    {
+      "corridor": "ORR North 2",
+      "mae": 0.1530439337917033,
+      "smape": 196.15508844020582,
+      "incidents": 232
+    },
+    {
+      "corridor": "Bannerghata Road",
+      "mae": 0.14038404056584997,
+      "smape": 197.4917458818634,
+      "incidents": 155
+    },
+    {
+      "corridor": "ORR East 2",
+      "mae": 0.1183577146274927,
+      "smape": 196.71065331235303,
+      "incidents": 178
+    }
+  ],
+  "mean_mae": 0.204,
+  "mean_smape": 193.6
+}

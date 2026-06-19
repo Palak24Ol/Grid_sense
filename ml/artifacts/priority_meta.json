@@ -1,0 +1,31 @@
+{
+  "threshold": 0.74,
+  "feature_cols": [
+    "event_cause_encoded",
+    "vehicle_type_encoded",
+    "hour_of_day",
+    "day_of_week",
+    "month",
+    "hour_sin",
+    "hour_cos",
+    "is_high_priority_corridor",
+    "is_non_corridor",
+    "has_vehicle_type",
+    "has_zone",
+    "police_station_encoded",
+    "zone_encoded",
+    "corridor_encoded",
+    "lat_bin",
+    "lon_bin",
+    "is_daytime",
+    "is_planned",
+    "cause_closure_rate",
+    "corridor_density_log"
+  ],
+  "target": "requires_road_closure",
+  "problem": "severity_closure_risk",
+  "auc_roc": 0.7379,
+  "auc_pr": 0.3376,
+  "version": "v2",
+  "note": "v2 reframes target from 'priority' (operationally biased) to 'requires_road_closure' (data-driven severity). New features: lat_bin, lon_bin, is_daytime, is_planned, cause_closure_rate, corridor_density_log."
+}
