@@ -1,5 +1,5 @@
 {
-  "threshold": 0.74,
+  "threshold": 0.56,
   "feature_cols": [
     "event_cause_encoded",
     "vehicle_type_encoded",
@@ -8,6 +8,8 @@
     "month",
     "hour_sin",
     "hour_cos",
+    "dow_sin",
+    "dow_cos",
     "is_high_priority_corridor",
     "is_non_corridor",
     "has_vehicle_type",
@@ -15,6 +17,9 @@
     "police_station_encoded",
     "zone_encoded",
     "corridor_encoded",
+    "is_rush_hour",
+    "corridor_events_4h",
+    "corridor_events_24h",
     "lat_bin",
     "lon_bin",
     "is_daytime",
@@ -22,10 +27,13 @@
     "cause_closure_rate",
     "corridor_density_log"
   ],
-  "target": "requires_road_closure",
-  "problem": "severity_closure_risk",
-  "auc_roc": 0.7379,
-  "auc_pr": 0.3376,
-  "version": "v2",
-  "note": "v2 reframes target from 'priority' (operationally biased) to 'requires_road_closure' (data-driven severity). New features: lat_bin, lon_bin, is_daytime, is_planned, cause_closure_rate, corridor_density_log."
+  "target": "y_severity",
+  "problem": "composite_severity",
+  "auc_roc": 0.8058,
+  "auc_pr": 0.3545,
+  "f1": 0.45,
+  "baseline_rule_f1": 0.4454,
+  "split_method": "time_based",
+  "version": "v3",
+  "note": "v3: composite severity target (closure + duration + disruption). Time-based split. New features: dow_sin/cos, corridor_events_4h/24h, is_rush_hour."
 }

@@ -1,0 +1,21 @@
+{
+  "feature_cols": [
+    "event_cause_encoded",
+    "corridor_encoded",
+    "vehicle_type_encoded",
+    "hour_of_day",
+    "day_of_week",
+    "month",
+    "is_high_priority_corridor",
+    "is_rush_hour"
+  ],
+  "target": "log1p(duration_mins)",
+  "mae": 318.3,
+  "medae": 45.2,
+  "lookup_mae": 288.2,
+  "improvement_pct": -10.5,
+  "train_size": 2216,
+  "test_size": 554,
+  "version": "v2",
+  "split_method": "time_based"
+}

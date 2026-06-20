@@ -147,7 +147,7 @@ def get_artifacts() -> Artifacts:
     )
 
     if arts.all_core_loaded:
-        logger.info("All core artifacts loaded successfully ✓")
+        logger.info("All core artifacts loaded successfully.")
     else:
         logger.warning("Some artifacts missing — running in mock/degraded mode")
 

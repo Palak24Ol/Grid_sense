@@ -65,6 +65,24 @@ export default function PredictionResultCard({ result }) {
           </div>
         )}
 
+        {/* SHAP AI Explanations */}
+        {result.top_reasons && result.top_reasons.length > 0 && (
+          <div className="p-4 rounded-xl border border-border bg-muted/10 space-y-2">
+            <h4 className="font-semibold text-sm flex items-center gap-2">
+              <Info className="w-4 h-4 text-primary" />
+              Why did the AI predict this?
+            </h4>
+            <ul className="space-y-1">
+              {result.top_reasons.map((reason, idx) => (
+                <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="text-primary/70 mt-0.5">•</span>
+                  {reason}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
       </div>
       
       {/* Model info footer */}
