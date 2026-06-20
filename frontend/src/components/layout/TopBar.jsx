@@ -4,12 +4,30 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
+import { useMapStore } from "../../store/useMapStore";
 
-const MOCK_CORRIDORS = [
-  "ORR South", "ORR East 1", "ORR East 2", "Bellary Road 1", "Bellary Road 2",
-  "Mysore Road", "Tumkur Road", "Bannerghata Road", "Hosur Road",
-  "CBD 1", "CBD 2", "West of Chord Road", "Old Madras Road",
-];
+// Corridor name → [lat, lng, zoom]
+const CORRIDOR_COORDS = {
+  "ORR South":             [12.9139, 77.5659, 14],
+  "ORR East 1":            [12.9502, 77.6992, 14],
+  "ORR East 2":            [12.9954, 77.6829, 14],
+  "ORR North 1":           [13.0388, 77.6211, 14],
+  "ORR North 2":           [13.0451, 77.5816, 14],
+  "ORR West 1":            [12.9139, 77.5659, 14],
+  "Bellary Road 1":        [13.0208, 77.5880, 14],
+  "Bellary Road 2":        [13.0804, 77.5962, 14],
+  "Mysore Road":           [12.9663, 77.6071, 14],
+  "Tumkur Road":           [13.0429, 77.5128, 14],
+  "Bannerghata Road":      [12.9094, 77.5982, 14],
+  "Hosur Road":            [12.9055, 77.6310, 14],
+  "CBD 1":                 [12.9808, 77.6028, 14],
+  "CBD 2":                 [12.9808, 77.6028, 14],
+  "West of Chord Road":    [12.9879, 77.5443, 14],
+  "Old Madras Road":       [12.9808, 77.6246, 14],
+  "IRR(Thanisandra road)": [12.9275, 77.6213, 14],
+};
+
+const MOCK_CORRIDORS = Object.keys(CORRIDOR_COORDS);
 
 const MOCK_NOTIFICATIONS = [
   { id: 1, type: "critical", title: "High Surge Risk", message: "ORR South — 4.4x vulnerability multiplier detected.", time: "2m ago" },
@@ -30,8 +48,10 @@ export default function TopBar() {
   const [searchQuery, setSearchQuery]         = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
   const searchRef = useRef(null);
   const notifRef  = useRef(null);
+  const { setViewport } = useMapStore();
 
   useEffect(() => {
     const handler = (e) => {
@@ -45,6 +65,15 @@ export default function TopBar() {
   const filtered = MOCK_CORRIDORS.filter(c =>
     c.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleCorridorSelect = (corridor) => {
+    setSearchQuery(corridor);
+    setIsSearchFocused(false);
+    const coords = CORRIDOR_COORDS[corridor];
+    if (coords) {
+      setViewport({ center: [coords[0], coords[1]], zoom: coords[2] });
+    }
+  };
 
   return (
     <div className="h-16 bg-card border-b border-border flex items-center justify-between px-6 shrink-0 z-20">
@@ -68,7 +97,7 @@ export default function TopBar() {
                   {filtered.map((corridor, i) => (
                     <li
                       key={i}
-                      onClick={() => { setSearchQuery(corridor); setIsSearchFocused(false); }}
+                      onClick={() => handleCorridorSelect(corridor)}
                       className="px-3 py-2 hover:bg-muted/60 cursor-pointer text-sm flex items-center gap-2 text-foreground transition-colors"
                     >
                       <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
@@ -119,18 +148,27 @@ export default function TopBar() {
             )}
           >
             <Bell className="w-4.5 h-4.5" />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full border border-card" />
+            {notifications.length > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full border border-card" />
+            )}
           </button>
 
           {showNotifications && (
             <div className="absolute top-full right-0 mt-2 w-80 bg-card border border-border rounded-xl shadow-2xl overflow-hidden z-50">
               <div className="px-4 py-3 border-b border-border flex justify-between items-center">
                 <span className="font-semibold text-sm text-foreground">Alerts</span>
-                <span className="text-xs text-primary cursor-pointer hover:underline">Clear all</span>
+                {notifications.length > 0 && (
+                  <span
+                    onClick={() => setNotifications([])}
+                    className="text-xs text-primary cursor-pointer hover:underline"
+                  >Clear all</span>
+                )}
               </div>
               <div className="max-h-72 overflow-y-auto divide-y divide-border">
-                {MOCK_NOTIFICATIONS.map((n) => (
-                  <div key={n.id} className="p-3 hover:bg-muted/40 transition-colors flex gap-3 cursor-pointer">
+                {notifications.length === 0 ? (
+                  <p className="p-6 text-xs text-muted-foreground text-center">No alerts</p>
+                ) : notifications.map((n) => (
+                  <div key={n.id} className="p-3 hover:bg-muted/40 transition-colors flex gap-3 cursor-pointer group">
                     <div className="mt-0.5 shrink-0">
                       {n.type === "critical" && <AlertTriangle className="w-4 h-4 text-destructive" />}
                       {n.type === "warning"  && <AlertCircle   className="w-4 h-4 text-warning" />}
@@ -147,11 +185,18 @@ export default function TopBar() {
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{n.message}</p>
                     </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setNotifications(prev => prev.filter(x => x.id !== n.id)); }}
+                      className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground text-xs px-1 transition-opacity shrink-0"
+                    >✕</button>
                   </div>
                 ))}
               </div>
               <div className="px-4 py-2 border-t border-border bg-muted/20 text-center">
-                <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                <button
+                  onClick={() => setShowNotifications(false)}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
                   View all alerts
                 </button>
               </div>

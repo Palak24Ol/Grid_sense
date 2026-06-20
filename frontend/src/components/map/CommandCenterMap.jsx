@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useMapStore } from '../../store/useMapStore';
@@ -7,7 +7,16 @@ import { getIncidents } from '../../api/incidents';
 // ─── Map viewport updater ─────────────────────────────────────────────────
 function MapUpdater({ center, zoom }) {
   const map = useMap();
-  useEffect(() => { map.setView(center, zoom); }, [center, zoom, map]);
+  const prevCenter = useRef(null);
+
+  useEffect(() => {
+    // Only fly if the center actually changed (avoids flying on initial mount)
+    const key = `${center[0]},${center[1]},${zoom}`;
+    if (prevCenter.current === key) return;
+    prevCenter.current = key;
+    map.flyTo(center, zoom, { animate: true, duration: 1.2 });
+  }, [center, zoom, map]);
+
   return null;
 }
 
