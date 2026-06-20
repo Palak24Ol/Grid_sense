@@ -11,6 +11,7 @@ Usage:
 """
 
 import json
+import warnings
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -35,7 +36,7 @@ class Artifacts:
     corridor_risk_index: Optional[dict] = None
     station_map: Optional[dict] = None
     station_concurrency: Optional[dict] = None
-    prophet_models: dict = field(default_factory=dict)   # junction → {model, mae}
+    prophet_models: dict = field(default_factory=dict)
     closure_meta: Optional[dict] = None
     priority_meta: Optional[dict] = None
     closure_encoding_lookups: Optional[dict] = None
@@ -43,7 +44,6 @@ class Artifacts:
 
     @property
     def all_core_loaded(self) -> bool:
-        """True if all non-Prophet artifacts are loaded."""
         return all([
             self.closure_model is not None,
             self.priority_model is not None,
@@ -96,7 +96,9 @@ def _load_pkl(path: Path) -> Optional[object]:
         logger.warning(f"Artifact not found: {path.name}")
         return None
     try:
-        obj = joblib.load(path)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            obj = joblib.load(path)
         size_kb = path.stat().st_size / 1024
         logger.info(f"Loaded {path.name} ({size_kb:.0f} KB, type={type(obj).__name__})")
         return obj
@@ -112,13 +114,24 @@ def _load_prophet_models(prophet_dir: Path) -> dict:
     models = {}
     for pkl_path in prophet_dir.glob("*.pkl"):
         try:
-            payload = joblib.load(pkl_path)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                payload = joblib.load(pkl_path)
             junction = payload.get("junction", pkl_path.stem)
             models[junction] = payload
         except Exception as e:
             logger.warning(f"Could not load prophet model {pkl_path.name}: {e}")
     logger.info(f"Loaded {len(models)} Prophet junction models")
     return models
+
+
+def _check_plotly() -> bool:
+    """Silently check if plotly is available without printing warnings."""
+    try:
+        import plotly  # noqa: F401
+        return True
+    except ImportError:
+        return False
 
 
 @lru_cache(maxsize=1)

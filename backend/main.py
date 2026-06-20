@@ -8,6 +8,11 @@ Or from project root:
     python -m uvicorn backend.main:app --reload
 """
 
+import warnings
+warnings.filterwarnings("ignore", message=".*NumPy.*")
+warnings.filterwarnings("ignore", message=".*numpy.*")
+warnings.filterwarnings("ignore", category=UserWarning, module="xgboost")
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -33,7 +38,6 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
     logger.info(f"GridSense backend starting (env={settings.ENV})")
 
-    # Eagerly load all ML artifacts into memory at startup.
     from backend.services.artifact_loader import get_artifacts
     arts = get_artifacts()
 
@@ -59,7 +63,6 @@ def create_app() -> FastAPI:
 
     register_middleware(app)
 
-    # Route registration
     prefix = "/api/v1"
     app.include_router(health_router)
     app.include_router(incidents_router,  prefix=prefix)

@@ -8,12 +8,14 @@ import {
   MapPin,
   CloudLightning,
   Radio,
+  CalendarDays,
 } from "lucide-react";
 import clsx from "clsx";
 
 const navItems = [
   { path: "/map",        label: "Command Center",  icon: Map,           sub: "Live overview" },
   { path: "/triage",     label: "Event Triage",    icon: Stethoscope,   sub: "Predict & classify" },
+  { path: "/planned-events", label: "Planned Events", icon: CalendarDays, sub: "Pre-deployment plans" },
   { path: "/blackspot",  label: "Risk Blackspots",  icon: MapPin,        sub: "Chronic hotspots" },
   { path: "/surge",      label: "Surge Alert",     icon: CloudLightning, sub: "Weather multiplier" },
   { path: "/forecast",   label: "72h Forecast",    icon: LineChart,     sub: "Corridor risk" },

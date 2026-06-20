@@ -54,6 +54,6 @@ class RequestMetaMiddleware(BaseHTTPMiddleware):
         response.headers["X-Response-Time-Ms"] = str(elapsed_ms)
 
         logger.debug(
-            f"{request.method} {request.url.path} → {response.status_code} ({elapsed_ms}ms)",
+            f"{request.method} {request.url.path} -> {response.status_code} ({elapsed_ms}ms)",
         )
         return response

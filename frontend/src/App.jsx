@@ -5,6 +5,7 @@ import TriageScreen from "./components/triage/TriageScreen";
 import BlackspotScreen from "./components/blackspot/BlackspotScreen";
 import SurgeScreen from "./components/surge/SurgeScreen";
 import DeploymentScreen from "./components/deployment/DeploymentScreen";
+import PlannedEventsScreen from "./components/events/PlannedEventsScreen";
 import ForecastScreen from "./components/forecast/ForecastScreen";
 import FlipkartScreen from "./components/flipkart/FlipkartScreen";
 
@@ -18,6 +19,7 @@ function App() {
           <Route index element={<Navigate to="/map" replace />} />
           <Route path="map" element={<MapPage />} />
           <Route path="triage" element={<TriageScreen />} />
+          <Route path="planned-events" element={<PlannedEventsScreen />} />
           <Route path="forecast" element={<ForecastScreen />} />
           <Route path="deployment" element={<DeploymentScreen />} />
           <Route path="flipkart" element={<FlipkartScreen />} />
