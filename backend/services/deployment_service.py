@@ -5,7 +5,10 @@ from backend.services.artifact_loader import get_artifacts
 
 # Derived from corridor_adjacency.json — for each corridor, which adjacent
 # corridor + road provides the best diversion, and typical extra delay.
-_DIVERSION_MAP: dict[str, list[dict]] = {
+# Public (no leading underscore) because backend/services/logistics_service.py
+# reuses this exact map for LCV reroute suggestions — one source of truth
+# instead of two hardcoded copies that can silently drift apart.
+DIVERSION_MAP: dict[str, list[dict]] = {
     "Mysore Road":        [{"via": "ORR West 1",       "road": "Outer Ring Road West",     "extra_mins": 12},
                            {"via": "Old Madras Road",   "road": "NICE Road connector",      "extra_mins": 18}],
     "Bellary Road 1":     [{"via": "Bellary Road 2",   "road": "Yelahanka bypass",          "extra_mins": 8},
@@ -68,7 +71,7 @@ def _build_diversion_routes(
     if closure_probability < 0.25:
         return []
 
-    alternatives = _DIVERSION_MAP.get(corridor, [])
+    alternatives = DIVERSION_MAP.get(corridor, [])
     if not alternatives:
         return []
 

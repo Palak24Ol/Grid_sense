@@ -1,15 +1,20 @@
 import sys
 import warnings
+import pytest
+from fastapi.testclient import TestClient
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", message=".*httpx.*")
 warnings.filterwarnings("ignore", message=".*NumPy.*")
 
 sys.path.insert(0, '.')
-from fastapi.testclient import TestClient
 from backend.main import create_app
 
-app = create_app()
-client = TestClient(app)
+@pytest.fixture(scope="module")
+def client():
+    app = create_app()
+    with TestClient(app) as c:
+        yield c
 
 scenarios = [
     {'event_cause': 'accident',           'corridor': None, 'vehicle_type': 'heavy_vehicle', 'hour_of_day': 21, 'day_of_week': 2},
@@ -19,10 +24,16 @@ scenarios = [
     {'event_cause': 'protest',            'corridor': None, 'vehicle_type': None,             'hour_of_day': 18, 'day_of_week': 4},
 ]
 
-for s in scenarios:
-    r = client.post('/api/v1/predict/triage', json=s)
-    if r.status_code != 200:
-        print(s['event_cause'], '-> HTTP', r.status_code, r.text[:300])
-        continue
-    d = r.json()
-    print(f"{s['event_cause']:<20} proba_high={d['priority_probability']:.3f}  pred={d['predicted_priority']:<5}  disagree={d['disagreement_flag']}")
+@pytest.mark.parametrize("scenario", scenarios)
+def test_predict_triage(client, scenario):
+    response = client.post('/api/v1/predict/triage', json=scenario)
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+    
+    data = response.json()
+    assert "priority_probability" in data
+    assert "predicted_priority" in data
+    assert "disagreement_flag" in data
+    
+    assert data["predicted_priority"] in ["High", "Medium", "Low"]
+    assert isinstance(data["priority_probability"], float)
+    assert 0.0 <= data["priority_probability"] <= 1.0

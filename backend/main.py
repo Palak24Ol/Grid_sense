@@ -26,7 +26,7 @@ from backend.api.routes.incidents import router as incidents_router
 from backend.api.routes.corridors import router as corridors_router
 from backend.api.routes.forecast import router as forecast_router
 from backend.api.routes.deploy import router as deploy_router
-from backend.api.routes.flipkart import router as flipkart_router
+from backend.api.routes.logistics import router as logistics_router
 from backend.api.routes.blackspot import router as blackspot_router
 from backend.api.routes.surge import router as surge_router
 
@@ -70,7 +70,7 @@ def create_app() -> FastAPI:
     app.include_router(predict_router,    prefix=prefix)
     app.include_router(forecast_router,   prefix=prefix)
     app.include_router(deploy_router,     prefix=prefix)
-    app.include_router(flipkart_router,   prefix=prefix)
+    app.include_router(logistics_router,  prefix=prefix)
     app.include_router(blackspot_router,  prefix=prefix)
     app.include_router(surge_router,      prefix=prefix)
 

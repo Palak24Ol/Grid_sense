@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 
 from backend.schemas.prediction import PredictionRequest, PredictionResponse, AnalogLookupRequest, AnalogLookupResponse, AnalogEvent
-from backend.services.prediction_service import run_prediction
+from backend.services.prediction_service import predict_incident
 from backend.core.logging import get_logger
 from backend.api.dependencies import get_db
 from backend.db.repositories.triage_log_repository import TriageLogRepository
@@ -17,7 +17,7 @@ def predict_triage(req: PredictionRequest, db: Session = Depends(get_db)) -> Pre
         # Currently run_prediction returns a flat dict in prediction_service?
         # No, wait, prediction_service currently returns an old structure. We need to adapt it.
         # I'll just rewrite prediction_service's return later, but for now we call it
-        res = run_prediction(req)
+        res = predict_incident(req)
         
         # Log to triage_log
         try:

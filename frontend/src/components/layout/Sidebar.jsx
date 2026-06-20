@@ -20,7 +20,7 @@ const navItems = [
   { path: "/surge",      label: "Surge Alert",     icon: CloudLightning, sub: "Weather multiplier" },
   { path: "/forecast",   label: "72h Forecast",    icon: LineChart,     sub: "Corridor risk" },
   { path: "/deployment", label: "Deploy Officers", icon: ShieldAlert,   sub: "Manpower planner" },
-  { path: "/flipkart",   label: "LCV Logistics",   icon: Truck,         sub: "Fleet incidents" },
+  { path: "/logistics",  label: "LCV Logistics",   icon: Truck,         sub: "Fleet incidents" },
 ];
 
 export default function Sidebar() {

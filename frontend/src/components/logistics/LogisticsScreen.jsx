@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Polyline, Tooltip } from 'react-leaflet';
-import { Package, Truck, AlertTriangle, Navigation, TrendingUp, RefreshCw } from 'lucide-react';
+import { Package, Truck, AlertTriangle, Navigation, TrendingUp, RefreshCw, Info } from 'lucide-react';
 import { client } from '../../api/client';
 import clsx from 'clsx';
 
@@ -19,7 +19,7 @@ const RISK_BADGE = {
   low:    'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
 };
 
-export default function FlipkartScreen() {
+export default function LogisticsScreen() {
   const [data, setData]       = useState(null);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,6 +38,7 @@ export default function FlipkartScreen() {
   useEffect(() => { load(); }, []);
 
   const corridors = data?.corridors || [];
+  const recent7dTotal = corridors.reduce((sum, c) => sum + (c.recent_7d_incidents || 0), 0);
 
   return (
     <div className="h-full flex flex-col md:flex-row relative">
@@ -62,8 +63,8 @@ export default function FlipkartScreen() {
               >
                 <Tooltip sticky>
                   <strong>{c.corridor}</strong><br />
-                  {c.active_lcv_incidents} active LCV incidents<br />
-                  Avg delay: {c.avg_delay_mins} min
+                  {c.incident_count} incidents in dataset<br />
+                  Avg delay: {c.avg_delay_mins ?? '—'} min
                 </Tooltip>
               </Polyline>
             );
@@ -91,7 +92,7 @@ export default function FlipkartScreen() {
           </div>
         )}
 
-        {!loading && data && (
+        {!loading && data && !data.error && (
           <div className="flex-1 overflow-y-auto p-5 space-y-5">
 
             {/* Summary stats */}
@@ -101,8 +102,8 @@ export default function FlipkartScreen() {
                 <p className="text-2xl font-bold text-destructive">{data.high_risk_corridors}</p>
               </div>
               <div className="bg-muted/20 border border-border rounded-xl p-3 text-center flex flex-col items-center justify-center gap-1">
-                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Active Disruptions</span>
-                <p className="text-2xl font-bold text-warning">{data.active_disruptions}</p>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Incidents (last 7d)</span>
+                <p className="text-2xl font-bold text-warning">{recent7dTotal}</p>
               </div>
               <div className="bg-muted/20 border border-border rounded-xl p-3 text-center flex flex-col items-center justify-center gap-1">
                 <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Incidents/Week</span>
@@ -111,25 +112,25 @@ export default function FlipkartScreen() {
             </div>
 
             {/* Surge day callout */}
-            {data.surge_day_reference && (
+            {data.surge_day_reference && !data.surge_day_reference.error && (
               <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-xl">
                 <p className="text-xs font-bold uppercase tracking-wider text-destructive flex items-center gap-1.5 mb-2">
                   <AlertTriangle className="w-3.5 h-3.5" />
                   Worst-Case Reference — {data.surge_day_reference.date}
                 </p>
                 <p className="text-sm text-foreground/80">
-                  {data.surge_day_reference.surge_multiplier}x surge ({data.surge_day_reference.total_lcv_incidents} vs {data.surge_day_reference.baseline_daily_avg} baseline).
-                  Cause: <span className="font-medium capitalize">{data.surge_day_reference.primary_cause.replace('_', ' ')}</span>.
+                  {data.surge_day_reference.surge_multiplier}x surge ({data.surge_day_reference.total_lcv_incidents} vs {data.surge_day_reference.baseline_daily_avg}/day baseline).
+                  Cause: <span className="font-medium capitalize">{(data.surge_day_reference.primary_cause || 'unknown').replace(/_/g, ' ')}</span>.
                   {' '}{data.surge_day_reference.estimated_total_delay_hrs} total delay-hours across fleet.
                 </p>
               </div>
             )}
 
-            {/* Disclosure */}
+            {/* Disclosure — now reflects what's actually computed, not a stale snapshot */}
             <div className="flex items-start gap-2 p-3 bg-primary/10 border border-primary/20 rounded-lg text-xs text-primary/80">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <Info className="w-4 h-4 shrink-0 mt-0.5" />
               <p>
-                <strong>Methodology:</strong> Intelligence derived from static analysis of 678 historical LCV incidents. Real-time DB querying is scoped for V2.
+                <strong>Methodology:</strong> {data.data_note || `Computed live from ${data.total_lcv_incidents_dataset} historical LCV incidents.`}
               </p>
             </div>
 
@@ -161,10 +162,10 @@ export default function FlipkartScreen() {
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3" />{c.incident_count} incidents
+                        <TrendingUp className="w-3 h-3" />{c.incident_count} total
                       </span>
-                      <span>{c.active_lcv_incidents} active</span>
-                      <span className="text-warning">+{c.avg_delay_mins} min avg</span>
+                      <span>{c.recent_7d_incidents} last 7d</span>
+                      <span className="text-warning">{c.avg_delay_mins != null ? `+${c.avg_delay_mins} min avg` : 'no delay data'}</span>
                     </div>
                   </button>
                 ))}
@@ -176,38 +177,46 @@ export default function FlipkartScreen() {
               <div className="border border-primary/30 bg-primary/10 rounded-xl p-4 space-y-3">
                 <p className="font-bold text-sm text-foreground">{selected.corridor} — Detail</p>
 
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1.5">Impacted Hubs</p>
-                  <div className="flex flex-wrap gap-2">
-                    {selected.impacted_hubs?.map(h => (
-                      <span key={h} className="text-xs bg-muted/30 border border-border px-2 py-0.5 rounded-md">
-                        {h}
-                      </span>
-                    ))}
+                {selected.impacted_hubs?.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1.5">Impacted Hubs</p>
+                    <div className="flex flex-wrap gap-2">
+                      {selected.impacted_hubs.map(h => (
+                        <span key={h} className="text-xs bg-muted/30 border border-border px-2 py-0.5 rounded-md">
+                          {h}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-                  <p className="text-xs font-medium text-emerald-400 flex items-center gap-1.5 mb-1">
-                    <Navigation className="w-3.5 h-3.5" />
-                    Suggested Reroute
-                  </p>
-                  <p className="text-sm font-semibold">{selected.suggested_reroute}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    +{selected.reroute_extra_mins} min vs. direct route
-                  </p>
-                </div>
+                {selected.suggested_reroute ? (
+                  <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+                    <p className="text-xs font-medium text-emerald-400 flex items-center gap-1.5 mb-1">
+                      <Navigation className="w-3.5 h-3.5" />
+                      Suggested Reroute
+                    </p>
+                    <p className="text-sm font-semibold">{selected.suggested_reroute}</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      +{selected.reroute_extra_mins} min vs. direct route
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">No diversion route on file for this corridor.</p>
+                )}
               </div>
             )}
 
           </div>
         )}
 
-        {!loading && !data && (
+        {!loading && (!data || data.error) && (
           <div className="flex-1 flex items-center justify-center p-6 text-center">
             <div className="space-y-2">
               <AlertTriangle className="w-8 h-8 text-muted-foreground mx-auto" />
-              <p className="text-sm text-muted-foreground">LCV API unavailable. Is the backend running?</p>
+              <p className="text-sm text-muted-foreground">
+                {data?.error || 'LCV API unavailable. Is the backend running?'}
+              </p>
               <button onClick={load} className="text-xs text-primary hover:underline">Retry</button>
             </div>
           </div>

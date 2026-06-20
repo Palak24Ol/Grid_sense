@@ -1,5 +1,56 @@
 import { AlertTriangle, Clock, Info } from 'lucide-react';
 
+// Covers every entry in closure_meta.json / priority_meta.json feature_cols
+// (see backend/services/prediction_service.py _build_base_features). Keep
+// this in sync if a retrain adds a new feature column — the fallback below
+// will never show a raw `_encoded` model-internal name, but a real label
+// here is always better than the generic fallback.
+const FEATURE_LABELS = {
+  cause_closure_rate:        "Historical closure rate for this cause",
+  station_priority_rate:     "Historical severity at this police station",
+  corridor_density_log:      "Traffic density on this corridor",
+  corridor_encoded:          "Specific road/corridor historical profile",
+  event_cause_encoded:       "Specific nature of the incident",
+  vehicle_type_encoded:      "Type of vehicle involved",
+  police_station_encoded:    "Historical pattern at this police station",
+  zone_encoded:              "Zone-level historical pattern",
+  hour_sin:                  "Time of day (cyclical traffic patterns)",
+  hour_cos:                  "Time of day (cyclical traffic patterns)",
+  hour_of_day:               "Time of day",
+  dow_sin:                   "Day of week (cyclical pattern)",
+  dow_cos:                   "Day of week (cyclical pattern)",
+  day_of_week:               "Day of week",
+  month:                     "Time of year (seasonal pattern)",
+  is_high_priority_corridor: "Location is a known high-priority corridor",
+  is_non_corridor:           "Location is off the named corridor network",
+  is_rush_hour:              "Occurred during peak rush hour",
+  is_daytime:                "Occurred during daytime hours",
+  is_planned:                "Reported as a planned event",
+  has_vehicle_type:          "Vehicle type was specified",
+  has_zone:                  "Zone was specified",
+  corridor_events_4h:        "Other incidents on this corridor in the last 4 hours",
+  corridor_events_24h:       "Other incidents on this corridor in the last 24 hours",
+  lat_bin:                   "Geographic location (latitude band)",
+  lon_bin:                   "Geographic location (longitude band)",
+};
+
+/** Translate a raw SHAP feature name (or a rule-fallback sentence, which
+ * passes through untouched) into operator-facing language. Never leaks a
+ * `_encoded` / `_bin` style internal name — falls back to a humanized,
+ * suffix-stripped version if the feature isn't in the map above. */
+function translateReason(feature) {
+  if (FEATURE_LABELS[feature]) return FEATURE_LABELS[feature];
+  // Rule-fallback messages are already full sentences with spaces, not
+  // underscored feature names — leave them exactly as the backend wrote them.
+  if (feature.includes(' ')) return feature;
+  return feature
+    .replace(/_encoded$/, '')
+    .replace(/_bin$/, '')
+    .replace(/_log$/, '')
+    .replace(/_/g, ' ')
+    .replace(/^./, (c) => c.toUpperCase());
+}
+
 export default function PredictionResultCard({ result }) {
   if (!result) return null;
 
@@ -80,18 +131,8 @@ export default function PredictionResultCard({ result }) {
                 const parts = reason.split(' (');
                 const feature = parts[0];
                 const value = parts.length > 1 ? '(' + parts[1] : '';
-                
-                let translated = feature.replace(/_/g, " ");
-                if (feature.includes("cause_closure_rate")) translated = "Historical closure rate for this cause";
-                else if (feature.includes("hour_cos") || feature.includes("hour_sin") || feature.includes("hour_of_day")) translated = "Time of day (cyclical traffic patterns)";
-                else if (feature.includes("is_high_priority_corridor")) translated = "Location is a known high-priority corridor";
-                else if (feature.includes("station_priority_rate")) translated = "Historical severity at this police station";
-                else if (feature.includes("corridor_encoded")) translated = "Specific road/corridor historical profile";
-                else if (feature.includes("event_cause_encoded")) translated = "Specific nature of the incident";
-                else if (feature.includes("vehicle_type_encoded")) translated = "Type of vehicle involved";
-                else if (feature.includes("is_rush_hour")) translated = "Occurred during peak rush hour";
-                else if (feature.includes("is_daytime")) translated = "Occurred during daytime hours";
-                
+                const translated = translateReason(feature);
+
                 return (
                 <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
                   <span className="text-primary/70 mt-0.5">•</span>
@@ -108,7 +149,7 @@ export default function PredictionResultCard({ result }) {
       <div className="p-3 border-t border-border bg-muted/10 text-xs text-muted-foreground flex justify-between items-center">
         <div className="flex items-center gap-1">
           <Info className="w-3 h-3" />
-          Powered by XGBoost & Random Forest Ensembles
+          Powered by XGBoost & SHAP, with rule-based fallback when it wins
         </div>
         <div className="font-mono">
           Models: {result.model_versions.closure_model}

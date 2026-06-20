@@ -7,7 +7,7 @@ import SurgeScreen from "./components/surge/SurgeScreen";
 import DeploymentScreen from "./components/deployment/DeploymentScreen";
 import PlannedEventsScreen from "./components/events/PlannedEventsScreen";
 import ForecastScreen from "./components/forecast/ForecastScreen";
-import FlipkartScreen from "./components/flipkart/FlipkartScreen";
+import LogisticsScreen from "./components/logistics/LogisticsScreen";
 
 const MapPage = () => <div className="p-4 h-full"><CommandCenterMap /></div>;
 
@@ -22,7 +22,7 @@ function App() {
           <Route path="planned-events" element={<PlannedEventsScreen />} />
           <Route path="forecast" element={<ForecastScreen />} />
           <Route path="deployment" element={<DeploymentScreen />} />
-          <Route path="flipkart" element={<FlipkartScreen />} />
+          <Route path="logistics" element={<LogisticsScreen />} />
           <Route path="blackspot" element={<BlackspotScreen />} />
           <Route path="surge" element={<SurgeScreen />} />
         </Route>
