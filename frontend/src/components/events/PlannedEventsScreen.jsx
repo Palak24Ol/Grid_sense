@@ -92,6 +92,8 @@ export default function PlannedEventsScreen() {
     event_cause:         "public_event",
     hour_of_day:         19,
     day_of_week:         6, // Sunday
+    event_name:          "",
+    crowd_size:          "medium",
   });
   
   const [cascadeResult, setCascadeResult] = useState(null);
@@ -106,7 +108,9 @@ export default function PlannedEventsScreen() {
         corridor: form.corridor,
         event_cause: form.event_cause,
         hour_of_day: Number(form.hour_of_day),
-        day_of_week: Number(form.day_of_week)
+        day_of_week: Number(form.day_of_week),
+        crowd_size: form.crowd_size,
+        event_name: form.event_name || null,
       };
 
       // 1. Run cascade prediction and triage model in parallel
@@ -200,11 +204,60 @@ export default function PlannedEventsScreen() {
                 </StyledSelect>
               </div>
 
+              {/* NEW: Event Name */}
+              <div className="col-span-2">
+                <FieldLabel icon={Radio}>Event Name <span className="text-muted-foreground/50 font-normal">(optional)</span></FieldLabel>
+                <StyledInput
+                  type="text"
+                  placeholder="e.g. IPL Final at Chinnaswamy, Rajyotsava Rally"
+                  value={form.event_name}
+                  onChange={(e) => setForm((f) => ({ ...f, event_name: e.target.value }))}
+                />
+              </div>
+
               <div className="col-span-2">
                 <FieldLabel icon={MapPin}>Location (Corridor)</FieldLabel>
                 <StyledSelect value={form.corridor} onChange={(e) => setForm((f) => ({ ...f, corridor: e.target.value }))}>
                   {CORRIDORS.map((c) => <option key={c} value={c}>{c}</option>)}
                 </StyledSelect>
+              </div>
+
+              {/* NEW: Crowd Size */}
+              <div className="col-span-2">
+                <FieldLabel icon={Users}>Expected Crowd Size</FieldLabel>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { val: "small",  label: "Small",  sub: "<5,000"  },
+                    { val: "medium", label: "Medium", sub: "5k–20k"  },
+                    { val: "large",  label: "Large",  sub: ">20,000" },
+                  ].map(({ val, label, sub }) => (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setForm((f) => ({ ...f, crowd_size: val }))}
+                      className={clsx(
+                        "rounded-lg py-2 px-3 border text-xs font-medium transition-all flex flex-col items-center gap-0.5",
+                        form.crowd_size === val
+                          ? "bg-primary/15 border-primary/50 text-primary"
+                          : "bg-muted/20 border-border text-muted-foreground hover:border-primary/30"
+                      )}
+                    >
+                      <span>{label}</span>
+                      <span className={clsx("text-[10px] font-normal", form.crowd_size === val ? "text-primary/70" : "text-muted-foreground/60")}>{sub}</span>
+                    </button>
+                  ))}
+                </div>
+                {form.crowd_size === "large" && (
+                  <p className="text-[10px] text-warning mt-1.5 flex items-center gap-1">
+                    <ShieldAlert className="w-3 h-3" />
+                    Large crowd: cascade multiplier will be scaled up by 1.7×
+                  </p>
+                )}
+                {form.crowd_size === "medium" && (
+                  <p className="text-[10px] text-muted-foreground mt-1.5">
+                    Medium crowd: cascade multiplier scaled by 1.3×
+                  </p>
+                )}
               </div>
 
               <div>
@@ -246,7 +299,7 @@ export default function PlannedEventsScreen() {
           {deployResult && cascadeResult && (
             <div className="space-y-4 border-t border-border pt-5">
 
-              {/* Tier badge & Warning */}
+              {/* Tier badge & Event name */}
               <div className="flex items-center justify-between">
                 <p className="section-label">Pre-Deployment Brief</p>
                 {tier && (
@@ -256,12 +309,35 @@ export default function PlannedEventsScreen() {
                   </div>
                 )}
               </div>
-              
-              {/* Removed stale product decision disclosure for the demo */}
+
+              {cascadeResult.event_name && (
+                <div className="bg-primary/8 border border-primary/20 rounded-lg px-3 py-2 text-xs text-primary font-medium flex items-center gap-2">
+                  <Radio className="w-3.5 h-3.5 shrink-0" />
+                  {cascadeResult.event_name}
+                </div>
+              )}
+
+              {cascadeResult.crowd_size && cascadeResult.crowd_size !== "small" && (
+                <div className="bg-warning/10 border border-warning/30 rounded-lg p-2.5 flex items-start gap-2">
+                  <ShieldAlert className="w-4 h-4 text-warning mt-0.5 shrink-0" />
+                  <p className="text-[10px] text-warning/90 leading-tight">
+                    <strong>{cascadeResult.crowd_size === "large" ? "Large" : "Medium"} crowd multiplier applied:</strong>{" "}
+                    Base {cascadeResult.cascade_multiplier}x → <strong>{cascadeResult.adjusted_cascade_multiplier}x</strong>{" "}
+                    ({cascadeResult.crowd_multiplier}× crowd factor). Extra officers included in recommendation.
+                  </p>
+                </div>
+              )}
 
               {/* Metric grid */}
               <div className="grid grid-cols-2 gap-2.5">
-                <MetricCard label="Cascade Impact"    value={`${cascadeResult.cascade_multiplier}x`} sub="traffic multiplier" highlight />
+                <MetricCard
+                  label="Cascade Impact"
+                  value={`${cascadeResult.adjusted_cascade_multiplier ?? cascadeResult.cascade_multiplier}x`}
+                  sub={cascadeResult.adjusted_cascade_multiplier !== cascadeResult.cascade_multiplier
+                    ? `base ${cascadeResult.cascade_multiplier}x × crowd`
+                    : "traffic multiplier"}
+                  highlight
+                />
                 <MetricCard label="Primary Station"   value={deployResult.recommended_station} highlight />
                 <MetricCard label="Officers Needed"   value={deployResult.recommended_officer_count} sub="personnel required" highlight />
                 <MetricCard label="Corridor Risk"     value={`${deployResult.corridor_risk_score?.toFixed(1)} / 100`} />
@@ -302,7 +378,7 @@ export default function PlannedEventsScreen() {
                   </p>
                   <div className="space-y-2">
                     {deployResult.diversion_routes.map((r, i) => (
-                      <div key={i} className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
+                      <div className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
                         <div className="flex items-center gap-2 font-semibold text-foreground">
                           <span>{r.from_junction}</span>
                           <ChevronRight className="w-3 h-3 text-muted-foreground" />

@@ -9,6 +9,7 @@ import {
   CloudLightning,
   Radio,
   CalendarDays,
+  GraduationCap,
 } from "lucide-react";
 import clsx from "clsx";
 
@@ -21,6 +22,7 @@ const navItems = [
   { path: "/forecast",   label: "72h Forecast",    icon: LineChart,     sub: "Corridor risk" },
   { path: "/deployment", label: "Deploy Officers", icon: ShieldAlert,   sub: "Manpower planner" },
   { path: "/logistics",  label: "LCV Logistics",   icon: Truck,         sub: "Fleet incidents" },
+  { path: "/learning",   label: "Model Learning",  icon: GraduationCap, sub: "Post-event accuracy" },
 ];
 
 export default function Sidebar() {

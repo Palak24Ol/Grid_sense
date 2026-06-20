@@ -59,7 +59,9 @@ async def predict_cascade(request: CascadeRequest, service: CascadeService = Dep
         cause=request.event_cause,
         corridor=request.corridor,
         hour=request.hour_of_day,
-        day_of_week=request.day_of_week
+        day_of_week=request.day_of_week,
+        crowd_size=request.crowd_size,
+        event_name=request.event_name,
     )
 
 @router.post("/planned-event-lookup", response_model=AnalogLookupResponse)

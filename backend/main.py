@@ -29,6 +29,7 @@ from backend.api.routes.deploy import router as deploy_router
 from backend.api.routes.logistics import router as logistics_router
 from backend.api.routes.blackspot import router as blackspot_router
 from backend.api.routes.surge import router as surge_router
+from backend.api.routes.learning import router as learning_router
 
 logger = get_logger(__name__)
 
@@ -73,6 +74,7 @@ def create_app() -> FastAPI:
     app.include_router(logistics_router,  prefix=prefix)
     app.include_router(blackspot_router,  prefix=prefix)
     app.include_router(surge_router,      prefix=prefix)
+    app.include_router(learning_router,   prefix=prefix)
 
     return app
 

@@ -16,6 +16,7 @@ from backend.api.routes.deploy import router as deploy_router
 from backend.api.routes.logistics import router as logistics_router
 from backend.api.routes.blackspot import router as blackspot_router
 from backend.api.routes.surge import router as surge_router
+from backend.api.routes.learning import router as learning_router
 
 __all__ = [
     "health_router",
@@ -27,4 +28,5 @@ __all__ = [
     "logistics_router",
     "blackspot_router",
     "surge_router",
+    "learning_router",
 ]

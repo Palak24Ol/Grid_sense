@@ -24,3 +24,7 @@ class TriageLog(Base):
     recommended_officer_count = Column(Integer, nullable=True)
     escalation_tier = Column(String(20), nullable=True)
     created_at = Column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+    # Post-event learning columns (added in migration 003)
+    actual_duration_mins = Column(Float, nullable=True)
+    actual_closure = Column(Boolean, nullable=True)
+    actual_officer_count = Column(Integer, nullable=True)

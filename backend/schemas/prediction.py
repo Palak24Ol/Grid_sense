@@ -55,6 +55,8 @@ class CascadeRequest(BaseModel):
     corridor: str
     hour_of_day: int
     day_of_week: int
+    crowd_size: Optional[str] = None   # "small" | "medium" | "large"
+    event_name: Optional[str] = None   # free text label e.g. "IPL Final at Chinnaswamy"
 
 class CascadeAtRiskJunction(BaseModel):
     junction: str
@@ -80,3 +82,7 @@ class CascadeResponse(BaseModel):
     recommended_officer_buffer: int
     cascade_window_hours: int
     interpretation: str
+    crowd_size: Optional[str] = None
+    crowd_multiplier: float = 1.0
+    event_name: Optional[str] = None
+    adjusted_cascade_multiplier: Optional[float] = None
