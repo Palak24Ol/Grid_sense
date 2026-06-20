@@ -1,13 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
 
 class PredictionRequest(BaseModel):
     corridor: Optional[str] = None
     event_cause: str
     vehicle_type: Optional[str] = None
-    hour_of_day: int
-    day_of_week: int
-    month: Optional[int] = None
+    hour_of_day: int = Field(ge=0, le=23)
+    day_of_week: int = Field(ge=0, le=6)  # 0=Mon ... 6=Sun
+    month: Optional[int] = Field(default=None, ge=1, le=12)
     zone: Optional[str] = None
     police_station: Optional[str] = None
     latitude: Optional[float] = None
@@ -32,8 +32,8 @@ class PredictionResponse(BaseModel):
 class AnalogLookupRequest(BaseModel):
     event_cause: str
     corridor: str
-    hour_of_day: int
-    day_of_week: int
+    hour_of_day: int = Field(ge=0, le=23)
+    day_of_week: int = Field(ge=0, le=6)
 
 class AnalogEvent(BaseModel):
     id: str
@@ -53,8 +53,8 @@ class AnalogLookupResponse(BaseModel):
 class CascadeRequest(BaseModel):
     event_cause: str        # procession, protest, public_event, vip_movement
     corridor: str
-    hour_of_day: int
-    day_of_week: int
+    hour_of_day: int = Field(ge=0, le=23)
+    day_of_week: int = Field(ge=0, le=6)
     crowd_size: Optional[str] = None   # "small" | "medium" | "large"
     event_name: Optional[str] = None   # free text label e.g. "IPL Final at Chinnaswamy"
 

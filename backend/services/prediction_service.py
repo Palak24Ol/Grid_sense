@@ -418,7 +418,14 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
 
     cause = (req.event_cause or "").strip().lower()
     corridor = req.corridor or "Non-corridor"
-    key = f"{cause}_{corridor}"
+    # duration_lookup.json is keyed by event_cause ALONE (see
+    # ml/pipeline/05_train_duration.py::build_duration_lookup, which does
+    # `for cause, group in dur_df.groupby("event_cause")`) — there is no
+    # corridor dimension in this artifact. Previously this looked up
+    # f"{cause}_{corridor}", which can never match any real key, so the
+    # lookup branch was silently dead and every request fell through to
+    # the XGBoost fallback below.
+    key = cause
 
     if arts.duration_lookup and key in arts.duration_lookup:
         stats = arts.duration_lookup[key]
@@ -426,13 +433,20 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
         p25 = stats["p25"]
         p75 = stats["p75"]
     elif arts.duration_model and arts.duration_meta:
-        # Fallback to XGBoost if this specific cause+corridor combination
-        # wasn't in the training set enough times to build a lookup.
+        # Fallback to XGBoost if this specific cause wasn't in the training
+        # set enough times to build a lookup entry.
         d_cols = arts.duration_meta.get("feature_cols", [])
         if d_cols:
             x_d = pd.DataFrame([{col: float(feature_dict_c.get(col) if feature_dict_c.get(col) is not None else 0.0) for col in d_cols}])
-            duration = float(arts.duration_model.predict(x_d)[0])
-            duration = max(10.0, min(duration, 300.0))
+            raw_pred = float(arts.duration_model.predict(x_d)[0])
+            # The model is trained on log1p(duration_mins) (see duration_meta.json
+            # "target" field and ml/pipeline/05_train_duration.py's np.expm1 at
+            # eval time) — the raw output must be inverse-transformed before use.
+            # Previously this was skipped, so the ~2.8-6.0 log-space output was
+            # treated as literal minutes and the floor below clamped EVERY
+            # prediction to exactly 10.0 regardless of incident type.
+            duration = float(np.expm1(raw_pred))
+            duration = max(10.0, min(duration, 1440.0))
             p25 = duration * 0.75
             p75 = duration * 1.3
 

@@ -1,7 +1,6 @@
 import { useSurgeStore } from '../../store/useSurgeStore';
 import { Play, Pause, BarChart2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export default function March7ReplayPanel() {

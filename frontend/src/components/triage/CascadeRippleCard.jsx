@@ -1,6 +1,5 @@
-import { ShieldAlert, TrendingUp, Users, MapPin } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
-import L from 'leaflet';
+import { TrendingUp, Users, MapPin } from 'lucide-react';
+import { MapContainer, TileLayer, Popup, CircleMarker } from 'react-leaflet';
 import clsx from 'clsx';
 
 // A simple small map focusing on the first at-risk junction, or Bangalore center
