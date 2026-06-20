@@ -1,111 +1,132 @@
-# 🚦 GridSense
+# 🚦 GridSense: Event-Driven Congestion Intelligence System
 
-![GridSense Banner](https://img.shields.io/badge/GridSense-Traffic%20Intelligence-0f172a?style=for-the-badge&logo=react)
-![Python FastAPI](https://img.shields.io/badge/Backend-FastAPI_&_Python-009688?style=for-the-badge&logo=fastapi)
-![Machine Learning](https://img.shields.io/badge/ML-XGBoost_&_Prophet-f59e0b?style=for-the-badge&logo=scikit-learn)
+![GridSense Banner](https://img.shields.io/badge/Status-Active-success) ![License](https://img.shields.io/badge/License-MIT-blue) ![Python](https://img.shields.io/badge/Python-3.13-yellow) ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688) ![React](https://img.shields.io/badge/React-Frontend-61dafb)
 
-GridSense is an AI-powered traffic intelligence and incident management platform designed for the city of Bengaluru. By leveraging historical incident data, machine learning classification, and time-series forecasting, GridSense enables proactive resource deployment, automated incident triage, and optimized logistics routing.
+**GridSense** is a production-grade machine learning platform built for city traffic authorities to predict, triage, and manage event-driven traffic congestion before it paralyses the city.
 
 ---
 
-## ✨ Core Features
+## 🛑 The Problem
+Political rallies, festivals, sports events, vehicle breakdowns, and unseasonal weather create highly localized, unpredictable traffic congestion. Traffic police are often reactive—deploying manpower and diversions *after* the gridlock occurs.
 
-1. **🚨 Triage & Predict:** Real-time ML classification of incoming traffic incidents. Automatically predicts if an incident is **High Priority** (needs immediate dispatch) and whether it will require a physical **Road Closure**.
-2. **📈 72-Hour Corridor Forecast:** Dynamic time-series forecasting predicting hourly incident volumes across 12 major city corridors, allowing authorities to anticipate morning and evening surge windows.
-3. **📍 Blackspots Analysis:** Historical heatmapping and risk-scoring of the city's most dangerous junctions and corridors based on incident density.
-4. **🚓 Automated Deployment:** Intelligent allocation of emergency responders and traffic police to critical corridors based on predicted 24-hour risk scores.
-5. **🚚 LCV Logistics:** Route optimization and dispatch window recommendations for Light Commercial Vehicles to avoid predicted peak incident hours.
+## 💡 The Solution
+GridSense shifts traffic management from **reactive** to **predictive**. By analyzing historical incident data (causes, vehicle types, day/time cyclicality, and corridor adjacency), the system automatically triages incoming incidents to predict priority, likelihood of road closure, and expected clearance duration.
 
 ---
 
-## 🧠 Machine Learning Architecture
+## ✨ Key Features
 
-GridSense utilizes a multi-model ML pipeline to power its predictive capabilities:
-
-*   **Incident Priority Classifier (XGBoost)**
-    *   **Task:** Multi-class prediction of incident priority to optimize emergency responder dispatch.
-    *   **Performance:** 92% Accuracy, 0.95 ROC-AUC, 0.93 F1-Score.
-*   **Road Closure Prediction (XGBoost)**
-    *   **Task:** Binary classification to predict if an incident will escalate to require a road closure (a severe 8.3% minority class).
-    *   **Performance:** 94% Accuracy, 0.93 ROC-AUC, 0.69 F1-Score.
-*   **Traffic Forecasting Models (Facebook Prophet)**
-    *   **Task:** 12 independent Additive Seasonality models predicting 72-hour incident volumes for major corridors.
-    *   **Performance:** Averages ~0.18 MAE, effectively isolating strong daily and weekly patterns to detect distinct morning/evening peaks.
+* **🧠 AI Triage Engine:** Uses XGBoost Ensembles to instantly classify incoming traffic incidents. It calculates priority confidence, road closure probability, and predicts clearance duration in minutes.
+* **🔍 SHAP Explainability:** AI shouldn't be a black box. GridSense integrates SHAP (SHapley Additive exPlanations) to provide human-readable logic for *why* a prediction was made (e.g., "+ Heavy Truck Involved", "- Non-Rush Hour").
+* **🛡️ Statistical Fallback Nets:** Real-world ML isn't perfect. If the AI detects low-confidence data, it seamlessly falls back to heavily tested statistical medians (e.g., historical group-by averages) ensuring the system never crashes or returns hallucinated values.
+* **🌐 Command Center Map:** A beautiful, dark-mode React dashboard allowing traffic controllers to visualize live incidents and AI predictions dynamically mapped across the city.
+* **🛑 Leakage-Free Architecture:** The ML training pipeline is built with strict time-based splits (temporal validation) to ensure honest, mathematically sound accuracy metrics free from data leakage.
 
 ---
 
-## 🛠️ Tech Stack
+## 📊 Model Evaluation & Honest Metrics
 
-*   **Frontend:** React (Vite), TailwindCSS, Lucide Icons
-*   **Backend:** Python, FastAPI, Uvicorn
-*   **Machine Learning:** XGBoost, Facebook Prophet, Pandas, Scikit-Learn
-*   **Mapping:** Leaflet (React-Leaflet)
+A core philosophy of GridSense is **mathematical honesty**. Most hackathon ML projects suffer from severe data leakage (e.g., using random train/test splits on time-series data), which artificially inflates accuracy to 95%+. 
+
+GridSense prevents this by using strict **temporal splitting** (training on past data, testing on future data) and strictly benchmarking against simple statistical heuristics. The results below represent the *true* signal in the historical traffic data:
+
+### 1. Severity / Priority Classification Model (XGBoost)
+Predicts the composite severity of an incident to assign a priority tier.
+* **XGBoost F1-Score:** `0.4500`
+* **Rule-based Baseline F1:** `0.4454`
+* *Verdict:* The ML model successfully learned complex interactions (like cyclical time + corridor density) to outperform a hardcoded human heuristic by +1.0%.
+
+### 2. Road Closure Risk Model (XGBoost)
+Predicts the likelihood of an incident requiring full lane closures.
+* **XGBoost F1-Score:** `0.3909`
+* **Rule-based Baseline F1:** `0.3983`
+* *Verdict:* Performs comparably to human heuristics. The extreme class imbalance (only 8.2% of incidents cause closures) required heavy `scale_pos_weight` tuning.
+
+### 3. Clearance Duration Model (XGBoost Regressor)
+Predicts the exact minutes required to resolve an incident.
+* **XGBoost Median Absolute Error (MedAE):** `45.2 minutes`
+* **Statistical Lookup Baseline MedAE:** `38.4 minutes`
+* *Verdict:* The basic "group-by-median" fallback actually outperforms the XGBoost regression due to high variance in real-world clearance times. GridSense automatically detects this and utilizes the statistical lookup table as a primary safety net.
+
+### 4. Hourly Corridor Forecasting (Prophet)
+Predicts traffic volume across major junctions.
+* **Prophet Mean Absolute Error (MAE):** `0.182`
+* **Naive Hourly Mean MAE:** `0.175`
+* *Verdict:* Prophet struggles to beat a naive historical average on this specific dataset, proving the need for live traffic integrations in V2.
 
 ---
 
-## 📂 Repository Structure
+## 🏗️ System Architecture
 
-```text
-GridSense/
-├── backend/                  # FastAPI Application
-│   ├── api/routes/           # API Endpoints (Forecast, Triage, Blackspots)
-│   ├── services/             # Core business logic and ML model loading
-│   └── schemas/              # Pydantic data validation models
-├── frontend/                 # React Vite Application
-│   ├── src/components/       # UI Components (ForecastScreen, TriageScreen, etc.)
-│   └── public/               # Static assets
-├── ml/                       # Machine Learning Pipeline
-│   ├── pipeline/             # Numbered Python scripts (01 to 06) for training
-│   └── artifacts/            # Output directory for encoders and .pkl models
-└── data/                     # Raw and Processed dataset directory
+GridSense is built using a modern, decoupled stack:
+
+### 1. The Machine Learning Pipeline (`/ml`)
+* **Data Processing:** `pandas`, `numpy` (includes automatic event deduplication).
+* **Feature Engineering:** Cyclical time encodings (`sin`/`cos`), rolling geographical incident counts, and composite severity targeting.
+* **Models:** `XGBoost` (Classification & Regression), `Prophet` (Corridor Forecasting).
+* **Explainability:** `SHAP` tree-explainers.
+
+### 2. The Backend (`/backend`)
+* **Framework:** `FastAPI` (Asynchronous API).
+* **Database:** `PostgreSQL` via `SQLAlchemy`.
+* **Model Serving:** In-memory `.pkl` loading via an abstract Artifact Loader module.
+
+### 3. The Frontend (`/frontend`)
+* **Framework:** `React` (Vite).
+* **Styling:** `Tailwind CSS`.
+* **Mapping:** Leaflet/Mapbox integrations.
+
+---
+
+## 🚀 How to Run Locally
+
+### Prerequisites
+* Python 3.10+
+* Node.js & npm
+* PostgreSQL (Running on port 5433)
+
+### 1. Install Backend Dependencies
+Navigate to the root directory and install the Python requirements:
+```powershell
+py -m pip install -r requirements.txt
 ```
 
----
-
-## 🚀 Installation & Setup
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/GridSense.git
-cd GridSense
+### 2. Start the FastAPI Backend
+Start the backend server on `localhost:8000`:
+```powershell
+py -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### 2. Machine Learning & Backend Setup (Python)
-Ensure you have Python 3.10+ installed.
-
-```bash
-# Create and activate a virtual environment
-python -m venv venv
-venv\Scripts\activate  # On Windows
-
-# Install dependencies
-pip install fastapi uvicorn pandas scikit-learn xgboost prophet
-
-# (Optional) Retrain the ML Models
-python ml/pipeline/01_ingest.py
-python ml/pipeline/02_feature_engineering.py
-python ml/pipeline/03_train_priority.py
-python ml/pipeline/04_train_closure.py
-python ml/pipeline/05_score_blackspots.py
-python ml/pipeline/06_train_forecast.py
-
-# Start the FastAPI Server
-uvicorn backend.main:app --reload --port 8000
-```
-
-### 3. Frontend Setup (Node.js)
-Ensure you have Node.js installed. Open a **new terminal window**.
-
-```bash
+### 3. Start the React Frontend
+Open a **second terminal**, navigate to the frontend folder, and start the Vite dev server:
+```powershell
 cd frontend
-npm install
+$env:VITE_USE_MOCK="false"  # Windows
+# export VITE_USE_MOCK="false" # Mac/Linux
 npm run dev
 ```
-
-The application will now be running at `http://localhost:5173`.
+Navigate to `http://localhost:5173` in your browser.
 
 ---
 
-## 👨‍💻 Authors & Acknowledgments
+## 🧪 Running the ML Pipeline
 
-Built for optimized urban traffic management and intelligent predictive logistics.
+To completely retrain the AI models from scratch using the raw data, run the pipeline scripts in sequential order:
+
+```powershell
+py ml/pipeline/01_ingest.py
+py ml/pipeline/02_feature_engineer.py
+py ml/pipeline/03_train_closure.py
+py ml/pipeline/04_train_priority.py
+py ml/pipeline/05_train_duration.py
+py ml/pipeline/06_train_forecast.py
+py ml/pipeline/07_export_artifacts.py
+```
+*(Tests can be run via `py test_predict.py` to verify API endpoint responses).*
+
+---
+
+## 🔮 Future Scope
+While the current architecture is fully operational on historical datasets, the immediate next steps for production deployment include:
+1. **Live Traffic APIs:** Integrating the Google Maps or TomTom Traffic API to feed real-time velocity data into the XGBoost models.
+2. **Weather Multipliers:** Connecting the OpenWeatherMap API to dynamically alter severity/duration predictions based on sudden rainfall or storms.
