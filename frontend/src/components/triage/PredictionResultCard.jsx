@@ -28,12 +28,15 @@ export default function PredictionResultCard({ result }) {
 
           <div className="rounded-xl p-4 border border-border bg-muted/20 flex flex-col items-center justify-center text-center gap-1">
             <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Road Closure Risk</span>
-            <span className={`text-3xl font-bold ${result.closure_flag ? 'text-destructive' : 'text-primary'}`}>
-              {result.closure_flag ? 'Yes' : 'No'}
+            <span className={`text-2xl font-bold ${result.closure_flag ? 'text-destructive' : 'text-primary'}`}>
+              {result.closure_flag ? 'High Risk' : 'Low Risk'}
             </span>
-            <span className="text-xs text-muted-foreground mt-2">
-              {(result.closure_probability * 100).toFixed(1)}% probability
-            </span>
+            <div className="w-full bg-muted rounded-full h-1.5 mt-2 overflow-hidden flex">
+              <div 
+                className={`h-full rounded-full ${result.closure_flag ? 'bg-destructive' : 'bg-primary'}`} 
+                style={{ width: `${Math.min(100, Math.max(0, result.closure_probability * 100))}%` }} 
+              />
+            </div>
           </div>
         </div>
 
@@ -73,12 +76,28 @@ export default function PredictionResultCard({ result }) {
               Why did the AI predict this?
             </h4>
             <ul className="space-y-1">
-              {result.top_reasons.map((reason, idx) => (
+              {result.top_reasons.map((reason, idx) => {
+                const parts = reason.split(' (');
+                const feature = parts[0];
+                const value = parts.length > 1 ? '(' + parts[1] : '';
+                
+                let translated = feature.replace(/_/g, " ");
+                if (feature.includes("cause_closure_rate")) translated = "Historical closure rate for this cause";
+                else if (feature.includes("hour_cos") || feature.includes("hour_sin") || feature.includes("hour_of_day")) translated = "Time of day (cyclical traffic patterns)";
+                else if (feature.includes("is_high_priority_corridor")) translated = "Location is a known high-priority corridor";
+                else if (feature.includes("station_priority_rate")) translated = "Historical severity at this police station";
+                else if (feature.includes("corridor_encoded")) translated = "Specific road/corridor historical profile";
+                else if (feature.includes("event_cause_encoded")) translated = "Specific nature of the incident";
+                else if (feature.includes("vehicle_type_encoded")) translated = "Type of vehicle involved";
+                else if (feature.includes("is_rush_hour")) translated = "Occurred during peak rush hour";
+                else if (feature.includes("is_daytime")) translated = "Occurred during daytime hours";
+                
+                return (
                 <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
                   <span className="text-primary/70 mt-0.5">•</span>
-                  {reason}
+                  <span>{translated} <span className="text-xs opacity-60 ml-1">{value}</span></span>
                 </li>
-              ))}
+              )})}
             </ul>
           </div>
         )}

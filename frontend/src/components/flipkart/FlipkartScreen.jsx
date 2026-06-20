@@ -125,6 +125,14 @@ export default function FlipkartScreen() {
               </div>
             )}
 
+            {/* Disclosure */}
+            <div className="flex items-start gap-2 p-3 bg-primary/10 border border-primary/20 rounded-lg text-xs text-primary/80">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <p>
+                <strong>Methodology:</strong> Intelligence derived from static analysis of 678 historical LCV incidents. Real-time DB querying is scoped for V2.
+              </p>
+            </div>
+
             {/* Corridor list */}
             <div>
               <p className="section-label mb-3">

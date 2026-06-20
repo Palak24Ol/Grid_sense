@@ -102,28 +102,35 @@ export default function PlannedEventsScreen() {
   const handleGenerate = async () => {
     setLoading(true); setError(null); setCascadeResult(null); setDeployResult(null);
     try {
-      const cascadePayload = {
+      const basePayload = {
         corridor: form.corridor,
         event_cause: form.event_cause,
         hour_of_day: Number(form.hour_of_day),
         day_of_week: Number(form.day_of_week)
       };
 
-      // 1. Fetch cascade multiplier and risk
-      const { data: cascadeData } = await client.post("/predict/cascade", cascadePayload);
-      
-      // 2. Fetch deployment recommendation using assumptions for a planned event
+      // 1. Run cascade prediction and triage model in parallel
+      const [{ data: cascadeData }, { data: triageData }] = await Promise.all([
+        client.post("/predict/cascade", basePayload),
+        client.post("/predict/triage", {
+          ...basePayload,
+          vehicle_type: "none",
+          is_planned: true,
+        }),
+      ]);
+
+      // 2. Use real ML outputs from triage — no hardcoded assumptions
       const deployPayload = {
-        ...cascadePayload,
+        ...basePayload,
         vehicle_type: "none",
-        closure_probability: 0.5, // Hardcoded > 0.25 to trigger diversion routes
-        predicted_priority: "High", // Assume High risk for planned events
-        predicted_duration_mins: 120, // 2 hour event block
+        closure_probability: triageData.closure_probability,
+        predicted_priority: triageData.predicted_priority,
+        predicted_duration_mins: triageData.predicted_duration_mins,
       };
       const { data: deployData } = await client.post("/deploy/recommend", deployPayload);
 
       setCascadeResult(cascadeData);
-      setDeployResult(deployData);
+      setDeployResult({ ...deployData, _triageData: triageData });
     } catch (e) {
       setError(e?.response?.data?.detail || "API error — is the backend running?");
     } finally {
@@ -301,7 +308,7 @@ export default function PlannedEventsScreen() {
                   </p>
                   <div className="space-y-2">
                     {deployResult.diversion_routes.map((r, i) => (
-                      <div key={i} className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
+                      <div className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
                         <div className="flex items-center gap-2 font-semibold text-foreground">
                           <span>{r.from_junction}</span>
                           <ChevronRight className="w-3 h-3 text-muted-foreground" />

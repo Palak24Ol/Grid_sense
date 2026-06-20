@@ -242,9 +242,18 @@ def run_prediction(req: PredictionRequest) -> PredictionResponse:
         if disagreement_flag else None
     )
 
-    # Duration prediction: ML model primary, lookup fallback
+    # Duration prediction: lookup table is PRIMARY (MedAE 38.4 vs model's 45.2 on temporal split).
+    # XGBoost duration model serves as fallback for causes not present in the lookup table.
     predicted_duration_mins = None
-    if arts.duration_model is not None and arts.duration_meta is not None:
+    if arts.duration_lookup is not None:
+        cause = req.event_cause or "__default__"
+        entry = arts.duration_lookup.get(cause) or arts.duration_lookup.get("__default__")
+        if entry is not None:
+            predicted_duration_mins = entry.get("median", 45.0)
+
+    # Fallback: XGBoost model for causes not covered by the lookup table
+    if predicted_duration_mins is None and arts.duration_model is not None and arts.duration_meta is not None:
+        logger.info(f"Duration lookup miss for cause='{req.event_cause}' — using XGBoost fallback")
         dur_cols = arts.duration_meta.get("feature_cols", [])
         dur_features = {col: feature_dict.get(col, 0) for col in dur_cols}
         X_dur = pd.DataFrame([dur_features])[dur_cols]
@@ -252,12 +261,7 @@ def run_prediction(req: PredictionRequest) -> PredictionResponse:
         predicted_duration_mins = round(float(np.expm1(pred_log)), 1)
         predicted_duration_mins = max(1.0, min(predicted_duration_mins, 5000.0))
 
-    if predicted_duration_mins is None and arts.duration_lookup is not None:
-        cause = req.event_cause or "__default__"
-        entry = arts.duration_lookup.get(cause, arts.duration_lookup.get("__default__", {}))
-        predicted_duration_mins = entry.get("median", 45.0)
-
-    # Final fallback if neither model nor lookup is available
+    # Final safety net
     if predicted_duration_mins is None:
         predicted_duration_mins = 45.0
 

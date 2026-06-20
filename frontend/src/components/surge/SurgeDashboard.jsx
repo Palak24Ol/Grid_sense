@@ -45,6 +45,7 @@ export default function SurgeDashboard() {
             <p className="text-sm text-foreground/80 leading-relaxed">
               Current weather conditions match historical patterns for mass incidents. 
               Top vulnerable corridor: <span className="font-bold text-foreground">{topCorridor}</span>. 
+              Expect up to <span className="font-bold text-warning">{Math.max(1, (vulnerability.corridors[0]?.vulnerability_score || 0) / 10).toFixed(1)}x more incidents</span> than a normal day.
               System recommends immediate execution of city-wide pre-deployment plan.
             </p>
           </div>

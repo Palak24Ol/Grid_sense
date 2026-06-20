@@ -24,6 +24,16 @@ GridSense shifts traffic management from **reactive** to **predictive**. By anal
 
 ---
 
+## 🧠 Honest ML on Constrained Real-World Data
+
+Before reading the metrics, this context is important. GridSense operates on a dataset of **8,173 real incidents** collected from Bengaluru's ASTRAM system over roughly 22 weeks. Unlike toy datasets designed for ML benchmarks, this data carries all the messiness of real-world operational data: extreme class imbalance (only **8.2% of incidents cause road closures**), a large proportion of off-corridor (`Non-corridor`) incidents with sparse labels, and a hard temporal constraint that prevents any form of data leakage.
+
+Most hackathon ML projects report 90–95%+ accuracy by using random train/test splits on time-series data — this is a form of data leakage where the model effectively "sees the future" during training. GridSense deliberately prevents this using strict **temporal splitting**: the model is trained exclusively on past data and evaluated on future data it has never seen, exactly as it would work in production.
+
+As a result, our metrics are lower than leaky models but reflect **true predictive signal**. Outperforming even a well-tuned rule-based heuristic by any margin on a constrained, imbalanced, temporally-split dataset is a meaningful result. Where the ML model does not outperform the statistical baseline, GridSense transparently uses the better baseline in production — this is how real ML systems are built.
+
+---
+
 ## 📊 Model Evaluation & Honest Metrics
 
 A core philosophy of GridSense is **mathematical honesty**. Most hackathon ML projects suffer from severe data leakage (e.g., using random train/test splits on time-series data), which artificially inflates accuracy to 95%+. 
