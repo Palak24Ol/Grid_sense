@@ -157,7 +157,9 @@ function IncidentPopup({ inc }) {
 
   const junction = inc.junction && inc.junction.length < 40
     ? inc.junction
-    : 'Unknown junction';
+    : inc.corridor && inc.corridor !== "Non-corridor" 
+      ? `${inc.corridor} Segment` 
+      : 'Local Road';
 
   return (
     <div style={{fontFamily:'inherit', minWidth:190}}>

@@ -8,10 +8,12 @@ export default function SurgeDashboard() {
   if (!vulnerability || !vulnerability.corridors) return null;
 
   const overallRisk = vulnerability.critical_count > 0 ? 'critical' : 'high';
-  const topCorridor = vulnerability.corridors[0]?.corridor || 'Unknown';
+  const topActualCorridor = vulnerability.corridors.find(c => c.corridor !== "Non-corridor");
+  const topCorridor = topActualCorridor?.corridor || 'Unknown';
+  const topMultiplier = topActualCorridor ? Math.max(1, topActualCorridor.vulnerability_score / 10).toFixed(1) : "1.0";
 
   return (
-    <div className="bg-card border border-border rounded-xl shadow-sm flex flex-col overflow-hidden">
+    <div className="bg-card border border-border rounded-xl shadow-sm flex flex-col shrink-0 overflow-hidden">
       <div className="p-4 border-b border-border bg-card flex items-center justify-between">
         <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
           <CloudLightning className="w-4 h-4 text-warning" />
@@ -45,7 +47,7 @@ export default function SurgeDashboard() {
             <p className="text-sm text-foreground/80 leading-relaxed">
               Current weather conditions match historical patterns for mass incidents. 
               Top vulnerable corridor: <span className="font-bold text-foreground">{topCorridor}</span>. 
-              Expect up to <span className="font-bold text-warning">{Math.max(1, (vulnerability.corridors[0]?.vulnerability_score || 0) / 10).toFixed(1)}x more incidents</span> than a normal day.
+              Expect up to <span className="font-bold text-warning">{topMultiplier}x more incidents</span> than a normal day.
               System recommends immediate execution of city-wide pre-deployment plan.
             </p>
           </div>
@@ -64,7 +66,10 @@ export default function SurgeDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {vulnerability.corridors.slice(0, 5).map((c) => {
+                {vulnerability.corridors
+                  .filter(c => c.corridor !== "Non-corridor")
+                  .slice(0, 5)
+                  .map((c) => {
                   const primaryCause = c.water_logging_count > c.tree_fall_count ? 'water_logging' : 'tree_fall';
                   const multiplier = Math.max(1, c.vulnerability_score / 10).toFixed(1);
                   return (

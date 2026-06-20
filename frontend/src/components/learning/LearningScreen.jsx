@@ -145,7 +145,9 @@ function RecentTable({ history }) {
             const diffGood = diff != null && Math.abs(diff) < 15;
             return (
               <tr key={row.id || i} className={clsx("border-b border-border/50 hover:bg-muted/20 transition-colors", row.disagreement_flag && "bg-warning/5")}>
-                <td className="py-2 pr-3 truncate max-w-[120px] text-foreground font-medium">{row.corridor}</td>
+                <td className="py-2 pr-3 truncate max-w-[120px] text-foreground font-medium">
+                  {(!row.corridor || row.corridor === "Unknown") ? "Non-corridor" : row.corridor}
+                </td>
                 <td className="py-2 pr-3 text-muted-foreground">{CAUSE_LABELS[row.event_cause] || row.event_cause}</td>
                 <td className="py-2 pr-3 text-muted-foreground">{days[row.day_of_week ?? 0]} {String(row.hour_of_day ?? 0).padStart(2, "0")}:00</td>
                 <td className="py-2 pr-3">
