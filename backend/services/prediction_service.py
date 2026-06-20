@@ -252,8 +252,7 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
 
     # If the model didn't beat the baseline rule on the test set, or if
     # it completely diverges from common sense (e.g., says an accident
-    # has a 2% chance of closure), flag it. We STILL return the model's
-    # numbers so the UI can show them, but we raise the disagreement flag.
+    # has a 2% chance of closure), flag it.
     disagreement_flag = False
     disagreement_reason = None
     if c_rule_f1 > c_model_f1:
@@ -262,6 +261,9 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
             "ML closure model underperformed heuristic baseline in testing. "
             f"Model says {c_prob:.0%}, heuristic says {c_rule_prob:.0%}."
         )
+        # Use the rule-based output as the primary prediction
+        c_prob = c_rule_prob
+        c_flag = c_rule_flag
 
     # 2. Priority Model
     p_meta = arts.priority_meta or {}

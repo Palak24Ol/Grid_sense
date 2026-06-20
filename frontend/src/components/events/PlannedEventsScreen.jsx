@@ -257,13 +257,7 @@ export default function PlannedEventsScreen() {
                 )}
               </div>
               
-              {/* Product decision disclosure for the demo */}
-              <div className="bg-warning/10 border border-warning/30 rounded-lg p-2.5 flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-warning mt-0.5 shrink-0" />
-                <p className="text-[10px] text-warning/90 leading-tight">
-                  <strong>Assumed Pre-deployment Mode:</strong> For planned events, GridSense defaults to worst-case readiness (High Priority, 50% Closure Risk, 2-hour duration) to ensure maximum safety and diversion availability.
-                </p>
-              </div>
+              {/* Removed stale product decision disclosure for the demo */}
 
               {/* Metric grid */}
               <div className="grid grid-cols-2 gap-2.5">
@@ -308,7 +302,7 @@ export default function PlannedEventsScreen() {
                   </p>
                   <div className="space-y-2">
                     {deployResult.diversion_routes.map((r, i) => (
-                      <div className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
+                      <div key={i} className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
                         <div className="flex items-center gap-2 font-semibold text-foreground">
                           <span>{r.from_junction}</span>
                           <ChevronRight className="w-3 h-3 text-muted-foreground" />
