@@ -159,6 +159,13 @@ def get_deployment_recommendation(
         closure_probability=req.closure_probability,
     )
 
+    # 6. Historical incident count at the recommended station (deployment-
+    # confidence context — "this station has handled N incidents on record")
+    historical_station_incidents = (
+        station_repo.get_historical_incident_count(recommended_station)
+        if recommended_station != "Unknown" else 0
+    )
+
     return DeploymentResponse(
         recommended_station=recommended_station,
         secondary_station=None,
@@ -169,6 +176,6 @@ def get_deployment_recommendation(
         deployment_duration_mins=req.predicted_duration_mins,
         suggested_junctions=suggested_junctions,
         corridor_risk_score=corridor_risk_score,
-        historical_station_incidents=0,
+        historical_station_incidents=historical_station_incidents,
         diversion_routes=diversion_routes,
     )

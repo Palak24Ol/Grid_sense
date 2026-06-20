@@ -79,6 +79,7 @@ class IncidentRepository:
 
     def get_junction_aggregates(self) -> List[dict]:
         from sqlalchemy import Integer
+
         query = select(
             Incident.junction,
             func.avg(Incident.latitude).label('latitude'),
@@ -89,6 +90,27 @@ class IncidentRepository:
         ).where(Incident.junction.isnot(None)).group_by(Incident.junction)
 
         results = self.session.execute(query).all()
+
+        # Per-junction top cause: group by (junction, event_cause), then keep
+        # the highest-count cause for each junction. One extra grouped query
+        # instead of N+1 lookups.
+        cause_query = (
+            select(
+                Incident.junction,
+                Incident.event_cause,
+                func.count(Incident.id).label('cause_count'),
+            )
+            .where(Incident.junction.isnot(None))
+            .group_by(Incident.junction, Incident.event_cause)
+        )
+        top_cause_by_junction: dict[str, tuple[str, int]] = {}
+        for junction, event_cause, cause_count in self.session.execute(cause_query).all():
+            if event_cause is None:
+                continue
+            current = top_cause_by_junction.get(junction)
+            if current is None or cause_count > current[1]:
+                top_cause_by_junction[junction] = (event_cause, cause_count)
+
         out = []
         for r in results:
             out.append({
@@ -98,6 +120,6 @@ class IncidentRepository:
                 "incident_count": r.incident_count,
                 "high_priority_count": r.high_priority_count or 0,
                 "closure_count": r.closure_count or 0,
-                "top_cause": "unknown" 
+                "top_cause": top_cause_by_junction.get(r.junction, ("unknown", 0))[0],
             })
         return out

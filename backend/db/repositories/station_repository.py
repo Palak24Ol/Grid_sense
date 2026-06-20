@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, func
 from typing import List, Optional
 
 from backend.db.models.station import StationConcurrency
+from backend.db.models.incident import Incident
 
 class StationRepository:
     def __init__(self, session: Session):
@@ -15,3 +16,12 @@ class StationRepository:
             StationConcurrency.day_of_week == day_of_week
         )
         return self.session.execute(query).scalar_one_or_none()
+
+    def get_historical_incident_count(self, police_station: str) -> int:
+        """Total historical incidents on record for this police station —
+        used as deployment-confidence context (e.g. 'this station has
+        handled 312 incidents historically')."""
+        query = select(func.count(Incident.id)).where(
+            Incident.police_station == police_station
+        )
+        return self.session.execute(query).scalar() or 0

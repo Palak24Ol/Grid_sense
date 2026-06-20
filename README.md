@@ -101,13 +101,21 @@ Navigate to the root directory and install the Python requirements:
 py -m pip install -r requirements.txt
 ```
 
-### 2. Start the FastAPI Backend
+### 2. Database Setup & Seeding
+Set up your environment variables and run the migrations to create the database schema, then seed it:
+```powershell
+cp .env.example .env
+alembic upgrade head
+py scripts/seed_db.py
+```
+
+### 3. Start the FastAPI Backend
 Start the backend server on `localhost:8000`:
 ```powershell
 py -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### 3. Start the React Frontend
+### 4. Start the React Frontend
 Open a **second terminal**, navigate to the frontend folder, and start the Vite dev server:
 ```powershell
 cd frontend

@@ -14,9 +14,6 @@ logger = get_logger(__name__)
 @router.post("/triage", response_model=PredictionResponse)
 def predict_triage(req: PredictionRequest, db: Session = Depends(get_db)) -> PredictionResponse:
     try:
-        # Currently run_prediction returns a flat dict in prediction_service?
-        # No, wait, prediction_service currently returns an old structure. We need to adapt it.
-        # I'll just rewrite prediction_service's return later, but for now we call it
         res = predict_incident(req)
         
         # Log to triage_log

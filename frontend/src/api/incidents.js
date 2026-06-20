@@ -1,8 +1,12 @@
 import { client } from "./client";
 import mockData from "./mocks/incidents.json";
 
-// Force mock mode if no backend env var is set
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true" || !import.meta.env.VITE_API_BASE_URL;
+// Mock mode is opt-out: default to mock (safe placeholder data) unless the
+// dev explicitly sets VITE_USE_MOCK=false. VITE_API_BASE_URL is a separate,
+// optional concern — it only overrides the backend URL (see client.js,
+// which already falls back to http://localhost:8000/api/v1) and should
+// never gate whether mock data is used.
+const USE_MOCK = import.meta.env.VITE_USE_MOCK !== "false";
 
 export const getIncidents = async (filters = {}) => {
   if (USE_MOCK) {
