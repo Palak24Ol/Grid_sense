@@ -31,7 +31,7 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report,
 )
-from sklearn.model_selection import train_test_split
+
 
 warnings.filterwarnings("ignore")
 
@@ -113,22 +113,35 @@ def main():
 
     fm = engineer_spatial(fm, clean)
 
-    # Target is closure (v2), not priority
-    y_all = fm["y_closure"].copy()
+    # Target: y_severity (v2) with fallback to y_closure
+    if "y_severity" in fm.columns:
+        y_all = fm["y_severity"].copy()
+        target_name = "y_severity"
+    else:
+        y_all = fm["y_closure"].copy()
+        target_name = "y_closure"
+        print("[eval_priority] WARNING: y_severity not found, falling back to y_closure")
     is_nc = fm["is_non_corridor"].copy()
 
     pos = int(y_all.sum())
     neg = int((y_all == 0).sum())
-    print(f"\nClosure dist : pos={pos:,} ({pos/len(y_all)*100:.1f}%)  "
+    print(f"\nTarget       : {target_name}")
+    print(f"Class dist   : pos={pos:,} ({pos/len(y_all)*100:.1f}%)  "
           f"neg={neg:,} ({neg/len(y_all)*100:.1f}%)")
 
-    # Reproduce exact training split
-    train_idx, test_idx = train_test_split(
-        np.arange(len(fm)), test_size=0.2, random_state=42, stratify=y_all
-    )
-    train_idx, val_idx = train_test_split(
-        train_idx, test_size=0.15, random_state=42, stratify=y_all.iloc[train_idx]
-    )
+    # Load time-based split indices
+    split_path = ARTIFACT_DIR / "priority_split.json"
+    if split_path.exists():
+        with open(split_path) as f:
+            split = json.load(f)
+        test_idx = split["test_indices"]
+        train_idx = split.get("train_indices", [i for i in range(len(fm)) if i not in test_idx])
+        print(f"[eval_priority] Using time-based split: test set = {len(test_idx):,} rows")
+        print("[eval_priority] EVALUATION ON HELD-OUT TEST SET ONLY (time-based split)")
+    else:
+        print("[eval_priority] WARNING: No split file found. Evaluating on FULL dataset (may include training data).")
+        test_idx = list(range(len(fm)))
+        train_idx = list(range(len(fm)))
 
     fm = add_target_encoded(fm, train_idx)
 
@@ -162,6 +175,18 @@ def main():
         print(f"  Recall    : {r:.4f}")
         print(f"  F1 Score  : {f1:.4f}")
         print(f"  CM        : TN={cm[0,0]}  FP={cm[0,1]}  |  FN={cm[1,0]}  TP={cm[1,1]}")
+
+    # Baseline comparisons
+    majority_f1 = f1_score(y_test, np.zeros(len(y_test)), zero_division=0)
+    rule_causes = {"accident", "tree_fall", "public_event", "protest", "procession"}
+    rule_preds = fm["event_cause"].iloc[test_idx].isin(rule_causes).astype(int).values
+    rule_f1 = f1_score(y_test, rule_preds, zero_division=0)
+    model_f1 = f1_score(y_test, (proba >= tuned_threshold).astype(int), zero_division=0)
+
+    print(f"\n── Baseline Comparison ──")
+    print(f"  Majority class F1:  {majority_f1:.4f}")
+    print(f"  Rule-based F1:      {rule_f1:.4f}")
+    print(f"  XGBoost F1:         {model_f1:.4f}")
 
     # Non-corridor subset — escalation flag analysis
     nc_mask    = nc_test.values == 1

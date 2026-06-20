@@ -101,17 +101,17 @@ def train_prophet(hourly: pd.DataFrame, corridor: str):
         logging.getLogger("cmdstanpy").setLevel(logging.ERROR)
     except ImportError:
         print("  ERROR: prophet not installed.")
-        return None, None, None
+        return None, None, None, None
 
     if len(hourly) < 72:
-        return None, None, None
+        return None, None, None, None
 
     cutoff = hourly["ds"].max() - pd.Timedelta(days=HOLDOUT_DAYS)
     train  = hourly[hourly["ds"] <= cutoff].copy()
     test   = hourly[hourly["ds"] >  cutoff].copy()
 
     if len(train) < 72:
-        return None, None, None
+        return None, None, None, None
 
     model = Prophet(
         daily_seasonality=True,
@@ -138,7 +138,14 @@ def train_prophet(hourly: pd.DataFrame, corridor: str):
         mae      = float(np.mean(np.abs(preds - actuals)))
         smape_val= smape(actuals, preds)
 
-    return model, mae, smape_val
+    # Hourly-mean baseline: predict average count per hour-of-day from training data
+    naive_mae = None
+    if len(test) > 0:
+        hourly_mean = train.groupby(train["ds"].dt.hour)["y"].mean()
+        naive_preds = test["ds"].dt.hour.map(hourly_mean).fillna(0).values
+        naive_mae = float(np.mean(np.abs(naive_preds - test["y"].values)))
+
+    return model, mae, smape_val, naive_mae
 
 
 def main():
@@ -167,7 +174,7 @@ def main():
         hourly = build_hourly_series(df, corridor)
         print(f"  Hourly rows: {len(hourly)}  mean/hr: {hourly['y'].mean():.3f}  max: {hourly['y'].max()}")
 
-        model, mae, smape_val = train_prophet(hourly, corridor)
+        model, mae, smape_val, naive_mae = train_prophet(hourly, corridor)
         if model is None:
             print("  Skipped (insufficient data)")
             failed.append(corridor)
@@ -181,6 +188,7 @@ def main():
             "level":           "corridor",
             "mae":             mae,
             "smape":           smape_val,
+            "naive_mae":       naive_mae,
             "total_incidents": count,
             "regressors":      ["is_weekend", "is_morning_peak", "is_evening_peak", "is_night"],
             "version":         "v2",
@@ -188,8 +196,10 @@ def main():
 
         mae_str   = f"{mae:.3f}"   if mae   is not None else "n/a"
         smape_str = f"{smape_val:.1f}%" if smape_val is not None else "n/a"
-        print(f"  Saved → {path.name}  MAE={mae_str}  SMAPE={smape_str}")
-        results.append({"corridor": corridor, "mae": mae, "smape": smape_val, "incidents": count})
+        naive_str = f"{naive_mae:.3f}" if naive_mae is not None else "n/a"
+        improv = f"{(naive_mae - mae) / naive_mae * 100:+.1f}%" if (naive_mae and mae) else "n/a"
+        print(f"  Saved -> {path.name}  MAE={mae_str}  Naive={naive_str}  Improv={improv}  SMAPE={smape_str}")
+        results.append({"corridor": corridor, "mae": mae, "smape": smape_val, "naive_mae": naive_mae, "incidents": count})
 
     # Summary
     print(f"\n{'─'*50}")
@@ -198,7 +208,12 @@ def main():
         maes   = [r["mae"]   for r in results if r["mae"]   is not None]
         smapes = [r["smape"] for r in results if r["smape"] is not None]
         if maes:
+            naive_maes = [r["naive_mae"] for r in results if r.get("naive_mae") is not None]
             print(f"\n  MAE   — mean: {np.mean(maes):.3f}  min: {min(maes):.3f}  max: {max(maes):.3f}")
+            if naive_maes:
+                print(f"  Naive — mean: {np.mean(naive_maes):.3f}")
+                mean_improv = np.mean([(n - m) / n * 100 for m, n in zip(maes, naive_maes) if n > 0])
+                print(f"  Prophet vs Naive improvement: {mean_improv:+.1f}%")
         if smapes:
             print(f"  SMAPE — mean: {np.mean(smapes):.1f}%  min: {min(smapes):.1f}%  max: {max(smapes):.1f}%")
 
@@ -207,6 +222,7 @@ def main():
         "corridors": results,
         "mean_mae":   round(float(np.mean([r["mae"] for r in results if r["mae"] is not None])), 3),
         "mean_smape": round(float(np.mean([r["smape"] for r in results if r["smape"] is not None])), 1),
+        "mean_naive_mae": round(float(np.mean([r["naive_mae"] for r in results if r.get("naive_mae") is not None])), 3) if any(r.get("naive_mae") for r in results) else None,
     }
     with open(OUT_EVAL, "w") as f:
         json.dump(eval_out, f, indent=2)

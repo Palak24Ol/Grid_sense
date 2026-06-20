@@ -25,6 +25,7 @@ class PredictionResponse(BaseModel):
     duration_bucket: str
     duration_p25: Optional[float]
     duration_p75: Optional[float]
+    top_reasons: Optional[List[str]] = None
     model_versions: Dict[str, str]
     inference_ms: int
 

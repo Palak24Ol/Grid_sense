@@ -1,25 +1,14 @@
 """
-04_train_priority.py — Train Severity Classifier v2 (XGBoost).
+04_train_priority.py — Train Severity Classifier v3 (XGBoost).
 
-PROBLEM REFRAME vs v1:
-  v1 predicted 'priority' (High/Low) — but this was 99.9% High on corridors
-  and 0% High on non-corridors, so `is_high_priority_corridor` dominated at
-  96% importance. The model learned an operational rule, not severity signals.
-
-  v2 predicts ROAD CLOSURE RISK as the operational severity signal:
-    - Target: requires_road_closure (True/False)
-    - This has real signal across all event types and locations
-    - Closure rate varies meaningfully: public_event=46%, tree_fall=37%,
-      construction=27%, vehicle_breakdown=4%
-    - Trains on FULL dataset (corridor + non-corridor)
-
-  Additionally produces:
-    - A SEVERITY SCORE (0–100) combining closure_proba + cause weights
-    - A 'disagree flag' where model score diverges from historical ops baseline
-
-  New features (on top of v1):
-    lat_bin, lon_bin, is_daytime, is_planned, cause_closure_rate (target-enc)
-    police_station_encoded, zone_encoded, corridor_density
+v3 changes:
+  - TARGET: y_severity (composite score = 0.4*closure + 0.3*long_duration + 0.3*high_disruption)
+    This differentiates from the closure model (03) which predicts y_closure alone.
+  - TIME-BASED train/val/test split (fixes temporal leakage)
+  - New features: dow_sin, dow_cos, corridor_events_4h, corridor_events_24h, is_rush_hour
+  - SHAP feature importance saved
+  - Baseline comparisons printed
+  - Split indices saved for evaluation
 
 Inputs:
     data/processed/feature_matrix.csv
@@ -28,6 +17,9 @@ Inputs:
 Outputs:
     ml/artifacts/priority_model.pkl
     ml/artifacts/priority_meta.json
+    ml/artifacts/priority_split.json
+    ml/artifacts/priority_shap.csv
+    ml/artifacts/priority_encoding_lookups.json
 
 Run:
     python ml/pipeline/04_train_priority.py
@@ -63,10 +55,12 @@ BASE_FEATURES = [
     "event_cause_encoded", "vehicle_type_encoded",
     "hour_of_day", "day_of_week", "month",
     "hour_sin", "hour_cos",
+    "dow_sin", "dow_cos",
     "is_high_priority_corridor", "is_non_corridor",
     "has_vehicle_type", "has_zone",
     "police_station_encoded", "zone_encoded",
     "corridor_encoded",
+    "is_rush_hour", "corridor_events_4h", "corridor_events_24h",
 ]
 
 NEW_FEATURES = [
@@ -137,8 +131,8 @@ def tune_threshold(proba, y_true):
 
 def main():
     print("=" * 60)
-    print("GridSense v2 — Train Severity/Closure Classifier (XGBoost)")
-    print("TARGET: requires_road_closure  (reframed from 'priority')")
+    print("GridSense v3 — Train Severity Classifier (XGBoost)")
+    print("TARGET: y_severity  (composite: closure + duration + disruption)")
     print("=" * 60)
 
     if not FEATURE_CSV.exists() or not CLEAN_CSV.exists():
@@ -153,8 +147,8 @@ def main():
 
     fm = engineer_features(fm, clean)
 
-    # Target is CLOSURE (y_closure), not priority
-    y_all = fm["y_closure"].copy()
+    # Target is SEVERITY (composite), not closure or priority
+    y_all = fm["y_severity"].copy()
     is_nc = fm["is_non_corridor"].copy()
     # Keep raw cols (without target-encoded ones that don't exist yet)
     raw_cols = [c for c in FEATURE_COLS if c != "cause_closure_rate"]
@@ -162,18 +156,21 @@ def main():
 
     pos = int(y_all.sum())
     neg = int((y_all == 0).sum())
-    print(f"\nTarget: requires_road_closure")
-    print(f"  Positive (closure): {pos:,} ({pos/len(y_all)*100:.1f}%)")
-    print(f"  Negative:           {neg:,} ({neg/len(y_all)*100:.1f}%)")
+    print(f"\nTarget: y_severity (composite)")
+    print(f"  Positive (severe): {pos:,} ({pos/len(y_all)*100:.1f}%)")
+    print(f"  Negative:          {neg:,} ({neg/len(y_all)*100:.1f}%)")
 
-    train_idx, test_idx = train_test_split(
-        np.arange(len(X_raw)), test_size=0.2, random_state=42, stratify=y_all
-    )
-    train_idx, val_idx = train_test_split(
-        train_idx, test_size=0.15, random_state=42, stratify=y_all.iloc[train_idx]
-    )
+    # TIME-BASED split (fixes temporal leakage)
+    fm["start_datetime"] = pd.to_datetime(fm["start_datetime"], format="mixed", utc=True, errors="coerce")
+    sort_order = fm["start_datetime"].argsort().values
+    n = len(X_raw)
+    train_end = int(n * 0.68)
+    val_end = int(n * 0.85)
+    train_idx = sort_order[:train_end]
+    val_idx = sort_order[train_end:val_end]
+    test_idx = sort_order[val_end:]
 
-    fm_labels = fm[["event_cause", "corridor", "y_closure", "y_priority"]].copy()
+    fm_labels = fm[["event_cause", "corridor", "y_closure", "y_priority", "y_severity"]].copy()
     fm_aug = add_target_encoded_cause(X_raw.copy(), fm_labels, train_idx)
     X_feat = fm_aug[FEATURE_COLS]
 
@@ -231,6 +228,22 @@ def main():
         print(f"  Escalation flags fired: {int(nc_preds.sum())} "
               f"(non-corridor incidents predicted to need closure)")
 
+    # ── Baseline comparisons ──────────────────────────────────────────────
+    preds_best = (test_proba >= best_t).astype(int)
+    f1_best = f1_score(y_test, preds_best, zero_division=0)
+    majority_f1 = f1_score(y_test, np.zeros(len(y_test)), zero_division=0)
+
+    rule_causes = {"accident", "tree_fall", "public_event", "protest", "procession"}
+    rule_preds = fm["event_cause"].iloc[test_idx].isin(rule_causes).astype(int).values
+    rule_f1 = f1_score(y_test, rule_preds, zero_division=0)
+
+    print(f"\n  ── Baseline Comparison ──")
+    print(f"    Majority class F1:  {majority_f1:.4f}")
+    print(f"    Rule-based F1:      {rule_f1:.4f}")
+    print(f"    XGBoost F1:         {f1_best:.4f}")
+    if rule_f1 > 0:
+        print(f"    Improvement over rule: {(f1_best - rule_f1) / rule_f1 * 100:+.1f}%")
+
     # Feature importances
     print("\n── Feature importances (top 15) ──")
     importances = model.feature_importances_
@@ -239,27 +252,61 @@ def main():
         bar = "█" * int(imp * 80)
         print(f"  {feat:<38} {imp:.4f}  {bar}")
 
+    # ── SHAP explainability ──────────────────────────────────────────────
+    try:
+        import shap
+        explainer = shap.TreeExplainer(model)
+        shap_values = explainer.shap_values(X_test)
+        shap_importance = pd.DataFrame({
+            "feature": FEATURE_COLS,
+            "mean_abs_shap": np.abs(shap_values).mean(axis=0)
+        }).sort_values("mean_abs_shap", ascending=False)
+        shap_importance.to_csv(ARTIFACT_DIR / "priority_shap.csv", index=False)
+        print(f"\n  SHAP importances saved → priority_shap.csv")
+        print("  Top 5 SHAP features:")
+        for _, row in shap_importance.head(5).iterrows():
+            print(f"    {row['feature']:<35} {row['mean_abs_shap']:.4f}")
+    except ImportError:
+        print("\n  shap not installed — skipping SHAP analysis")
+    except Exception as e:
+        print(f"\n  SHAP failed: {e}")
+
+    # ── Save split indices ───────────────────────────────────────────────
+    split_info = {
+        "method": "time_based",
+        "train_size": len(train_idx),
+        "val_size": len(val_idx),
+        "test_size": len(test_idx),
+        "train_indices": train_idx.tolist(),
+        "val_indices": val_idx.tolist(),
+        "test_indices": test_idx.tolist(),
+    }
+    with open(ARTIFACT_DIR / "priority_split.json", "w") as f:
+        json.dump(split_info, f)
+    print(f"  Split indices saved → priority_split.json")
+
     # Save
     joblib.dump(model, OUT_MODEL)
     meta = {
         "threshold":    best_t,
         "feature_cols": FEATURE_COLS,
-        "target":       "requires_road_closure",
-        "problem":      "severity_closure_risk",
+        "target":       "y_severity",
+        "problem":      "composite_severity",
         "auc_roc":      round(auc,   4),
         "auc_pr":       round(auc_pr,4),
-        "version":      "v2",
+        "f1":           round(f1_best, 4),
+        "baseline_rule_f1": round(rule_f1, 4),
+        "split_method": "time_based",
+        "version":      "v3",
         "note": (
-            "v2 reframes target from 'priority' (operationally biased) to "
-            "'requires_road_closure' (data-driven severity). "
-            "New features: lat_bin, lon_bin, is_daytime, is_planned, "
-            "cause_closure_rate, corridor_density_log."
+            "v3: composite severity target (closure + duration + disruption). "
+            "Time-based split. New features: dow_sin/cos, corridor_events_4h/24h, is_rush_hour."
         ),
     }
     with open(OUT_META, "w") as f:
         json.dump(meta, f, indent=2)
 
-    # Export cause_closure_rate + corridor_density lookups for inference
+    # Export encoding lookups for inference
     train_labels_full = fm_labels.iloc[train_idx]
     cause_lookup = train_labels_full.groupby("event_cause")["y_closure"].mean().to_dict()
     cause_lookup["__default__"] = float(train_labels_full["y_closure"].mean())

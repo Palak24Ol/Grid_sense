@@ -1,12 +1,12 @@
 """
-03_train_closure.py — Train XGBoost Road Closure Predictor (v2).
+03_train_closure.py — Train XGBoost Road Closure Predictor (v3).
 
-Improvements over v1:
-  - 7 new features: lat_bin, lon_bin, cause_closure_rate (target-encoded),
-    station_priority_rate, is_daytime, police_station_encoded, zone_encoded
-  - SMOTE oversampling on training split instead of just scale_pos_weight
-  - Threshold tuned by maximising F1 on validation set
-  - Removes test-set leakage: cause_closure_rate computed only on train fold
+v3 improvements over v2:
+  - TIME-BASED train/val/test split (fixes temporal leakage from random split)
+  - New features: dow_sin, dow_cos, corridor_events_4h, corridor_events_24h, is_rush_hour
+  - SHAP feature importance saved to CSV
+  - Baseline comparisons (majority class, rule-based) printed
+  - Split indices saved for evaluation scripts
 
 Inputs:
     data/processed/feature_matrix.csv
@@ -14,7 +14,10 @@ Inputs:
 
 Outputs:
     ml/artifacts/closure_model.pkl
-    ml/artifacts/closure_meta.json    (threshold, feature list)
+    ml/artifacts/closure_meta.json        (threshold, feature list, metrics)
+    ml/artifacts/closure_split.json       (train/val/test indices)
+    ml/artifacts/closure_shap.csv         (SHAP feature importances)
+    ml/artifacts/closure_encoding_lookups.json
 
 Run:
     python ml/pipeline/03_train_closure.py
@@ -45,17 +48,19 @@ ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_MODEL    = ARTIFACT_DIR / "closure_model.pkl"
 OUT_META     = ARTIFACT_DIR / "closure_meta.json"
 
-# Base features (same as v1)
+# Base features from feature_matrix.csv
 BASE_FEATURE_COLS = [
     "corridor_encoded", "event_cause_encoded", "vehicle_type_encoded",
     "hour_of_day", "day_of_week", "month",
     "hour_sin", "hour_cos",
+    "dow_sin", "dow_cos",
     "is_high_priority_corridor", "is_non_corridor",
     "has_vehicle_type", "has_zone",
     "police_station_encoded", "zone_encoded",
+    "is_rush_hour", "corridor_events_4h", "corridor_events_24h",
 ]
 
-# New spatial + derived features (added by this script)
+# Spatial + derived features (added by this script at train time)
 NEW_FEATURE_COLS = [
     "lat_bin", "lon_bin",
     "cause_closure_rate",
@@ -162,13 +167,15 @@ def main():
     neg = int((y_all == 0).sum())
     print(f"Closure class dist — pos: {pos:,}  neg: {neg:,}  pos_rate: {pos/len(y_all)*100:.1f}%")
 
-    # Stratified split
-    train_idx, test_idx = train_test_split(
-        np.arange(len(X_raw)), test_size=0.2, random_state=42, stratify=y_all
-    )
-    train_idx, val_idx = train_test_split(
-        train_idx, test_size=0.15, random_state=42, stratify=y_all.iloc[train_idx]
-    )
+    # TIME-BASED split (fixes temporal leakage from random split)
+    fm["start_datetime"] = pd.to_datetime(fm["start_datetime"], format="mixed", utc=True, errors="coerce")
+    sort_order = fm["start_datetime"].argsort().values
+    n = len(X_raw)
+    train_end = int(n * 0.68)
+    val_end = int(n * 0.85)
+    train_idx = sort_order[:train_end]
+    val_idx = sort_order[train_end:val_end]
+    test_idx = sort_order[val_end:]
 
     # Add target-encoded features (leak-free) — now columns exist in fm_aug
     fm_labels = fm[["event_cause", "corridor", "y_closure", "y_priority"]].copy()
@@ -228,6 +235,26 @@ def main():
         print(f"    Precision: {p:.4f}  Recall: {r:.4f}  F1: {f1:.4f}")
         print(f"    CM: TN={cm[0,0]}  FP={cm[0,1]}  FN={cm[1,0]}  TP={cm[1,1]}")
 
+    # ── Baseline comparisons ──────────────────────────────────────────────
+    preds_best = (test_proba >= best_threshold).astype(int)
+    f1_best = f1_score(y_test, preds_best, zero_division=0)
+
+    # Majority class baseline (always predict 0 = no closure)
+    majority_f1 = f1_score(y_test, np.zeros(len(y_test)), zero_division=0)
+
+    # Rule-based baseline: event_cause in [accident, tree_fall, public_event] → closure
+    rule_causes = {"accident", "tree_fall", "public_event", "protest", "procession"}
+    rule_preds = fm["event_cause"].iloc[test_idx].isin(rule_causes).astype(int).values
+    rule_f1 = f1_score(y_test, rule_preds, zero_division=0)
+
+    print(f"\n  ── Baseline Comparison ──")
+    print(f"    Majority class F1:  {majority_f1:.4f}")
+    print(f"    Rule-based F1:      {rule_f1:.4f}")
+    print(f"    XGBoost F1:         {f1_best:.4f}")
+    if rule_f1 > 0:
+        print(f"    Improvement over rule: {(f1_best - rule_f1) / rule_f1 * 100:+.1f}%")
+
+    # ── Feature importances ──────────────────────────────────────────────
     print("\n  Feature importances (top 15):")
     importances = model.feature_importances_
     feat_imp = sorted(zip(FEATURE_COLS, importances), key=lambda x: -x[1])
@@ -235,14 +262,50 @@ def main():
         bar = "█" * int(imp * 80)
         print(f"    {feat:<35} {imp:.4f}  {bar}")
 
-    # Save model + metadata
+    # ── SHAP explainability ──────────────────────────────────────────────
+    try:
+        import shap
+        explainer = shap.TreeExplainer(model)
+        shap_values = explainer.shap_values(X_test)
+        shap_importance = pd.DataFrame({
+            "feature": FEATURE_COLS,
+            "mean_abs_shap": np.abs(shap_values).mean(axis=0)
+        }).sort_values("mean_abs_shap", ascending=False)
+        shap_importance.to_csv(ARTIFACT_DIR / "closure_shap.csv", index=False)
+        print(f"\n  SHAP importances saved → closure_shap.csv")
+        print("  Top 5 SHAP features:")
+        for _, row in shap_importance.head(5).iterrows():
+            print(f"    {row['feature']:<35} {row['mean_abs_shap']:.4f}")
+    except ImportError:
+        print("\n  shap not installed — skipping SHAP analysis")
+    except Exception as e:
+        print(f"\n  SHAP failed: {e}")
+
+    # ── Save split indices ───────────────────────────────────────────────
+    split_info = {
+        "method": "time_based",
+        "train_size": len(train_idx),
+        "val_size": len(val_idx),
+        "test_size": len(test_idx),
+        "train_indices": train_idx.tolist(),
+        "val_indices": val_idx.tolist(),
+        "test_indices": test_idx.tolist(),
+    }
+    with open(ARTIFACT_DIR / "closure_split.json", "w") as f:
+        json.dump(split_info, f)
+    print(f"  Split indices saved → closure_split.json")
+
+    # ── Save model + metadata ────────────────────────────────────────────
     joblib.dump(model, OUT_MODEL)
     meta = {
         "threshold":    best_threshold,
         "feature_cols": FEATURE_COLS,
         "auc_roc":      round(auc, 4),
         "auc_pr":       round(auc_pr, 4),
-        "version":      "v2",
+        "f1":           round(f1_best, 4),
+        "baseline_rule_f1": round(rule_f1, 4),
+        "split_method": "time_based",
+        "version":      "v3",
     }
     with open(OUT_META, "w") as f:
         json.dump(meta, f, indent=2)

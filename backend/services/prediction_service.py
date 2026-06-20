@@ -73,6 +73,9 @@ def _build_base_features(req: PredictionRequest, encoders: dict) -> dict:
 
     hour_sin = math.sin(2 * math.pi * req.hour_of_day / 24)
     hour_cos = math.cos(2 * math.pi * req.hour_of_day / 24)
+    dow_sin = math.sin(2 * math.pi * req.day_of_week / 7)
+    dow_cos = math.cos(2 * math.pi * req.day_of_week / 7)
+    is_rush_hour = int(req.hour_of_day in range(7, 11) or req.hour_of_day in range(17, 21))
 
     month = req.month if req.month is not None else 6  # fallback: mid-year default
 
@@ -102,6 +105,9 @@ def _build_base_features(req: PredictionRequest, encoders: dict) -> dict:
         "month":                     month,
         "hour_sin":                  hour_sin,
         "hour_cos":                  hour_cos,
+        "dow_sin":                   dow_sin,
+        "dow_cos":                   dow_cos,
+        "is_rush_hour":              is_rush_hour,
         "is_high_priority_corridor": is_high_priority_corridor,
         "is_non_corridor":           is_non_corridor,
         "has_vehicle_type":          has_vehicle_type,
@@ -110,6 +116,10 @@ def _build_base_features(req: PredictionRequest, encoders: dict) -> dict:
         "lon_bin":                   lon_bin,
         "is_daytime":                is_daytime,
         "is_planned":                is_planned,
+        # Rolling corridor event counts — default to 0 at inference time since
+        # we lack historical context; the model handles this gracefully.
+        "corridor_events_4h":        0,
+        "corridor_events_24h":       0,
         # placeholders — filled in by _apply_encoding_lookups before use
         "cause_closure_rate":        None,
         "station_priority_rate":     None,
@@ -200,6 +210,22 @@ def run_prediction(req: PredictionRequest) -> PredictionResponse:
     closure_prob = float(arts.closure_model.predict_proba(X_closure)[0][1])
     closure_flag = closure_prob >= closure_threshold
 
+    # SHAP explanation for closure prediction
+    top_reasons = []
+    try:
+        import shap
+        explainer = shap.TreeExplainer(arts.closure_model)
+        shap_vals = explainer.shap_values(X_closure)
+        feature_contributions = sorted(
+            zip(closure_cols, shap_vals[0]), key=lambda x: abs(x[1]), reverse=True
+        )[:3]
+        top_reasons = [
+            f"{feat} ({'+' if val > 0 else ''}{val:.3f})"
+            for feat, val in feature_contributions
+        ]
+    except Exception:
+        pass
+
     # priority_model (v2) actually predicts requires_road_closure as a
     # data-driven severity proxy — see priority_meta["note"]. We surface it
     # under the existing "priority" response fields so the frontend contract
@@ -216,11 +242,31 @@ def run_prediction(req: PredictionRequest) -> PredictionResponse:
         if disagreement_flag else None
     )
 
+    # Duration prediction: ML model primary, lookup fallback
+    predicted_duration_mins = None
+    if arts.duration_model is not None and arts.duration_meta is not None:
+        dur_cols = arts.duration_meta.get("feature_cols", [])
+        dur_features = {col: feature_dict.get(col, 0) for col in dur_cols}
+        X_dur = pd.DataFrame([dur_features])[dur_cols]
+        pred_log = arts.duration_model.predict(X_dur)[0]
+        predicted_duration_mins = round(float(np.expm1(pred_log)), 1)
+        predicted_duration_mins = max(1.0, min(predicted_duration_mins, 5000.0))
+
+    if predicted_duration_mins is None and arts.duration_lookup is not None:
+        cause = req.event_cause or "__default__"
+        entry = arts.duration_lookup.get(cause, arts.duration_lookup.get("__default__", {}))
+        predicted_duration_mins = entry.get("median", 45.0)
+
+    # Final fallback if neither model nor lookup is available
+    if predicted_duration_mins is None:
+        predicted_duration_mins = 45.0
+
+    predicted_duration_mins = float(predicted_duration_mins)
+
     duration_rec = (
         arts.duration_lookup.get(req.event_cause)
         or arts.duration_lookup.get("__default__", {"median": 45.0, "p25": 15.0, "p75": 90.0})
-    )
-    predicted_duration_mins = float(duration_rec.get("median", 45.0))
+    ) if arts.duration_lookup is not None else {"p25": 15.0, "p75": 90.0}
     duration_p25 = float(duration_rec.get("p25", 15.0))
     duration_p75 = float(duration_rec.get("p75", 90.0))
 
@@ -243,6 +289,7 @@ def run_prediction(req: PredictionRequest) -> PredictionResponse:
         duration_bucket=duration_bucket,
         duration_p25=duration_p25,
         duration_p75=duration_p75,
+        top_reasons=top_reasons if top_reasons else None,
         model_versions={
             "closure_model": arts.closure_meta.get("version", "v2"),
             "priority_model": arts.priority_meta.get("version", "v2"),

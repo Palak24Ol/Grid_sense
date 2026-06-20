@@ -193,6 +193,33 @@ def main():
         print(f"  on any given corridor. SMAPE blows up at zero denominators.")
         print(f"  MAE is the correct metric here.")
 
+        # ── Hourly-Mean Baseline Comparison ──
+        print(f"\n── Hourly-Mean Baseline Comparison ──")
+        wins = [r for r in results if r["mae"] < r["naive_mae"]]
+        ties = [r for r in results if abs(r["mae"] - r["naive_mae"]) < 1e-6]
+        losses = [r for r in results if r["mae"] > r["naive_mae"] and abs(r["mae"] - r["naive_mae"]) >= 1e-6]
+
+        print(f"  Prophet beats hourly-mean baseline : {len(wins)}/{len(results)} corridors")
+        print(f"  Prophet ties baseline              : {len(ties)}/{len(results)} corridors")
+        print(f"  Prophet loses to baseline          : {len(losses)}/{len(results)} corridors")
+        print(f"  Median improvement                 : {np.median(improves):+.1f}%")
+
+        if losses:
+            print(f"\n  Corridors where Prophet underperforms hourly-mean baseline:")
+            for r in sorted(losses, key=lambda x: x["improvement"]):
+                print(f"    {r['corridor']:<28}  Prophet MAE={r['mae']:.3f}  "
+                      f"Baseline MAE={r['naive_mae']:.3f}  ({r['improvement']:+.1f}%)")
+
+        # Summary statistics side-by-side
+        print(f"\n── Prophet vs Baseline Summary Statistics ──")
+        print(f"  {'Metric':<20} {'Prophet':>10} {'Hourly-Mean':>12}")
+        print(f"  {'-'*44}")
+        print(f"  {'Mean MAE':<20} {np.mean(maes):>10.3f} {np.mean(naive_m):>12.3f}")
+        print(f"  {'Median MAE':<20} {np.median(maes):>10.3f} {np.median(naive_m):>12.3f}")
+        print(f"  {'Std MAE':<20} {np.std(maes):>10.3f} {np.std(naive_m):>12.3f}")
+        print(f"  {'Min MAE':<20} {np.min(maes):>10.3f} {np.min(naive_m):>12.3f}")
+        print(f"  {'Max MAE':<20} {np.max(maes):>10.3f} {np.max(naive_m):>12.3f}")
+
     print("\n✅ Forecast evaluation complete.")
 
 

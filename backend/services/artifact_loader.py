@@ -30,6 +30,8 @@ class Artifacts:
     priority_model: Optional[object] = None
     encoders: Optional[dict] = None
     duration_lookup: Optional[dict] = None
+    duration_model: Optional[object] = None
+    duration_meta: Optional[dict] = None
     corridor_risk_index: Optional[dict] = None
     station_map: Optional[dict] = None
     station_concurrency: Optional[dict] = None
@@ -69,6 +71,8 @@ class Artifacts:
             "priority_meta": self.priority_meta is not None,
             "closure_encoding_lookups": self.closure_encoding_lookups is not None,
             "priority_encoding_lookups": self.priority_encoding_lookups is not None,
+            "duration_model": self.duration_model is not None,
+            "duration_meta": self.duration_meta is not None,
             "prophet_models_count": len(self.prophet_models),
         }
 
@@ -130,6 +134,8 @@ def get_artifacts() -> Artifacts:
         priority_model=_load_pkl(artifact_dir / "priority_model.pkl"),
         encoders=_load_pkl(artifact_dir / "encoders.pkl"),
         duration_lookup=_load_json(artifact_dir / "duration_lookup.json"),
+        duration_model=_load_pkl(artifact_dir / "duration_model.pkl"),
+        duration_meta=_load_json(artifact_dir / "duration_meta.json"),
         corridor_risk_index=_load_json(artifact_dir / "corridor_risk_index.json"),
         station_map=_load_json(artifact_dir / "station_map.json"),
         station_concurrency=_load_json(artifact_dir / "station_concurrency.json"),

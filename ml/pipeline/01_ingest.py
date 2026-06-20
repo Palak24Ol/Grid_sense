@@ -134,6 +134,38 @@ def apply_staleness_filter(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def deduplicate_events(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove near-duplicate event reports.
+
+    Clusters events by (police_station, event_cause, corridor) within
+    a +/-15-minute window. Keeps the earliest report in each cluster.
+    """
+    df = df.sort_values("start_datetime").reset_index(drop=True)
+    keep = pd.Series(True, index=df.index)
+
+    for (station, cause, corridor), group in df.groupby(
+        ["police_station", "event_cause", "corridor"], dropna=False
+    ):
+        if len(group) < 2:
+            continue
+        times = group["start_datetime"].values
+        idxs = group.index.values
+        for i in range(1, len(times)):
+            if pd.notna(times[i]) and pd.notna(times[i - 1]):
+                diff_mins = (times[i] - times[i - 1]) / np.timedelta64(1, "m")
+                if abs(diff_mins) <= 15:
+                    keep.iloc[idxs[i]] = False
+
+    before = len(df)
+    df = df[keep].reset_index(drop=True)
+    removed = before - len(df)
+    print(
+        f"[01_ingest] Deduplication: {before:,} → {len(df):,} "
+        f"({removed:,} duplicates removed, {removed / before * 100:.1f}%)"
+    )
+    return df
+
+
 def compute_derived_fields(df: pd.DataFrame) -> pd.DataFrame:
     """Compute duration, time components, and corridor flags."""
     # Duration: use closed_datetime preferentially, fall back to end_datetime
@@ -270,6 +302,7 @@ def main():
     df = parse_datetimes(df)
     df = normalise_boolean(df)
     df = apply_staleness_filter(df)
+    df = deduplicate_events(df)
     df = compute_derived_fields(df)
     validate(df)
 
