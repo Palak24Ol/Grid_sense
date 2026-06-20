@@ -42,19 +42,7 @@ ARTIFACT_DIR = ROOT / "ml" / "artifacts"
 MODEL_PATH   = ARTIFACT_DIR / "priority_model.pkl"
 META_PATH    = ARTIFACT_DIR / "priority_meta.json"
 
-FEATURE_COLS = [
-    "event_cause_encoded", "vehicle_type_encoded",
-    "hour_of_day", "day_of_week", "month",
-    "hour_sin", "hour_cos",
-    "is_high_priority_corridor", "is_non_corridor",
-    "has_vehicle_type", "has_zone",
-    "police_station_encoded", "zone_encoded",
-    "corridor_encoded",
-    "lat_bin", "lon_bin",
-    "is_daytime", "is_planned",
-    "cause_closure_rate",
-    "corridor_density_log",
-]
+FEATURE_COLS: list[str] = []  # populated from priority_meta.json at runtime — see main()
 
 
 def engineer_spatial(fm: pd.DataFrame, clean: pd.DataFrame) -> pd.DataFrame:
@@ -101,6 +89,11 @@ def main():
     model = joblib.load(MODEL_PATH)
     meta  = json.load(open(META_PATH))
     tuned_threshold = meta["threshold"]
+
+    global FEATURE_COLS
+    FEATURE_COLS = meta["feature_cols"]
+    print(f"Feature cols ({len(FEATURE_COLS)}): {FEATURE_COLS}")
+
     print(f"Model      : {type(model).__name__}")
     print(f"Version    : {meta.get('version', 'v1')}")
     print(f"Target     : {meta.get('target', 'requires_road_closure')}")

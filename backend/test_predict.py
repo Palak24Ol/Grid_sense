@@ -37,3 +37,16 @@ def test_predict_triage(client, scenario):
     assert data["predicted_priority"] in ["High", "Medium", "Low"]
     assert isinstance(data["priority_probability"], float)
     assert 0.0 <= data["priority_probability"] <= 1.0
+
+
+def test_closure_rate_varies_by_cause(client):
+    high_risk = client.post('/api/v1/predict/triage', json={
+        'event_cause': 'tree_fall', 'corridor': None, 'hour_of_day': 14, 'day_of_week': 2
+    }).json()
+    low_risk = client.post('/api/v1/predict/triage', json={
+        'event_cause': 'vehicle_breakdown', 'corridor': None, 'hour_of_day': 14, 'day_of_week': 2
+    }).json()
+    # tree_fall has a ~48% historical closure rate, vehicle_breakdown ~5% —
+    # if these come back equal/close, the encoding lookups are broken again.
+    assert high_risk['closure_probability'] > low_risk['closure_probability'] + 0.2
+    assert high_risk['priority_probability'] > low_risk['priority_probability'] + 0.2

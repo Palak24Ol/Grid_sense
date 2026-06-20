@@ -168,13 +168,21 @@ def _apply_encoding_lookups(
     cause = req.event_cause
     corridor = req.corridor or "Non-corridor"
 
+    # cause_closure_rate is exported into BOTH lookup files (same underlying
+    # historical rate, computed independently by each training script) —
+    # whichever call this is (closure or priority), use whichever table was
+    # actually passed in. Previously this only ever read from closure_lookups,
+    # so the priority-model call (which passes closure_lookups=None) silently
+    # got the 0.08 default every time even though priority_lookups has its
+    # own correct cause_closure_rate entry.
+    rate_source = closure_lookups or priority_lookups or {}
+    cc_rate = rate_source.get("cause_closure_rate", {})
+    feature_dict["cause_closure_rate"] = cc_rate.get(cause, cc_rate.get("__default__", 0.08))
+
     if closure_lookups:
-        cc_rate = closure_lookups.get("cause_closure_rate", {})
         sp_rate = closure_lookups.get("station_priority_rate", {})
-        feature_dict["cause_closure_rate"] = cc_rate.get(cause, cc_rate.get("__default__", 0.08))
         feature_dict["station_priority_rate"] = sp_rate.get(corridor, sp_rate.get("__default__", 0.5))
     else:
-        feature_dict["cause_closure_rate"] = 0.08
         feature_dict["station_priority_rate"] = 0.5
 
     if priority_lookups:
@@ -217,7 +225,7 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
 
     # 1. Road Closure Model
     c_meta = arts.closure_meta or {}
-    closure_lookups = c_meta.get("encoding_lookups", {})
+    closure_lookups = arts.closure_encoding_lookups or {}
     feature_dict_c = _apply_encoding_lookups(base_features.copy(), req, closure_lookups, None)
     c_cols = c_meta.get("feature_cols", [])
 
@@ -231,7 +239,7 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
         # Guarantee exact column order that the model expects
         x_c = pd.DataFrame([{col: float(feature_dict_c.get(col) if feature_dict_c.get(col) is not None else 0.0) for col in c_cols}])
         c_prob = float(arts.closure_model.predict_proba(x_c)[0, 1])
-        c_flag = bool(c_prob >= 0.5)
+        c_flag = bool(c_prob >= c_meta.get("threshold", 0.5))
 
     # Compare against honest rule-based fallback
     c_rule_flag, c_rule_prob = _rule_based_prediction(
@@ -239,7 +247,7 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
         feature_dict_c["cause_closure_rate"]
     )
 
-    c_model_f1 = c_meta.get("metrics", {}).get("test_f1", 0)
+    c_model_f1 = c_meta.get("f1", 0)
     c_rule_f1 = c_meta.get("baseline_rule_f1", 0)
 
     # If the model didn't beat the baseline rule on the test set, or if
@@ -257,7 +265,7 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
 
     # 2. Priority Model
     p_meta = arts.priority_meta or {}
-    priority_lookups = p_meta.get("encoding_lookups", {})
+    priority_lookups = arts.priority_encoding_lookups or {}
     feature_dict_p = _apply_encoding_lookups(base_features.copy(), req, None, priority_lookups)
     p_cols = p_meta.get("feature_cols", [])
 
@@ -268,7 +276,7 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
     else:
         x_p = pd.DataFrame([{col: float(feature_dict_p.get(col) if feature_dict_p.get(col) is not None else 0.0) for col in p_cols}])
         p_prob = float(arts.priority_model.predict_proba(x_p)[0, 1])
-        p_label = "High" if p_prob >= 0.5 else "Medium"
+        p_label = "High" if p_prob >= p_meta.get("threshold", 0.5) else "Medium"
 
     # 3. Duration Model (Lookup as Primary)
     # Following the "Honest ML" rule from the README: the XGBoost duration
@@ -315,9 +323,9 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
     if c_prob >= 0.5:
         top_reasons.append(f"cause_closure_rate ({feature_dict_c['cause_closure_rate']:.1%})")
     if p_label == "High":
-        if is_high_priority_corridor:
+        if base_features["is_high_priority_corridor"]:
             top_reasons.append("is_high_priority_corridor")
-        if is_rush_hour:
+        if base_features["is_rush_hour"]:
             top_reasons.append("is_rush_hour")
 
     inf_ms = int((time.perf_counter() - t0) * 1000)
