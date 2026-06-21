@@ -4,7 +4,7 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](http://15.207.223.137:5173) [![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-blue)](http://15.207.223.137:8000/docs)
 
 > 🚀 **Live Demo:** http://15.207.223.137:5173 | 📖 **API Docs:** http://15.207.223.137:8000/docs
-[Python](https://img.shields.io/badge/Python-3.10%2B-yellow) ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688) ![React](https://img.shields.io/badge/React%2019-Frontend-61dafb) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
+[Python](https://img.shields.io/badge/Python-3.10%2B-yellow) ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688) ![React](https://img.shields.io/badge/React%2019-Frontend-61dafb) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)![TomTom](https://img.shields.io/badge/TomTom-Live%20Traffic-FF6B6B)
 
 GridSense is a full-stack (ML + FastAPI + React) decision-support platform built for a city traffic department. It turns historical and live incident reports into a road-closure risk score, a priority tier, an expected clearance time, and a concrete manpower/diversion recommendation for every traffic incident — planned or unplanned.
 
@@ -57,7 +57,7 @@ Given a new incident (cause, location/corridor, time, vehicle type), GridSense:
 4. **Models cascade risk** for planned events (processions, protests, VIP movement, public events) — how much a planned event historically inflates unplanned-incident rates on the same corridor in the following 3 hours, and on adjacent corridors.
 5. **Learns from outcomes.** Every triage prediction is logged; once an incident resolves, the actual duration/closure/officer-count can be recorded, closing the "no post-event learning system" gap named in the brief.
 6. Surfaces **chronic blackspots**, **neglected stations** (incidents that take far longer to clear than the historical norm for their cause), and a **rainfall-surge replay** of the dataset's worst weather day, so commanders can pre-position resources before the next storm.
-
+7. **Live traffic overlay.** Real-time Bengaluru road congestion (TomTom Traffic Flow API) displayed on the command center map, with actual turn-by-turn diversion routes drawn on the deployment map using TomTom Routing API.
 ---
 
 ## 3. The Dataset
@@ -308,6 +308,8 @@ Verified directly from `frontend/package.json`:
 - **Recharts** for charts, **`react-router-dom` v7** for routing, **`axios`** for API calls, **`lucide-react`** for icons
 
 **9 screens** (`frontend/src/App.jsx`): Command Center Map, Triage, Planned Events, Forecast, Deployment, Logistics, Blackspot, Surge, and Learning — one screen per backend module.The officer-facing sidebar surfaces 8 of these screens in plain, field-friendly language; the Learning screen remains accessible directly via `/learning` for admin and data-team use.
+
+- **TomTom Traffic API** for live congestion overlay and real diversion route calculation
 
 The frontend can also run in a **mock-data mode** (`VITE_USE_MOCK=true`), serving canned responses from `frontend/src/api/mocks/` so the UI can be demoed without a live backend/database.
 
@@ -584,7 +586,7 @@ This last finding is, if anything, a useful illustration of the project's own "H
 
 ## 13. Future Scope
 
-1. **Live traffic feed integration** (e.g. a real-time traffic-speed API) to replace the zeroed-out rolling corridor-event-count features at inference time with real live context.
+1. **Live traffic feed integration** ✅ **Done** — TomTom Traffic Flow API now powers the live congestion layer on the command center map, and TomTom Routing API draws real diversion routes on the deployment map.
 2. **Live weather feed integration** so the surge-vulnerability ranking can trigger automatically ahead of forecast rainfall, rather than only being demonstrated via the historical March 7 replay.
 3. **Closing the learning loop operationally** — the `/learning/outcome/{id}` endpoint exists and is wired to the database; the next step is a scheduled job that periodically refreshes the duration lookup table and retrains the classifiers on accumulated actual outcomes.
 4. **Regenerating the blackspot/cascade/surge artifacts** from the current pipeline code so the three analytics modules match the rest of the system's reproducibility standard (Section 11).
