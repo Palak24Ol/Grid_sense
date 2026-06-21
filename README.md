@@ -1,6 +1,10 @@
 # 🚦 GridSense — Event-Driven Traffic Congestion Intelligence Platform
 
 ![Status](https://img.shields.io/badge/Status-Active-success) ![License](https://img.shields.io/badge/License-MIT-blue) ![Python](https://img.shields.io/badge/Python-3.10%2B-yellow) ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688) ![React](https://img.shields.io/badge/React%2019-Frontend-61dafb) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](http://15.207.223.137:5173) [![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-blue)](http://15.207.223.137:8000/docs)
+
+> 🚀 **Live Demo:** http://15.207.223.137:5173 | 📖 **API Docs:** http://15.207.223.137:8000/docs
+[Python](https://img.shields.io/badge/Python-3.10%2B-yellow) ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688) ![React](https://img.shields.io/badge/React%2019-Frontend-61dafb) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
 
 GridSense is a full-stack (ML + FastAPI + React) decision-support platform built for a city traffic department. It turns historical and live incident reports into a road-closure risk score, a priority tier, an expected clearance time, and a concrete manpower/diversion recommendation for every traffic incident — planned or unplanned.
 
