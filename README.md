@@ -523,6 +523,14 @@ npm run dev
 ```
 
 Open `http://localhost:5173`. API docs are auto-served at `http://localhost:8000/docs`.
+```bash
+# 5. Add API keys to frontend
+cd frontend
+cp .env.example .env
+# Edit .env and fill in your keys:
+# VITE_TOMTOM_KEY=your_tomtom_key_here        (get from developer.tomtom.com)
+# VITE_WEATHER_KEY=your_openweathermap_key_here (get from openweathermap.org)
+```
 
 ### 10.3 Useful checks
 
