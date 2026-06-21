@@ -1,5 +1,7 @@
 import { useSurgeStore } from '../../store/useSurgeStore';
 import { CloudLightning, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Cloud, Droplets, Wind, Thermometer } from 'lucide-react';
 import clsx from 'clsx';
 
 function roadStatusLabel(multiplier) {
@@ -8,9 +10,32 @@ function roadStatusLabel(multiplier) {
   if (multiplier >= 1.5) return { label: 'Getting Worse', cls: 'badge-medium', dot: 'bg-yellow-400' };
   return                        { label: 'Manageable', cls: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20', dot: 'bg-emerald-400' };
 }
+async function fetchBengaluruWeather(apiKey) {
+  const res = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=Bengaluru,IN&appid=${apiKey}&units=metric`
+  );
+  const data = await res.json();
+  if (data.cod !== 200) return null;  // ← add this
+  return data;
+}
 
 export default function SurgeDashboard() {
+
+
   const { vulnerability } = useSurgeStore();
+   const [weather, setWeather] = useState(null);
+const [isRaining, setIsRaining] = useState(false);
+
+useEffect(() => {
+  const key = import.meta.env.VITE_WEATHER_KEY;
+  if (!key) return;
+  fetchBengaluruWeather(key).then(data => {
+  if (!data) return;  // ← add this
+  setWeather(data);
+  const rain = data.weather?.[0]?.main?.toLowerCase();
+  setIsRaining(rain === 'rain' || rain === 'drizzle' || rain === 'thunderstorm');
+});
+}, []);
 
   if (!vulnerability || !vulnerability.corridors) return null;
 
@@ -20,6 +45,8 @@ export default function SurgeDashboard() {
   const topMultiplier = topActual
     ? Math.max(1, topActual.vulnerability_score / 10).toFixed(1)
     : '1.0';
+
+ 
 
   return (
     <div className="bg-card border border-border rounded-xl shadow-sm flex flex-col shrink-0 overflow-hidden">
@@ -34,6 +61,43 @@ export default function SurgeDashboard() {
       </div>
 
       <div className="p-6 space-y-6">
+
+        {weather && (
+  <div className="p-4 rounded-xl border border-border bg-muted/20 flex items-center justify-between">
+    <div className="flex items-center gap-3">
+      <img 
+        src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+        alt="weather"
+        className="w-12 h-12"
+      />
+      <div>
+        <p className="font-bold text-foreground capitalize">
+          {weather.weather[0].description}
+        </p>
+        <p className="text-xs text-muted-foreground">Bengaluru right now</p>
+      </div>
+    </div>
+    <div className="flex gap-4 text-xs text-muted-foreground">
+      <div className="flex items-center gap-1">
+        <Thermometer className="w-3 h-3" />
+        {Math.round(weather.main.temp)}°C
+      </div>
+      <div className="flex items-center gap-1">
+        <Droplets className="w-3 h-3" />
+        {weather.main.humidity}%
+      </div>
+      <div className="flex items-center gap-1">
+        <Wind className="w-3 h-3" />
+        {Math.round(weather.wind.speed)} m/s
+      </div>
+    </div>
+    {isRaining && (
+      <span className="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-full text-xs font-bold animate-pulse">
+        🌧️ RAIN DETECTED
+      </span>
+    )}
+  </div>
+)}
 
         {/* Main alert banner — plain language */}
         <div className={clsx(
