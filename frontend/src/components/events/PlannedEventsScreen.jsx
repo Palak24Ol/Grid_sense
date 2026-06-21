@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import {
-  CalendarDays, MapPin, AlertCircle, Clock, 
+  CalendarDays, MapPin, AlertCircle, Clock,
   ShieldAlert, Users, Loader2, Navigation, ChevronRight, Zap, Radio
 } from "lucide-react";
 import { client } from "../../api/client";
@@ -16,8 +16,8 @@ const CORRIDORS = [
 ];
 
 const PLANNED_EVENTS = [
-  { value: "public_event", label: "Public Event / Match" },
-  { value: "protest",      label: "Protest / Rally" },
+  { value: "public_event", label: "Match / Festival" },
+  { value: "protest",      label: "Rally / Protest" },
   { value: "procession",   label: "Procession" },
 ];
 
@@ -25,6 +25,12 @@ const TIER_CONFIG = {
   Critical: { cls: "bg-red-500/15 text-red-400 border-red-500/30",     dot: "bg-red-400" },
   Elevated: { cls: "bg-warning/15 text-warning border-warning/30",      dot: "bg-warning" },
   Routine:  { cls: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30", dot: "bg-emerald-400" },
+};
+
+const ALERT_LEVEL_LABEL = {
+  Critical: "High Alert",
+  Elevated: "Elevated Alert",
+  Routine:  "Routine",
 };
 
 const JUNCTION_COORDS = {
@@ -38,6 +44,12 @@ const JUNCTION_COORDS = {
   "YelhankaCircle":                [13.100, 77.596],
   "GokuldasImagesJunc":            [13.008, 77.541],
 };
+
+const HOURS = Array.from({ length: 24 }, (_, i) => {
+  const ampm = i < 12 ? 'AM' : 'PM';
+  const h    = i === 0 ? 12 : i > 12 ? i - 12 : i;
+  return { value: i, label: `${h}:00 ${ampm}` };
+});
 
 function FieldLabel({ icon: Icon, children }) {
   return (
@@ -73,9 +85,7 @@ function MetricCard({ label, value, sub, highlight }) {
   return (
     <div className={clsx(
       "rounded-xl p-3 border flex flex-col gap-1",
-      highlight
-        ? "bg-primary/8 border-primary/30"
-        : "bg-muted/20 border-border"
+      highlight ? "bg-primary/8 border-primary/30" : "bg-muted/20 border-border"
     )}>
       <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
       <p className={clsx("text-lg font-bold leading-tight", highlight ? "text-primary" : "text-foreground")}>
@@ -86,49 +96,51 @@ function MetricCard({ label, value, sub, highlight }) {
   );
 }
 
+function impactLabel(multiplier) {
+  if (!multiplier) return "Unknown";
+  if (multiplier >= 4)  return "Very High";
+  if (multiplier >= 2.5) return "High";
+  if (multiplier >= 1.5) return "Medium";
+  return "Low";
+}
+
 export default function PlannedEventsScreen() {
   const [form, setForm] = useState({
-    corridor:            "Bellary Road 1",
-    event_cause:         "public_event",
-    hour_of_day:         19,
-    day_of_week:         6, // Sunday
-    event_name:          "",
-    crowd_size:          "medium",
+    corridor:    "Bellary Road 1",
+    event_cause: "public_event",
+    hour_of_day: 19,
+    day_of_week: 6,
+    event_name:  "",
+    crowd_size:  "medium",
   });
-  
+
   const [cascadeResult, setCascadeResult] = useState(null);
-  const [deployResult, setDeployResult]   = useState(null);
+  const [deployResult,  setDeployResult]  = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(null);
+  const [error,   setError]   = useState(null);
 
   const handleGenerate = async () => {
     setLoading(true); setError(null); setCascadeResult(null); setDeployResult(null);
     try {
       const basePayload = {
-        corridor: form.corridor,
+        corridor:    form.corridor,
         event_cause: form.event_cause,
         hour_of_day: Number(form.hour_of_day),
         day_of_week: Number(form.day_of_week),
-        crowd_size: form.crowd_size,
-        event_name: form.event_name || null,
+        crowd_size:  form.crowd_size,
+        event_name:  form.event_name || null,
       };
 
-      // 1. Run cascade prediction and triage model in parallel
       const [{ data: cascadeData }, { data: triageData }] = await Promise.all([
         client.post("/predict/cascade", basePayload),
-        client.post("/predict/triage", {
-          ...basePayload,
-          vehicle_type: "none",
-          is_planned: true,
-        }),
+        client.post("/predict/triage", { ...basePayload, vehicle_type: "none", is_planned: true }),
       ]);
 
-      // 2. Use real ML outputs from triage — no hardcoded assumptions
       const deployPayload = {
         ...basePayload,
-        vehicle_type: "none",
-        closure_probability: triageData.closure_probability,
-        predicted_priority: triageData.predicted_priority,
+        vehicle_type:            "none",
+        closure_probability:     triageData.closure_probability,
+        predicted_priority:      triageData.predicted_priority,
         predicted_duration_mins: triageData.predicted_duration_mins,
       };
       const { data: deployData } = await client.post("/deploy/recommend", deployPayload);
@@ -136,7 +148,7 @@ export default function PlannedEventsScreen() {
       setCascadeResult(cascadeData);
       setDeployResult({ ...deployData, _triageData: triageData });
     } catch (e) {
-      setError(e?.response?.data?.detail || "API error — is the backend running?");
+      setError(e?.response?.data?.detail || "Could not connect — is the backend running?");
     } finally {
       setLoading(false);
     }
@@ -151,7 +163,7 @@ export default function PlannedEventsScreen() {
   return (
     <div className="h-full flex flex-col md:flex-row relative">
 
-      {/* Map pane */}
+      {/* Map */}
       <div className="w-full md:w-1/2 h-1/2 md:h-full relative z-0">
         <MapContainer
           center={[12.98, 77.57]} zoom={12}
@@ -184,8 +196,8 @@ export default function PlannedEventsScreen() {
               <CalendarDays className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-foreground">Planned Event Intelligence</h2>
-              <p className="text-[10px] text-muted-foreground">Pre-deployment planning for high-impact events</p>
+              <h2 className="text-sm font-bold text-foreground">Plan Ahead for Big Events</h2>
+              <p className="text-[10px] text-muted-foreground">Rallies, matches, festivals — get ready before it hits</p>
             </div>
           </div>
         </div>
@@ -194,42 +206,40 @@ export default function PlannedEventsScreen() {
 
           {/* Form */}
           <div>
-            <p className="section-label mb-4">Event Parameters</p>
+            <p className="section-label mb-4">Tell us about the event</p>
             <div className="grid grid-cols-2 gap-3">
 
               <div className="col-span-2">
-                <FieldLabel icon={AlertCircle}>Event Type</FieldLabel>
+                <FieldLabel icon={AlertCircle}>Event type</FieldLabel>
                 <StyledSelect value={form.event_cause} onChange={(e) => setForm((f) => ({ ...f, event_cause: e.target.value }))}>
                   {PLANNED_EVENTS.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </StyledSelect>
               </div>
 
-              {/* NEW: Event Name */}
               <div className="col-span-2">
-                <FieldLabel icon={Radio}>Event Name <span className="text-muted-foreground/50 font-normal">(optional)</span></FieldLabel>
+                <FieldLabel icon={Radio}>Event name <span className="text-muted-foreground/50 font-normal">(optional)</span></FieldLabel>
                 <StyledInput
                   type="text"
-                  placeholder="e.g. IPL Final at Chinnaswamy, Rajyotsava Rally"
+                  placeholder="e.g. IPL Final, Rajyotsava Rally"
                   value={form.event_name}
                   onChange={(e) => setForm((f) => ({ ...f, event_name: e.target.value }))}
                 />
               </div>
 
               <div className="col-span-2">
-                <FieldLabel icon={MapPin}>Location (Corridor)</FieldLabel>
+                <FieldLabel icon={MapPin}>Location (road / corridor)</FieldLabel>
                 <StyledSelect value={form.corridor} onChange={(e) => setForm((f) => ({ ...f, corridor: e.target.value }))}>
                   {CORRIDORS.map((c) => <option key={c} value={c}>{c}</option>)}
                 </StyledSelect>
               </div>
 
-              {/* NEW: Crowd Size */}
               <div className="col-span-2">
-                <FieldLabel icon={Users}>Expected Crowd Size</FieldLabel>
+                <FieldLabel icon={Users}>Expected crowd size</FieldLabel>
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { val: "small",  label: "Small",  sub: "<5,000"  },
-                    { val: "medium", label: "Medium", sub: "5k–20k"  },
-                    { val: "large",  label: "Large",  sub: ">20,000" },
+                    { val: "small",  label: "Small",  sub: "Under 5,000"  },
+                    { val: "medium", label: "Medium", sub: "5,000–20,000" },
+                    { val: "large",  label: "Large",  sub: "Over 20,000"  },
                   ].map(({ val, label, sub }) => (
                     <button
                       key={val}
@@ -250,18 +260,13 @@ export default function PlannedEventsScreen() {
                 {form.crowd_size === "large" && (
                   <p className="text-[10px] text-warning mt-1.5 flex items-center gap-1">
                     <ShieldAlert className="w-3 h-3" />
-                    Large crowd: cascade multiplier will be scaled up by 1.7×
-                  </p>
-                )}
-                {form.crowd_size === "medium" && (
-                  <p className="text-[10px] text-muted-foreground mt-1.5">
-                    Medium crowd: cascade multiplier scaled by 1.3×
+                    Large crowd — extra officers will be added to the plan
                   </p>
                 )}
               </div>
 
               <div>
-                <FieldLabel icon={CalendarDays}>Day of Week</FieldLabel>
+                <FieldLabel icon={CalendarDays}>Day</FieldLabel>
                 <StyledSelect value={form.day_of_week} onChange={(e) => setForm((f) => ({ ...f, day_of_week: e.target.value }))}>
                   {["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map((d, i) =>
                     <option key={i} value={i}>{d}</option>
@@ -270,9 +275,12 @@ export default function PlannedEventsScreen() {
               </div>
 
               <div>
-                <FieldLabel icon={Clock}>Time (Hour 0–23)</FieldLabel>
-                <StyledInput type="number" min={0} max={23} value={form.hour_of_day}
-                  onChange={(e) => setForm((f) => ({ ...f, hour_of_day: e.target.value }))} />
+                <FieldLabel icon={Clock}>Time</FieldLabel>
+                <StyledSelect value={form.hour_of_day} onChange={(e) => setForm((f) => ({ ...f, hour_of_day: Number(e.target.value) }))}>
+                  {HOURS.map(({ value, label }) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </StyledSelect>
               </div>
 
             </div>
@@ -283,8 +291,8 @@ export default function PlannedEventsScreen() {
               className="mt-5 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded-xl transition-all flex justify-center items-center gap-2 disabled:opacity-50 text-sm glow-yellow"
             >
               {loading
-                ? <><Loader2 className="w-4 h-4 animate-spin" />Analyzing Impact…</>
-                : <><Zap className="w-4 h-4" />Generate Pre-deployment Plan</>
+                ? <><Loader2 className="w-4 h-4 animate-spin" />Working…</>
+                : <><Zap className="w-4 h-4" />Get Deployment Plan</>
               }
             </button>
 
@@ -295,17 +303,17 @@ export default function PlannedEventsScreen() {
             )}
           </div>
 
-          {/* Result */}
+          {/* Results */}
           {deployResult && cascadeResult && (
             <div className="space-y-4 border-t border-border pt-5">
 
-              {/* Tier badge & Event name */}
+              {/* Alert level badge */}
               <div className="flex items-center justify-between">
-                <p className="section-label">Pre-Deployment Brief</p>
+                <p className="section-label">Deployment Plan</p>
                 {tier && (
                   <div className={clsx("px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5", TIER_CONFIG[tier]?.cls)}>
                     <span className={clsx("w-1.5 h-1.5 rounded-full", TIER_CONFIG[tier]?.dot)} />
-                    {tier} Escalation
+                    {ALERT_LEVEL_LABEL[tier] || tier}
                   </div>
                 )}
               </div>
@@ -321,43 +329,39 @@ export default function PlannedEventsScreen() {
                 <div className="bg-warning/10 border border-warning/30 rounded-lg p-2.5 flex items-start gap-2">
                   <ShieldAlert className="w-4 h-4 text-warning mt-0.5 shrink-0" />
                   <p className="text-[10px] text-warning/90 leading-tight">
-                    <strong>{cascadeResult.crowd_size === "large" ? "Large" : "Medium"} crowd multiplier applied:</strong>{" "}
-                    Base {cascadeResult.cascade_multiplier}x → <strong>{cascadeResult.adjusted_cascade_multiplier}x</strong>{" "}
-                    ({cascadeResult.crowd_multiplier}× crowd factor). Extra officers included in recommendation.
+                    <strong>{cascadeResult.crowd_size === "large" ? "Large" : "Medium"} crowd</strong> — extra officers included in the plan below.
                   </p>
                 </div>
               )}
 
-              {/* Metric grid */}
+              {/* Metric cards — plain language */}
               <div className="grid grid-cols-2 gap-2.5">
                 <MetricCard
-                  label="Cascade Impact"
-                  value={`${cascadeResult.adjusted_cascade_multiplier ?? cascadeResult.cascade_multiplier}x`}
-                  sub={cascadeResult.adjusted_cascade_multiplier !== cascadeResult.cascade_multiplier
-                    ? `base ${cascadeResult.cascade_multiplier}x × crowd`
-                    : "traffic multiplier"}
+                  label="Traffic impact"
+                  value={impactLabel(cascadeResult.adjusted_cascade_multiplier ?? cascadeResult.cascade_multiplier)}
+                  sub="on nearby roads"
                   highlight
                 />
-                <MetricCard label="Primary Station"   value={deployResult.recommended_station} highlight />
-                <MetricCard label="Officers Needed"   value={deployResult.recommended_officer_count} sub="personnel required" highlight />
-                <MetricCard label="Corridor Risk"     value={`${deployResult.corridor_risk_score?.toFixed(1)} / 100`} />
+                <MetricCard label="Nearest Station"  value={deployResult.recommended_station} highlight />
+                <MetricCard label="Send officers"    value={`${deployResult.recommended_officer_count} officers`} sub="recommended" highlight />
+                <MetricCard label="Road risk level"  value={`${deployResult.corridor_risk_score?.toFixed(0)}%`} />
               </div>
 
-              {/* Rationale */}
+              {/* Rationale — no mention of ML */}
               <div className="bg-muted/20 rounded-xl p-4 border border-border space-y-1.5">
                 <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                  <Radio className="w-3.5 h-3.5" /> ML Rationale
+                  <Radio className="w-3.5 h-3.5" /> Why this recommendation
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">{deployResult.officer_count_rationale}</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  <strong>Cascade Intelligence:</strong> {cascadeResult.interpretation}
+                  <strong>Spillover risk:</strong> {cascadeResult.interpretation}
                 </p>
               </div>
 
-              {/* Junctions */}
+              {/* Where to put barricades */}
               {deployResult.suggested_junctions?.length > 0 && (
                 <div>
-                  <p className="section-label mb-2.5">Barricade / Deploy At These Junctions</p>
+                  <p className="section-label mb-2.5">Put barricades here</p>
                   <div className="flex flex-wrap gap-2">
                     {deployResult.suggested_junctions.map((j) => (
                       <span key={j} className="text-xs bg-primary/10 text-primary border border-primary/25 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 font-medium">
@@ -369,16 +373,16 @@ export default function PlannedEventsScreen() {
                 </div>
               )}
 
-              {/* Diversion routes */}
+              {/* Alternative routes */}
               {deployResult.diversion_routes?.length > 0 && (
                 <div>
                   <p className="section-label mb-2.5 flex items-center gap-1.5">
                     <Navigation className="w-3.5 h-3.5 text-primary" />
-                    Recommended Diversion Routes
+                    Alternative roads to use
                   </p>
                   <div className="space-y-2">
                     {deployResult.diversion_routes.map((r, i) => (
-                      <div className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
+                      <div key={i} className="p-3.5 bg-primary/5 border border-primary/15 rounded-xl text-xs space-y-1.5">
                         <div className="flex items-center gap-2 font-semibold text-foreground">
                           <span>{r.from_junction}</span>
                           <ChevronRight className="w-3 h-3 text-muted-foreground" />

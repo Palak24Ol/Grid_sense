@@ -303,7 +303,7 @@ Verified directly from `frontend/package.json`:
 - **`react-leaflet` / Leaflet** for the map (⚠️ this is Leaflet, not Mapbox — there is no Mapbox dependency anywhere in this project)
 - **Recharts** for charts, **`react-router-dom` v7** for routing, **`axios`** for API calls, **`lucide-react`** for icons
 
-**9 screens** (`frontend/src/App.jsx`): Command Center Map, Triage, Planned Events, Forecast, Deployment, Logistics, Blackspot, Surge, and Learning — one screen per backend module.
+**9 screens** (`frontend/src/App.jsx`): Command Center Map, Triage, Planned Events, Forecast, Deployment, Logistics, Blackspot, Surge, and Learning — one screen per backend module.The officer-facing sidebar surfaces 8 of these screens in plain, field-friendly language; the Learning screen remains accessible directly via `/learning` for admin and data-team use.
 
 The frontend can also run in a **mock-data mode** (`VITE_USE_MOCK=true`), serving canned responses from `frontend/src/api/mocks/` so the UI can be demoed without a live backend/database.
 

@@ -22,8 +22,8 @@ const EVENT_CAUSES = [
   { value: "tree_fall",         label: "Tree Fall" },
   { value: "water_logging",     label: "Water Logging" },
   { value: "construction",      label: "Construction Activity" },
-  { value: "protest",           label: "Protest / Rally" },
-  { value: "public_event",      label: "Public Event / Festival" },
+  { value: "protest",           label: "Rally / Protest" },
+  { value: "public_event",      label: "Match / Festival" },
   { value: "vip_movement",      label: "VIP Movement" },
 ];
 
@@ -32,6 +32,8 @@ const TIER_CONFIG = {
   Elevated: { cls: "bg-warning/15 text-warning border-warning/30",      dot: "bg-warning" },
   Routine:  { cls: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30", dot: "bg-emerald-400" },
 };
+
+const ALERT_LABEL = { Critical: "High Alert", Elevated: "Elevated", Routine: "Routine" };
 
 const JUNCTION_COORDS = {
   "MekhriCircle":                  [13.014, 77.584],
@@ -44,6 +46,19 @@ const JUNCTION_COORDS = {
   "YelhankaCircle":                [13.100, 77.596],
   "GokuldasImagesJunc":            [13.008, 77.541],
 };
+
+const HOURS = Array.from({ length: 24 }, (_, i) => {
+  const ampm = i < 12 ? 'AM' : 'PM';
+  const h    = i === 0 ? 12 : i > 12 ? i - 12 : i;
+  return { value: i, label: `${h}:00 ${ampm}` };
+});
+
+function riskLabel(score) {
+  if (!score) return "—";
+  if (score >= 70) return "High";
+  if (score >= 40) return "Medium";
+  return "Low";
+}
 
 function FieldLabel({ icon: Icon, children }) {
   return (
@@ -79,9 +94,7 @@ function MetricCard({ label, value, sub, highlight }) {
   return (
     <div className={clsx(
       "rounded-xl p-3 border flex flex-col gap-1",
-      highlight
-        ? "bg-primary/8 border-primary/30"
-        : "bg-muted/20 border-border"
+      highlight ? "bg-primary/8 border-primary/30" : "bg-muted/20 border-border"
     )}>
       <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
       <p className={clsx("text-lg font-bold leading-tight", highlight ? "text-primary" : "text-foreground")}>
@@ -94,18 +107,19 @@ function MetricCard({ label, value, sub, highlight }) {
 
 export default function DeploymentScreen() {
   const [form, setForm] = useState({
-    corridor:            "Bellary Road 1",
-    event_cause:         "vehicle_breakdown",
-    vehicle_type:        "heavy_truck",
-    hour_of_day:         20,
-    day_of_week:         4,
-    closure_probability: 0.45,
-    predicted_priority:  "High",
+    corridor:                "Bellary Road 1",
+    event_cause:             "vehicle_breakdown",
+    vehicle_type:            "heavy_truck",
+    hour_of_day:             20,
+    day_of_week:             4,
+    // These are kept in state for the API but NOT shown to the user
+    closure_probability:     0.45,
+    predicted_priority:      "High",
     predicted_duration_mins: 60,
   });
-  const [result, setResult]   = useState(null);
+  const [result,  setResult]  = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(null);
+  const [error,   setError]   = useState(null);
 
   const handleGenerate = async () => {
     setLoading(true); setError(null); setResult(null);
@@ -119,7 +133,7 @@ export default function DeploymentScreen() {
       });
       setResult(data);
     } catch (e) {
-      setError(e?.response?.data?.detail || "Deployment API error — is the backend running?");
+      setError(e?.response?.data?.detail || "Could not connect — is the backend running?");
     } finally {
       setLoading(false);
     }
@@ -134,7 +148,7 @@ export default function DeploymentScreen() {
   return (
     <div className="h-full flex flex-col md:flex-row relative">
 
-      {/* Map pane */}
+      {/* Map */}
       <div className="w-full md:w-1/2 h-1/2 md:h-full relative z-0">
         <MapContainer
           center={[12.98, 77.57]} zoom={12}
@@ -167,8 +181,8 @@ export default function DeploymentScreen() {
               <Users className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-foreground">Officer Deployment Planner</h2>
-              <p className="text-[10px] text-muted-foreground">ML-powered manpower & diversion recommendations</p>
+              <h2 className="text-sm font-bold text-foreground">Where to Post Officers</h2>
+              <p className="text-[10px] text-muted-foreground">Tell us the situation — get posting advice</p>
             </div>
           </div>
         </div>
@@ -177,51 +191,45 @@ export default function DeploymentScreen() {
 
           {/* Form */}
           <div>
-            <p className="section-label mb-4">Incident Parameters</p>
+            <p className="section-label mb-4">What's the situation?</p>
             <div className="grid grid-cols-2 gap-3">
 
               <div className="col-span-2">
-                <FieldLabel icon={MapPin}>Corridor</FieldLabel>
+                <FieldLabel icon={MapPin}>Where?</FieldLabel>
                 <StyledSelect value={form.corridor} onChange={(e) => setForm((f) => ({ ...f, corridor: e.target.value }))}>
                   {CORRIDORS.map((c) => <option key={c} value={c}>{c}</option>)}
                 </StyledSelect>
               </div>
 
               <div className="col-span-2">
-                <FieldLabel icon={AlertCircle}>Event Cause</FieldLabel>
+                <FieldLabel icon={AlertCircle}>What happened?</FieldLabel>
                 <StyledSelect value={form.event_cause} onChange={(e) => setForm((f) => ({ ...f, event_cause: e.target.value }))}>
                   {EVENT_CAUSES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
                 </StyledSelect>
               </div>
 
               <div>
-                <FieldLabel icon={Car}>Vehicle Type</FieldLabel>
+                <FieldLabel icon={Car}>Vehicle involved?</FieldLabel>
                 <StyledSelect value={form.vehicle_type} onChange={(e) => setForm((f) => ({ ...f, vehicle_type: e.target.value }))}>
                   <option value="heavy_truck">Heavy Truck</option>
                   <option value="bus">Bus</option>
                   <option value="car">Car</option>
-                  <option value="2_wheeler">2 Wheeler</option>
+                  <option value="2_wheeler">Two Wheeler</option>
                   <option value="none">None</option>
                 </StyledSelect>
               </div>
 
               <div>
-                <FieldLabel icon={ShieldAlert}>Priority Level</FieldLabel>
-                <StyledSelect value={form.predicted_priority} onChange={(e) => setForm((f) => ({ ...f, predicted_priority: e.target.value }))}>
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
+                <FieldLabel icon={Clock}>Time</FieldLabel>
+                <StyledSelect value={form.hour_of_day} onChange={(e) => setForm((f) => ({ ...f, hour_of_day: Number(e.target.value) }))}>
+                  {HOURS.map(({ value, label }) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
                 </StyledSelect>
               </div>
 
-              <div>
-                <FieldLabel icon={Clock}>Hour of Day (0–23)</FieldLabel>
-                <StyledInput type="number" min={0} max={23} value={form.hour_of_day}
-                  onChange={(e) => setForm((f) => ({ ...f, hour_of_day: e.target.value }))} />
-              </div>
-
-              <div>
-                <FieldLabel icon={CalendarDays}>Day of Week</FieldLabel>
+              <div className="col-span-2">
+                <FieldLabel icon={CalendarDays}>Day</FieldLabel>
                 <StyledSelect value={form.day_of_week} onChange={(e) => setForm((f) => ({ ...f, day_of_week: e.target.value }))}>
                   {["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map((d, i) =>
                     <option key={i} value={i}>{d}</option>
@@ -229,17 +237,6 @@ export default function DeploymentScreen() {
                 </StyledSelect>
               </div>
 
-              <div>
-                <FieldLabel>Closure Probability</FieldLabel>
-                <StyledInput type="number" min={0} max={1} step={0.05} value={form.closure_probability}
-                  onChange={(e) => setForm((f) => ({ ...f, closure_probability: e.target.value }))} />
-              </div>
-
-              <div>
-                <FieldLabel>Duration (mins)</FieldLabel>
-                <StyledInput type="number" min={5} max={480} value={form.predicted_duration_mins}
-                  onChange={(e) => setForm((f) => ({ ...f, predicted_duration_mins: e.target.value }))} />
-              </div>
             </div>
 
             <button
@@ -248,8 +245,8 @@ export default function DeploymentScreen() {
               className="mt-5 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2.5 rounded-xl transition-all flex justify-center items-center gap-2 disabled:opacity-50 text-sm glow-yellow"
             >
               {loading
-                ? <><Loader2 className="w-4 h-4 animate-spin" />Generating Plan…</>
-                : <><Zap className="w-4 h-4" />Generate Deployment Brief</>
+                ? <><Loader2 className="w-4 h-4 animate-spin" />Working…</>
+                : <><Zap className="w-4 h-4" />Get Posting Plan</>
               }
             </button>
 
@@ -264,36 +261,36 @@ export default function DeploymentScreen() {
           {result && (
             <div className="space-y-4 border-t border-border pt-5">
 
-              {/* Tier badge */}
+              {/* Alert level */}
               <div className="flex items-center justify-between">
-                <p className="section-label">Deployment Brief</p>
+                <p className="section-label">Posting Plan</p>
                 {tier && (
                   <div className={clsx("px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-1.5", TIER_CONFIG[tier]?.cls)}>
                     <span className={clsx("w-1.5 h-1.5 rounded-full", TIER_CONFIG[tier]?.dot)} />
-                    {tier} Escalation
+                    {ALERT_LABEL[tier] || tier}
                   </div>
                 )}
               </div>
 
-              {/* Metric grid */}
+              {/* Key numbers */}
               <div className="grid grid-cols-2 gap-2.5">
-                <MetricCard label="Primary Station"   value={result.recommended_station} highlight />
-                <MetricCard label="Officers Needed"   value={result.recommended_officer_count} sub="personnel required" highlight />
-                <MetricCard label="Deploy Duration"   value={`${result.deployment_duration_mins} min`} />
-                <MetricCard label="Corridor Risk"     value={`${result.corridor_risk_score?.toFixed(1)} / 100`} />
+                <MetricCard label="Call this station"   value={result.recommended_station} highlight />
+                <MetricCard label="Send officers"       value={`${result.recommended_officer_count} officers`} sub="to this location" highlight />
+                <MetricCard label="How long to stay"    value={`${result.deployment_duration_mins} min`} />
+                <MetricCard label="Road risk level"     value={riskLabel(result.corridor_risk_score)} />
               </div>
 
-              {/* Rationale */}
+              {/* Plain language rationale */}
               <div className="bg-muted/20 rounded-xl p-4 border border-border space-y-1.5">
-                <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">ML Rationale</p>
+                <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Why this recommendation</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">{result.officer_count_rationale}</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">{result.escalation_rationale}</p>
               </div>
 
-              {/* Junctions */}
+              {/* Where to deploy */}
               {result.suggested_junctions?.length > 0 && (
                 <div>
-                  <p className="section-label mb-2.5">Deploy At These Junctions</p>
+                  <p className="section-label mb-2.5">Post officers at these junctions</p>
                   <div className="flex flex-wrap gap-2">
                     {result.suggested_junctions.map((j) => (
                       <span key={j} className="text-xs bg-primary/10 text-primary border border-primary/25 px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 font-medium">
@@ -305,12 +302,12 @@ export default function DeploymentScreen() {
                 </div>
               )}
 
-              {/* Diversion routes */}
+              {/* Alternative routes */}
               {result.diversion_routes?.length > 0 && (
                 <div>
                   <p className="section-label mb-2.5 flex items-center gap-1.5">
                     <Navigation className="w-3.5 h-3.5 text-primary" />
-                    Diversion Routes
+                    Alternative roads to use
                   </p>
                   <div className="space-y-2">
                     {result.diversion_routes.map((r, i) => (

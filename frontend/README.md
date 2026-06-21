@@ -42,8 +42,13 @@ docker-compose up -d --build
 
 ## 🗺 Application Structure
 - **/components/map**: Contains `CommandCenterMap.jsx`, handling the live Leaflet map and dynamic tooltips.
-- **/components/triage**: Triage Engine form for predicting incident closure times and priorities.
-- **/components/surge**: Surge Alert Dashboard highlighting top vulnerable corridors based on live weather data.
-- **/components/learning**: Post-Event Learning UI tracking ML model accuracy over time against actual real-world outcomes.
+- **/components/triage**: Incident check form — predicts closure risk, priority, and expected clearance time in plain language for field officers.
+- **/components/surge**: Rain & Surge Alert dashboard highlighting vulnerable corridors with red/yellow/green road status.
+- **/components/events**: Planned event deployment planner for rallies, matches, and festivals.
+- **/components/forecast**: 3-day ahead traffic trouble forecast per corridor.
+- **/components/deployment**: Officer posting recommender — how many officers, where to send them.
+- **/components/blackspot**: Recurring problem junctions map and slow-response station tracker.
+- **/components/logistics**: Heavy vehicle trouble zones and risk breakdown.
+- **/components/learning**: Post-event learning system (accessible via `/learning` URL — not shown in the officer sidebar by design).
 - **/api**: Axios client wrappers to fetch data from the FastAPI endpoints.
 - **/store**: Zustand global stores managing UI state across the dashboards.

@@ -5,8 +5,8 @@ import {
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import { useMapStore } from "../../store/useMapStore";
+import { getIncidents } from "../../api/incidents";
 
-// Corridor name → [lat, lng, zoom]
 const CORRIDOR_COORDS = {
   "ORR South":             [12.9139, 77.5659, 14],
   "ORR East 1":            [12.9502, 77.6992, 14],
@@ -30,9 +30,9 @@ const CORRIDOR_COORDS = {
 const MOCK_CORRIDORS = Object.keys(CORRIDOR_COORDS);
 
 const MOCK_NOTIFICATIONS = [
-  { id: 1, type: "critical", title: "High Surge Risk", message: "ORR South — 4.4x vulnerability multiplier detected.", time: "2m ago" },
-  { id: 2, type: "warning",  title: "Tree Fall Reported", message: "Mysore Road junction blocked, single lane active.", time: "15m ago" },
-  { id: 3, type: "info",     title: "Deployment Active", message: "8 officers dispatched to Bellary Road 1.", time: "1h ago" },
+  { id: 1, type: "critical", title: "ORR South — Jam Alert",    message: "Heavy rain is making traffic much worse than usual. Send extra officers.", time: "2m ago" },
+  { id: 2, type: "warning",  title: "Tree Fall on Mysore Road", message: "Junction blocked, only one lane open. Divert traffic.",                     time: "15m ago" },
+  { id: 3, type: "info",     title: "Officers Dispatched",      message: "8 officers sent to Bellary Road 1.",                                         time: "1h ago" },
 ];
 
 function LivePulse() {
@@ -45,13 +45,28 @@ function LivePulse() {
 }
 
 export default function TopBar() {
-  const [searchQuery, setSearchQuery]         = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [searchQuery,       setSearchQuery]       = useState("");
+  const [isSearchFocused,   setIsSearchFocused]   = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  const [notifications,     setNotifications]     = useState(MOCK_NOTIFICATIONS);
+  const [activeProblems,    setActiveProblems]    = useState(null);
+  const [urgentNow,         setUrgentNow]         = useState(null);
   const searchRef = useRef(null);
   const notifRef  = useRef(null);
   const { setViewport } = useMapStore();
+
+  // Pull real incident counts from API
+  useEffect(() => {
+    getIncidents()
+      .then(data => {
+        const list = Array.isArray(data) ? data : (data.incidents || []);
+        setActiveProblems(list.length);
+        setUrgentNow(list.filter(i => i.priority === 'High').length);
+      })
+      .catch(() => {
+        // leave as null — won't show stale hardcoded numbers
+      });
+  }, []);
 
   useEffect(() => {
     const handler = (e) => {
@@ -70,9 +85,7 @@ export default function TopBar() {
     setSearchQuery(corridor);
     setIsSearchFocused(false);
     const coords = CORRIDOR_COORDS[corridor];
-    if (coords) {
-      setViewport({ center: [coords[0], coords[1]], zoom: coords[2] });
-    }
+    if (coords) setViewport({ center: [coords[0], coords[1]], zoom: coords[2] });
   };
 
   return (
@@ -84,7 +97,7 @@ export default function TopBar() {
           <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search corridors, junctions…"
+            placeholder="Search a road or area…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchFocused(true)}
@@ -106,7 +119,7 @@ export default function TopBar() {
                   ))}
                 </ul>
               ) : (
-                <p className="p-3 text-sm text-muted-foreground text-center">No corridors found.</p>
+                <p className="p-3 text-sm text-muted-foreground text-center">No roads found.</p>
               )}
             </div>
           )}
@@ -114,24 +127,25 @@ export default function TopBar() {
         <LivePulse />
       </div>
 
-      {/* Right: stats + bell */}
+      {/* Right: live stats + bell */}
       <div className="flex items-center gap-5">
 
-        {/* Stat chips */}
-        <div className="flex items-center gap-1">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20">
-            <Activity className="w-3.5 h-3.5 text-red-400" />
-            <span className="text-xs text-muted-foreground">Incidents</span>
-            <span className="text-sm font-bold text-red-400">24</span>
-          </div>
+        {/* Active Problems — real data */}
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20">
+          <Activity className="w-3.5 h-3.5 text-red-400" />
+          <span className="text-xs text-muted-foreground">Active Problems</span>
+          <span className="text-sm font-bold text-red-400">
+            {activeProblems !== null ? activeProblems : '—'}
+          </span>
         </div>
 
-        <div className="flex items-center gap-1">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-warning/10 border border-warning/20">
-            <Zap className="w-3.5 h-3.5 text-warning" />
-            <span className="text-xs text-muted-foreground">Critical</span>
-            <span className="text-sm font-bold text-warning">3</span>
-          </div>
+        {/* Urgent Now — real data */}
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-warning/10 border border-warning/20">
+          <Zap className="w-3.5 h-3.5 text-warning" />
+          <span className="text-xs text-muted-foreground">Urgent Now</span>
+          <span className="text-sm font-bold text-warning">
+            {urgentNow !== null ? urgentNow : '—'}
+          </span>
         </div>
 
         <div className="w-px h-6 bg-border" />
@@ -147,7 +161,7 @@ export default function TopBar() {
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
             )}
           >
-            <Bell className="w-4.5 h-4.5" />
+            <Bell className="w-4 h-4" />
             {notifications.length > 0 && (
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full border border-card" />
             )}

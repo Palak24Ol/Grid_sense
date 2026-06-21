@@ -8,19 +8,20 @@ import {
 import { client } from '../../api/client';
 import clsx from 'clsx';
 
-// Corridor center coords for map overlays
 const CORRIDOR_COORDS = {
-  'Bellary Road 1':   [[13.014, 77.583], [13.058, 77.591]],
-  'Tumkur Road':      [[12.993, 77.541], [13.035, 77.521]],
-  'Mysore Road':      [[12.958, 77.530], [12.927, 77.484]],
-  'ORR North 1':      [[13.031, 77.610], [13.041, 77.650]],
-  'Hosur Road':       [[12.931, 77.613], [12.886, 77.641]],
-  'Magadi Road':      [[12.973, 77.527], [12.985, 77.498]],
-  'CBD 2':            [[12.976, 77.586], [12.982, 77.579]],
-  'West of Chord Road':[[12.991, 77.539],[13.003, 77.526]],
+  'Bellary Road 1':    [[13.014, 77.583], [13.058, 77.591]],
+  'Tumkur Road':       [[12.993, 77.541], [13.035, 77.521]],
+  'Mysore Road':       [[12.958, 77.530], [12.927, 77.484]],
+  'ORR North 1':       [[13.031, 77.610], [13.041, 77.650]],
+  'Hosur Road':        [[12.931, 77.613], [12.886, 77.641]],
+  'Magadi Road':       [[12.973, 77.527], [12.985, 77.498]],
+  'CBD 2':             [[12.976, 77.586], [12.982, 77.579]],
+  'West of Chord Road':[[12.991, 77.539], [13.003, 77.526]],
 };
 
 const RISK_COLOR = { critical: '#ef4444', high: '#f97316', medium: '#eab308' };
+
+const RISK_LABEL = { critical: 'Very High', high: 'High', medium: 'Medium' };
 
 function RiskBadge({ level }) {
   const colors = {
@@ -30,7 +31,7 @@ function RiskBadge({ level }) {
   };
   return (
     <span className={clsx('px-2 py-0.5 rounded-full text-xs font-bold border uppercase tracking-wider', colors[level])}>
-      {level}
+      {RISK_LABEL[level] || level}
     </span>
   );
 }
@@ -41,24 +42,22 @@ function CustomTooltip({ active, payload, label }) {
   return (
     <div className="bg-card border border-border rounded-lg p-3 shadow-xl text-xs">
       <p className="font-semibold mb-1">{label}:00</p>
-      <p className="text-primary">Predicted: {d?.predicted_incident_count?.toFixed(2)}</p>
-      <p className="text-muted-foreground">Range: {d?.yhat_lower?.toFixed(2)} – {d?.yhat_upper?.toFixed(2)}</p>
-      {d?.is_peak_hour && <p className="text-warning font-medium mt-1">⚠ Peak hour</p>}
+      <p className="text-primary">Expected problems: {d?.predicted_incident_count?.toFixed(1)}</p>
+      {d?.is_peak_hour && <p className="text-warning font-medium mt-1">⚠ Busy period</p>}
     </div>
   );
 }
 
 export default function ForecastScreen() {
-  const [corridors, setCorridors] = useState([]);
-  const [selected, setSelected]   = useState(null);
-  const [junctions, setJunctions] = useState([]);
-  const [selJunction, setSelJunction] = useState(null);
-  const [chartData, setChartData]     = useState([]);
-  const [junctionMeta, setJunctionMeta] = useState(null);
+  const [corridors,      setCorridors]      = useState([]);
+  const [selected,       setSelected]       = useState(null);
+  const [junctions,      setJunctions]      = useState([]);
+  const [selJunction,    setSelJunction]    = useState(null);
+  const [chartData,      setChartData]      = useState([]);
+  const [junctionMeta,   setJunctionMeta]   = useState(null);
   const [loadingCorridors, setLoadingCorridors] = useState(true);
-  const [loadingChart, setLoadingChart]         = useState(false);
+  const [loadingChart,     setLoadingChart]     = useState(false);
 
-  // Load top corridors on mount
   useEffect(() => {
     client.get('/forecast/corridors')
       .then(r => {
@@ -73,7 +72,6 @@ export default function ForecastScreen() {
       .catch(() => {});
   }, []);
 
-  // Load chart when junction is picked
   useEffect(() => {
     if (!selJunction) return;
     setLoadingChart(true);
@@ -109,7 +107,7 @@ export default function ForecastScreen() {
               positions={c.coords}
               pathOptions={{ color: c.color, weight: selected?.corridor === c.corridor ? 6 : 3, opacity: 0.85 }}
             >
-              <Tooltip sticky>{c.corridor} — {c.risk_level?.toUpperCase()}</Tooltip>
+              <Tooltip sticky>{c.corridor} — {RISK_LABEL[c.risk_level] || c.risk_level} risk</Tooltip>
             </Polyline>
           ))}
         </MapContainer>
@@ -125,8 +123,8 @@ export default function ForecastScreen() {
               <CloudRain className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-foreground">72-Hour Corridor Forecast</h2>
-              <p className="text-[10px] text-muted-foreground">Prophet time-series predictions</p>
+              <h2 className="text-sm font-bold text-foreground">Trouble Expected in Next 3 Days</h2>
+              <p className="text-[10px] text-muted-foreground">Based on past incident patterns for each road</p>
             </div>
           </div>
           <span className="text-xs text-muted-foreground">{new Date().toLocaleTimeString()}</span>
@@ -136,13 +134,11 @@ export default function ForecastScreen() {
 
           {/* Top Corridors */}
           <div>
-            <p className="section-label mb-3">
-              Top Risk Corridors — Next 24h
-            </p>
+            <p className="section-label mb-3">Roads to watch tomorrow</p>
             {loadingCorridors ? (
               <div className="flex items-center gap-2 text-muted-foreground text-sm py-4">
                 <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                Loading corridors…
+                Loading…
               </div>
             ) : (
               <div className="space-y-2">
@@ -164,11 +160,11 @@ export default function ForecastScreen() {
                     <div className="flex gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <TrendingUp className="w-3 h-3" />
-                        {c.next_24h_predicted_incidents} incidents/day
+                        {c.next_24h_predicted_incidents} issues expected
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        Peak {String(c.peak_hour).padStart(2, '0')}:00
+                        Worst at {String(c.peak_hour).padStart(2, '0')}:00
                       </span>
                     </div>
                   </button>
@@ -177,17 +173,17 @@ export default function ForecastScreen() {
             )}
           </div>
 
-          {/* Junction Chart */}
+          {/* Detail chart */}
           <div className="border border-border rounded-xl overflow-hidden">
             <div className="p-3 bg-muted/30 border-b border-border flex items-center gap-3">
-              <span className="text-sm font-medium">Corridor Detail</span>
+              <span className="text-sm font-medium">Road detail</span>
               <div className="relative flex-1">
                 <select
                   className="w-full bg-muted/30 border border-border rounded-lg px-3 py-1.5 text-xs appearance-none focus:outline-none focus:border-primary/60 transition-colors pr-6"
                   value={selJunction || ''}
                   onChange={e => setSelJunction(e.target.value)}
                 >
-                  <option value="">— select corridor —</option>
+                  <option value="">— pick a road —</option>
                   {junctions.map(c => <option key={c} value={c}>{c.replace(/_/g, ' ')}</option>)}
                 </select>
                 <ChevronDown className="w-3 h-3 absolute right-2 top-2 text-muted-foreground pointer-events-none" />
@@ -197,14 +193,14 @@ export default function ForecastScreen() {
             <div className="p-4">
               {!selJunction && (
                 <p className="text-xs text-muted-foreground text-center py-6">
-                  Select a corridor above to view its 72-hour Prophet forecast
+                  Pick a road above to see when it's likely to get busy
                 </p>
               )}
 
               {selJunction && loadingChart && (
                 <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm py-8">
                   <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  Running corridor forecast…
+                  Loading forecast…
                 </div>
               )}
 
@@ -213,19 +209,13 @@ export default function ForecastScreen() {
                   {junctionMeta && (
                     <div className="flex gap-2.5 mb-4 text-xs">
                       <div className="bg-muted/20 border border-border rounded-xl px-3 py-2 flex-1">
-                        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-0.5">Corridor</p>
+                        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-0.5">Road</p>
                         <p className="font-bold text-foreground text-sm">{junctionMeta.corridor}</p>
                       </div>
                       <div className="bg-muted/20 border border-border rounded-xl px-3 py-2 flex-1">
-                        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-0.5">Hist. Daily Avg</p>
-                        <p className="font-bold text-foreground text-sm">{junctionMeta.historical_daily_avg} incidents</p>
+                        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider mb-0.5">Usual daily problems</p>
+                        <p className="font-bold text-foreground text-sm">{junctionMeta.historical_daily_avg}</p>
                       </div>
-                      {junctionMeta.model_mae && (
-                        <div className="bg-primary/8 border border-primary/30 rounded-xl px-3 py-2 flex-1">
-                          <p className="text-[10px] font-medium text-primary uppercase tracking-wider mb-0.5">Model MAE</p>
-                          <p className="font-bold text-primary text-sm">{junctionMeta.model_mae}</p>
-                        </div>
-                      )}
                     </div>
                   )}
 
@@ -245,11 +235,9 @@ export default function ForecastScreen() {
                       <XAxis dataKey="hour_label" tick={{ fontSize: 10, fill: '#6b7280' }} interval={5} />
                       <YAxis tick={{ fontSize: 10, fill: '#6b7280' }} />
                       <ReTooltip content={<CustomTooltip />} />
-                      <ReferenceLine y={1.5} stroke="#f97316" strokeDasharray="4 2" label={{ value: 'peak', fill: '#f97316', fontSize: 9 }} />
-                      {/* Confidence band */}
+                      <ReferenceLine y={1.5} stroke="#f97316" strokeDasharray="4 2" label={{ value: 'busy', fill: '#f97316', fontSize: 9 }} />
                       <Area type="monotone" dataKey="yhat_upper" stroke="none" fill="url(#bandGrad)" />
                       <Area type="monotone" dataKey="yhat_lower" stroke="none" fill="#0a0a0f" />
-                      {/* Main line */}
                       <Area
                         type="monotone"
                         dataKey="predicted_incident_count"

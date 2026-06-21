@@ -1,28 +1,26 @@
 import { NavLink } from "react-router-dom";
 import {
   Map,
-  Stethoscope,
-  LineChart,
+  Zap,
+  CalendarDays,
+  MapPin,
+  CloudRain,
+  BarChart2,
   ShieldAlert,
   Truck,
-  MapPin,
-  CloudLightning,
   Radio,
-  CalendarDays,
-  GraduationCap,
 } from "lucide-react";
 import clsx from "clsx";
 
 const navItems = [
-  { path: "/map",        label: "Command Center",  icon: Map,           sub: "Live overview" },
-  { path: "/triage",     label: "Event Triage",    icon: Stethoscope,   sub: "Predict & classify" },
-  { path: "/planned-events", label: "Planned Events", icon: CalendarDays, sub: "Pre-deployment plans" },
-  { path: "/blackspot",  label: "Risk Blackspots",  icon: MapPin,        sub: "Chronic hotspots" },
-  { path: "/surge",      label: "Surge Alert",     icon: CloudLightning, sub: "Weather multiplier" },
-  { path: "/forecast",   label: "72h Forecast",    icon: LineChart,     sub: "Corridor risk" },
-  { path: "/deployment", label: "Deploy Officers", icon: ShieldAlert,   sub: "Manpower planner" },
-  { path: "/logistics",  label: "LCV Logistics",   icon: Truck,         sub: "Fleet incidents" },
-  { path: "/learning",   label: "Model Learning",  icon: GraduationCap, sub: "Post-event accuracy" },
+  { path: "/map",           label: "Live Map",            icon: Map,          sub: "See what's happening now" },
+  { path: "/triage",        label: "Check an Incident",   icon: Zap,          sub: "How bad is it? What to do?" },
+  { path: "/planned-events",label: "Upcoming Events",     icon: CalendarDays, sub: "Rallies, festivals, matches" },
+  { path: "/blackspot",     label: "Trouble Spots",       icon: MapPin,       sub: "Roads that always jam" },
+  { path: "/surge",         label: "Rain & Surge Alert",  icon: CloudRain,    sub: "Weather making it worse?" },
+  { path: "/forecast",      label: "Next 3 Days",         icon: BarChart2,    sub: "Expected traffic trouble" },
+  { path: "/deployment",    label: "Officer Posting",     icon: ShieldAlert,  sub: "How many? Where to send?" },
+  { path: "/logistics",     label: "Heavy Vehicle Risk",  icon: Truck,        sub: "Trucks blocking roads" },
 ];
 
 export default function Sidebar() {
@@ -91,25 +89,21 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* System status footer */}
+      {/* Status footer */}
       <div className="p-4 border-t border-border space-y-3">
-        <span className="section-label">System</span>
+        <span className="section-label">Status</span>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-primary pulse-live shrink-0" />
-          <span className="text-xs font-medium text-foreground">Live Data Stream</span>
+          <span className="text-xs font-medium text-foreground">Live</span>
         </div>
         <div className="bg-muted/40 rounded-lg p-2.5 space-y-1.5">
           <div className="flex justify-between text-[10px]">
-            <span className="text-muted-foreground">ML Models</span>
-            <span className="text-primary font-medium">Online</span>
-          </div>
-          <div className="flex justify-between text-[10px]">
-            <span className="text-muted-foreground">Corridors</span>
+            <span className="text-muted-foreground">Roads monitored</span>
             <span className="text-foreground font-medium">20 active</span>
           </div>
           <div className="flex justify-between text-[10px]">
-            <span className="text-muted-foreground">Bengaluru Traffic</span>
-            <span className="text-warning font-medium">3 critical</span>
+            <span className="text-muted-foreground">Right now</span>
+            <span className="text-warning font-medium">3 urgent situations</span>
           </div>
         </div>
       </div>
