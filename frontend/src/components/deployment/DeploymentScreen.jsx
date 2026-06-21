@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Polyline } from "react-leaflet";
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import {
   Users, ShieldAlert, MapPin, AlertCircle, Car, Clock,
@@ -45,6 +46,10 @@ const JUNCTION_COORDS = {
   "VeerannapalyaJunction(BEL,HO)": [13.041, 77.613],
   "YelhankaCircle":                [13.100, 77.596],
   "GokuldasImagesJunc":            [13.008, 77.541],
+   "LRDE Junction":                 [13.041, 77.613],
+  "Bellary Road 2 merge point":    [13.050, 77.590],
+  "Tumkur Road merge point":       [13.020, 77.530],
+  "KodigehalliCross":              [13.041, 77.613],
 };
 
 const HOURS = Array.from({ length: 24 }, (_, i) => {
@@ -120,18 +125,44 @@ export default function DeploymentScreen() {
   const [result,  setResult]  = useState(null);
   const [loading, setLoading] = useState(false);
   const [error,   setError]   = useState(null);
+  const [routes, setRoutes] = useState([]);
 
-  const handleGenerate = async () => {
-    setLoading(true); setError(null); setResult(null);
+  const fetchRoutes = async (diversionRoutes) => {
+  const TOMTOM_KEY = import.meta.env.VITE_TOMTOM_KEY;
+  const fetchedRoutes = [];
+  
+  for (const route of diversionRoutes) {
+    const from = JUNCTION_COORDS[route.from_junction];
+    const to   = JUNCTION_COORDS[route.to_junction];
+    if (!from || !to) continue;
     try {
-      const { data } = await client.post("/deploy/recommend", {
-        ...form,
-        hour_of_day:             Number(form.hour_of_day),
-        day_of_week:             Number(form.day_of_week),
-        closure_probability:     Number(form.closure_probability),
-        predicted_duration_mins: Number(form.predicted_duration_mins),
-      });
-      setResult(data);
+      const res = await fetch(
+        `https://api.tomtom.com/routing/1/calculateRoute/${from[0]},${from[1]}:${to[0]},${to[1]}/json?key=${TOMTOM_KEY}&traffic=true`
+      );
+      const data = await res.json();
+      const points = data.routes?.[0]?.legs?.[0]?.points?.map(p => [p.latitude, p.longitude]);
+      if (points) fetchedRoutes.push(points);
+    } catch (e) {
+      console.error('Route fetch failed', e);
+    }
+  }
+  setRoutes(fetchedRoutes);
+};
+
+    const handleGenerate = async () => {
+      setLoading(true); setError(null); setResult(null);
+      try {
+        const { data } = await client.post("/deploy/recommend", {
+          ...form,
+          hour_of_day:             Number(form.hour_of_day),
+          day_of_week:             Number(form.day_of_week),
+          closure_probability:     Number(form.closure_probability),
+          predicted_duration_mins: Number(form.predicted_duration_mins),
+        });
+        setResult(data);
+       if (data.diversion_routes?.length > 0) {
+  await fetchRoutes(data.diversion_routes);
+}
     } catch (e) {
       setError(e?.response?.data?.detail || "Could not connect — is the backend running?");
     } finally {
@@ -156,18 +187,30 @@ export default function DeploymentScreen() {
           zoomControl={false}
         >
           <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
-          {markerJunctions.map((j) => (
-            <CircleMarker
-              key={j.name}
-              center={j.coords}
-              radius={10}
-              pathOptions={{ color: "#F9E107", fillColor: "#F9E107", fillOpacity: 0.7, weight: 2 }}
-            >
-              <Tooltip permanent className="leaflet-tooltip-yellow">
-                {j.name.replace(/_/g, " ")}
-              </Tooltip>
-            </CircleMarker>
-          ))}
+{markerJunctions.map((j) => (
+  <CircleMarker
+    key={j.name}
+    center={j.coords}
+    radius={10}
+    pathOptions={{ color: "#F9E107", fillColor: "#F9E107", fillOpacity: 0.7, weight: 2 }}
+  >
+    <Tooltip permanent className="leaflet-tooltip-yellow">
+      {j.name.replace(/_/g, " ")}
+    </Tooltip>
+  </CircleMarker>
+))}
+{routes.map((points, i) => (
+  <Polyline
+    key={i}
+    positions={points}
+    pathOptions={{
+      color: i === 0 ? '#F9E107' : '#60a5fa',
+      weight: 4,
+      opacity: 0.8,
+      dashArray: '8, 4',
+    }}
+  />
+))}
         </MapContainer>
       </div>
 
