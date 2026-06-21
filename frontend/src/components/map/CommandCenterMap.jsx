@@ -307,9 +307,14 @@ export default function CommandCenterMap({
         >
           <MapUpdater center={viewport.center} zoom={viewport.zoom} />
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          />
+  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+/>
+<TileLayer
+  url={`https://api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=${import.meta.env.VITE_TOMTOM_KEY}`}
+  attribution='&copy; <a href="https://tomtom.com">TomTom</a>'
+  opacity={0.7}
+/>
           {visible.map(inc => (
             <Marker
               key={inc.id}
