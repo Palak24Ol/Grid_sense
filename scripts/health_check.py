@@ -41,7 +41,7 @@ MIN_PROPHET_MODELS = 10  # Minimum junction models expected
 
 def check_json_artifact(path: Path, verbose: bool) -> bool:
     if not path.exists():
-        print(f"  ❌ MISSING   {path.name}")
+        print(f"  [MISSING]   {path.name}")
         return False
     try:
         with open(path) as f:
@@ -49,18 +49,18 @@ def check_json_artifact(path: Path, verbose: bool) -> bool:
         size_kb = path.stat().st_size / 1024
         entries = len(data) if isinstance(data, dict) else len(data)
         if verbose:
-            print(f"  ✅ OK        {path.name}  ({size_kb:.1f} KB, {entries} entries)")
+            print(f"  [OK]        {path.name}  ({size_kb:.1f} KB, {entries} entries)")
         else:
-            print(f"  ✅ {path.name}")
+            print(f"  [OK]        {path.name}")
         return True
     except Exception as e:
-        print(f"  ❌ CORRUPT   {path.name}: {e}")
+        print(f"  [CORRUPT]   {path.name}: {e}")
         return False
 
 
 def check_pkl_artifact(path: Path, verbose: bool) -> bool:
     if not path.exists():
-        print(f"  ❌ MISSING   {path.name}")
+        print(f"  [MISSING]   {path.name}")
         return False
     try:
         import joblib
@@ -68,12 +68,12 @@ def check_pkl_artifact(path: Path, verbose: bool) -> bool:
         size_kb = path.stat().st_size / 1024
         obj_type = type(obj).__name__
         if verbose:
-            print(f"  ✅ OK        {path.name}  ({size_kb:.1f} KB, type={obj_type})")
+            print(f"  [OK]        {path.name}  ({size_kb:.1f} KB, type={obj_type})")
         else:
-            print(f"  ✅ {path.name}")
+            print(f"  [OK]        {path.name}")
         return True
     except Exception as e:
-        print(f"  ❌ CORRUPT   {path.name}: {e}")
+        print(f"  [CORRUPT]   {path.name}: {e}")
         return False
 
 

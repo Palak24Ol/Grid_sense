@@ -1,0 +1,25 @@
+{
+  "threshold": 0.5,
+  "f1": 0.9989,
+  "baseline_rule_f1": 0.4454,
+  "feature_cols": [
+    "event_cause_encoded",
+    "vehicle_type_encoded",
+    "hour_of_day",
+    "day_of_week",
+    "month",
+    "hour_sin",
+    "hour_cos",
+    "description_char_count",
+    "has_fatal_keyword",
+    "has_collision_keyword",
+    "has_injury_keyword",
+    "has_ambulance_keyword",
+    "has_blocked_keyword",
+    "has_multi_vehicle_keyword",
+    "emergency_keyword_count",
+    "cause_median_duration",
+    "cause_vehicle_median_duration",
+    "closure_probability"
+  ]
+}

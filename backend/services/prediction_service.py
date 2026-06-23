@@ -339,7 +339,7 @@ def predict_incident(req: PredictionRequest) -> PredictionResponse:
             duration_p25=30.0,
             duration_p75=60.0,
             duration_bucket="30-60m",
-            inference_ms=round((time.perf_counter() - t0) * 1000, 2),
+            inference_ms=int(round((time.perf_counter() - t0) * 1000)),
             model_versions={
                 "closure_model": "rule_based_fallback",
                 "priority_model": "rule_based_fallback",
