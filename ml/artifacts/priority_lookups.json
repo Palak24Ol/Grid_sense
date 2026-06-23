@@ -1,0 +1,31 @@
+{
+  "global_median": 61.21035085,
+  "cause_medians": {
+    "accident": 40.03595935,
+    "congestion": 77.19870800833334,
+    "construction": 720.6296833333333,
+    "others": 135.96534174166666,
+    "pot_holes": 3171.436475616667,
+    "procession": 84.7351,
+    "protest": 18.243379033333333,
+    "public_event": 480.0,
+    "road_conditions": 875.3519315,
+    "test_demo": 2.3584172666666663,
+    "tree_fall": 237.728040625,
+    "vehicle_breakdown": 40.86747448333333,
+    "vip_movement": 300.0,
+    "water_logging": 1001.6558022083333
+  },
+  "cause_vehicle_medians": {
+    "vehicle_breakdown||auto": 26.158530816666666,
+    "vehicle_breakdown||bmtc_bus": 49.315911283333335,
+    "vehicle_breakdown||heavy_vehicle": 41.010567475,
+    "vehicle_breakdown||ksrtc_bus": 35.835339575000006,
+    "vehicle_breakdown||lcv": 35.12267365,
+    "vehicle_breakdown||others": 35.277599050000006,
+    "vehicle_breakdown||private_bus": 43.05589045,
+    "vehicle_breakdown||private_car": 27.943090291666664,
+    "vehicle_breakdown||taxi": 35.598752825000005,
+    "vehicle_breakdown||truck": 44.526367825
+  }
+}

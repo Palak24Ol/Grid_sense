@@ -180,7 +180,7 @@
   "pre_deployment_plan": [
     {
       "corridor": "Mysore Road",
-      "recommended_station": "Byatarayanapura",
+      "recommended_station": "Unknown",
       "recommended_officers": 8,
       "escalation_tier": "Critical",
       "surge_reason": "Water logging + tree fall historical vulnerability",
@@ -188,7 +188,7 @@
     },
     {
       "corridor": "Bellary Road 1",
-      "recommended_station": "Sadashivanagar",
+      "recommended_station": "Unknown",
       "recommended_officers": 8,
       "escalation_tier": "Critical",
       "surge_reason": "Water logging + tree fall historical vulnerability",
@@ -196,7 +196,7 @@
     },
     {
       "corridor": "Bannerghata Road",
-      "recommended_station": "Mico Layout",
+      "recommended_station": "Unknown",
       "recommended_officers": 8,
       "escalation_tier": "Critical",
       "surge_reason": "Water logging + tree fall historical vulnerability",
@@ -204,7 +204,7 @@
     },
     {
       "corridor": "ORR East 1",
-      "recommended_station": "HAL Old Airport",
+      "recommended_station": "Unknown",
       "recommended_officers": 8,
       "escalation_tier": "Critical",
       "surge_reason": "Water logging + tree fall historical vulnerability",
@@ -212,7 +212,7 @@
     },
     {
       "corridor": "ORR East 2",
-      "recommended_station": "HAL Old Airport",
+      "recommended_station": "Unknown",
       "recommended_officers": 8,
       "escalation_tier": "Critical",
       "surge_reason": "Water logging + tree fall historical vulnerability",
