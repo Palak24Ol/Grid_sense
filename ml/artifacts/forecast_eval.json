@@ -1,0 +1,92 @@
+{
+  "version": "v2",
+  "corridors": [
+    {
+      "corridor": "Mysore Road",
+      "mae": 0.3847845680182021,
+      "smape": 178.92400271276,
+      "naive_mae": 0.3653705095176757,
+      "incidents": 695
+    },
+    {
+      "corridor": "Bellary Road 1",
+      "mae": 0.30349764721542866,
+      "smape": 185.73251668853175,
+      "naive_mae": 0.2845571622809708,
+      "incidents": 536
+    },
+    {
+      "corridor": "Tumkur Road",
+      "mae": 0.2516432939268562,
+      "smape": 188.9318212295381,
+      "naive_mae": 0.21847589400723794,
+      "incidents": 426
+    },
+    {
+      "corridor": "Bellary Road 2",
+      "mae": 0.1484139835090201,
+      "smape": 196.97372446483584,
+      "naive_mae": 0.17051022051156228,
+      "incidents": 352
+    },
+    {
+      "corridor": "Hosur Road",
+      "mae": 0.09551669427669744,
+      "smape": 199.23407748479954,
+      "naive_mae": 0.12531094527363185,
+      "incidents": 213
+    },
+    {
+      "corridor": "ORR North 1",
+      "mae": 0.19605570650343185,
+      "smape": 195.70817380554567,
+      "naive_mae": 0.1429277459158846,
+      "incidents": 227
+    },
+    {
+      "corridor": "Old Madras Road",
+      "mae": 0.12279937685782621,
+      "smape": 198.96013208661492,
+      "naive_mae": 0.14981131341425458,
+      "incidents": 213
+    },
+    {
+      "corridor": "Magadi Road",
+      "mae": 0.16968893154001724,
+      "smape": 193.44100122776555,
+      "naive_mae": 0.14361690226118087,
+      "incidents": 222
+    },
+    {
+      "corridor": "ORR East 1",
+      "mae": 0.15538909117983213,
+      "smape": 196.34960984955012,
+      "naive_mae": 0.14987143182631904,
+      "incidents": 202
+    },
+    {
+      "corridor": "ORR North 2",
+      "mae": 0.14234364146460243,
+      "smape": 195.9298478321785,
+      "naive_mae": 0.13478219991700385,
+      "incidents": 219
+    },
+    {
+      "corridor": "Bannerghata Road",
+      "mae": 0.11473437019209906,
+      "smape": 197.9787193251671,
+      "naive_mae": 0.10989858906525572,
+      "incidents": 138
+    },
+    {
+      "corridor": "ORR East 2",
+      "mae": 0.1038465090300571,
+      "smape": 196.8682533317874,
+      "naive_mae": 0.10408715012722644,
+      "incidents": 171
+    }
+  ],
+  "mean_mae": 0.182,
+  "mean_smape": 193.8,
+  "mean_naive_mae": 0.175
+}

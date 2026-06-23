@@ -1,15 +1,20 @@
 """
-06_train_forecast.py — Train Facebook Prophet for top junctions.
+06_train_forecast.py — Train Prophet corridor forecasters v2.
 
-One model per junction with >= 15 incidents.
-Aggregates incident data to hourly counts and fits Prophet with
-daily + weekly seasonality.
+Improvements over v1:
+  1. Exogenous regressors: is_weekend, hour_bin (morning/evening peak flags)
+     — these are the strongest patterns in Bengaluru traffic data
+  2. Stronger changepoint_prior_scale (0.15 vs 0.1) for more flexibility
+  3. Multiplicative seasonality mode — incident counts scale with corridor load
+  4. Reports both training MAE AND SMAPE (scale-free %) for interpretability
+  5. Saves evaluation summary to JSON for the backend to surface
 
 Inputs:
     data/processed/events_clean.csv
 
 Outputs:
-    ml/artifacts/prophet_models/{JunctionName}.pkl  (one per junction)
+    ml/artifacts/prophet_models/{CorridorName}.pkl  (one per corridor)
+    ml/artifacts/forecast_eval.json
 
 Run:
     python ml/pipeline/06_train_forecast.py
@@ -26,168 +31,203 @@ import pandas as pd
 
 warnings.filterwarnings("ignore")
 
-ROOT = Path(__file__).parent.parent.parent
-CLEAN_CSV = ROOT / "data" / "processed" / "events_clean.csv"
+ROOT         = Path(__file__).parent.parent.parent
+CLEAN_CSV    = ROOT / "data" / "processed" / "events_clean.csv"
 ARTIFACT_DIR = ROOT / "ml" / "artifacts"
-PROPHET_DIR = ARTIFACT_DIR / "prophet_models"
+PROPHET_DIR  = ARTIFACT_DIR / "prophet_models"
 PROPHET_DIR.mkdir(parents=True, exist_ok=True)
+OUT_EVAL     = ARTIFACT_DIR / "forecast_eval.json"
 
-MIN_INCIDENTS = 15  # Minimum incidents for a junction to get a model
-HOLDOUT_DAYS = 14   # Days held out for MAE evaluation
-FORECAST_HOURS = 72
+MIN_INCIDENTS = 50
+HOLDOUT_DAYS  = 14
+FORECAST_HRS  = 72
+
+TARGET_CORRIDORS = [
+    "Mysore Road", "Bellary Road 1", "Tumkur Road", "Bellary Road 2",
+    "Hosur Road", "ORR North 1", "Old Madras Road", "Magadi Road",
+    "ORR East 1", "ORR North 2", "Bannerghata Road", "ORR East 2",
+]
 
 
 def load_data(path: Path) -> pd.DataFrame:
-    print(f"[06_forecast] Loading data from {path} …")
+    print(f"[06] Loading {path} …")
     df = pd.read_csv(path, low_memory=False)
-    df["start_datetime"] = pd.to_datetime(df["start_datetime"], format="ISO8601", utc=True, errors="coerce")
-    df = df.dropna(subset=["start_datetime", "junction"])
+    df["start_datetime"] = pd.to_datetime(df["start_datetime"], format="mixed", utc=True, errors="coerce")
+    df = df.dropna(subset=["start_datetime", "corridor"])
     df = df[df["is_stale_active"].astype(str).str.upper() != "TRUE"]
-    print(f"[06_forecast] Usable rows: {len(df):,}")
+    df = df[df["corridor"] != "Non-corridor"]
+    print(f"[06] Usable rows: {len(df):,}")
     return df
 
 
-def get_target_junctions(df: pd.DataFrame) -> list[str]:
-    """Return junctions with >= MIN_INCIDENTS, sorted by count descending."""
-    counts = df["junction"].value_counts()
-    target = counts[counts >= MIN_INCIDENTS].index.tolist()
-    print(f"[06_forecast] Junctions with >= {MIN_INCIDENTS} incidents: {len(target)}")
-    for j in target[:5]:
-        print(f"  {j}: {counts[j]} incidents")
-    return target
-
-
-def build_hourly_series(df: pd.DataFrame, junction: str) -> pd.DataFrame:
-    """Aggregate incidents at a junction to hourly counts."""
-    jdf = df[df["junction"] == junction].copy()
-    # Floor to hour
-    jdf["hour"] = jdf["start_datetime"].dt.floor("h")
-    hourly = jdf.groupby("hour").size().reset_index(name="y")
+def build_hourly_series(df: pd.DataFrame, corridor: str) -> pd.DataFrame:
+    sub  = df[df["corridor"] == corridor].copy()
+    sub["hour"] = sub["start_datetime"].dt.floor("h")
+    hourly = sub.groupby("hour").size().reset_index(name="y")
     hourly = hourly.rename(columns={"hour": "ds"})
-    hourly["ds"] = hourly["ds"].dt.tz_localize(None)  # Prophet requires tz-naive
+    hourly["ds"] = hourly["ds"].dt.tz_localize(None)
 
-    # Fill missing hours with 0 between first and last incident
-    if len(hourly) < 2:
-        return hourly
-
-    full_range = pd.date_range(
-        start=hourly["ds"].min(),
-        end=hourly["ds"].max(),
-        freq="h",
+    # Fill missing hours with 0
+    full_range = pd.date_range(start=hourly["ds"].min(), end=hourly["ds"].max(), freq="h")
+    hourly = (
+        hourly.set_index("ds")
+              .reindex(full_range, fill_value=0)
+              .reset_index()
     )
-    hourly = hourly.set_index("ds").reindex(full_range, fill_value=0).reset_index()
     hourly.columns = ["ds", "y"]
+
+    # Exogenous regressors — computed from the timestamp
+    hourly["is_weekend"]     = (hourly["ds"].dt.dayofweek >= 5).astype(float)
+    hourly["is_morning_peak"]= hourly["ds"].dt.hour.between(7, 10).astype(float)
+    hourly["is_evening_peak"]= hourly["ds"].dt.hour.between(17, 20).astype(float)
+    hourly["is_night"]       = (~hourly["ds"].dt.hour.between(6, 21)).astype(float)
     return hourly
 
 
-def train_prophet_model(hourly: pd.DataFrame, junction: str):
-    """Fit Prophet model. Returns (model, mae) or (None, None) on failure."""
+def smape(actual: np.ndarray, predicted: np.ndarray) -> float:
+    """Symmetric Mean Absolute Percentage Error — scale-free."""
+    denom = (np.abs(actual) + np.abs(predicted)) / 2
+    mask  = denom > 0
+    if mask.sum() == 0:
+        return float("nan")
+    return float(np.mean(np.abs(actual[mask] - predicted[mask]) / denom[mask]) * 100)
+
+
+def train_prophet(hourly: pd.DataFrame, corridor: str):
     try:
         from prophet import Prophet
+        import logging
+        logging.getLogger("prophet").setLevel(logging.ERROR)
+        logging.getLogger("cmdstanpy").setLevel(logging.ERROR)
     except ImportError:
-        print("  [WARNING] prophet not installed. Skipping.")
-        return None, None
+        print("  ERROR: prophet not installed.")
+        return None, None, None, None
 
-    if len(hourly) < 48:
-        return None, None
+    if len(hourly) < 72:
+        return None, None, None, None
 
-    # Hold out last HOLDOUT_DAYS for evaluation
     cutoff = hourly["ds"].max() - pd.Timedelta(days=HOLDOUT_DAYS)
-    train = hourly[hourly["ds"] <= cutoff].copy()
-    test = hourly[hourly["ds"] > cutoff].copy()
+    train  = hourly[hourly["ds"] <= cutoff].copy()
+    test   = hourly[hourly["ds"] >  cutoff].copy()
 
-    if len(train) < 24:
-        return None, None
+    if len(train) < 72:
+        return None, None, None, None
 
     model = Prophet(
         daily_seasonality=True,
         weekly_seasonality=True,
         yearly_seasonality=False,
         interval_width=0.8,
-        changepoint_prior_scale=0.05,
+        changepoint_prior_scale=0.15,
+        seasonality_prior_scale=12,
+        seasonality_mode="multiplicative",
     )
 
-    # Suppress Prophet output
-    import logging
-    logging.getLogger("prophet").setLevel(logging.WARNING)
-    logging.getLogger("cmdstanpy").setLevel(logging.WARNING)
+    # Add exogenous regressors
+    for reg in ["is_weekend", "is_morning_peak", "is_evening_peak", "is_night"]:
+        model.add_regressor(reg)
 
     model.fit(train)
 
-    # Evaluate on holdout
-    mae = None
+    mae, smape_val = None, None
     if len(test) > 0:
-        future = model.make_future_dataframe(
-            periods=len(test), freq="h", include_history=False
-        )
+        future = test[["ds", "is_weekend", "is_morning_peak", "is_evening_peak", "is_night"]].copy()
         forecast = model.predict(future)
-        preds = forecast["yhat"].clip(lower=0).values[: len(test)]
-        actuals = test["y"].values
-        mae = float(np.mean(np.abs(preds - actuals)))
+        preds    = forecast["yhat"].clip(lower=0).values[:len(test)]
+        actuals  = test["y"].values
+        mae      = float(np.mean(np.abs(preds - actuals)))
+        smape_val= smape(actuals, preds)
 
-    return model, mae
+    # Hourly-mean baseline: predict average count per hour-of-day from training data
+    naive_mae = None
+    if len(test) > 0:
+        hourly_mean = train.groupby(train["ds"].dt.hour)["y"].mean()
+        naive_preds = test["ds"].dt.hour.map(hourly_mean).fillna(0).values
+        naive_mae = float(np.mean(np.abs(naive_preds - test["y"].values)))
 
-
-def save_model(model, junction: str, mae: float | None) -> None:
-    """Serialise model to pkl. Sanitise junction name for filesystem."""
-    # Replace characters that are invalid in filenames
-    safe_name = junction.replace("/", "_").replace("\\", "_").replace(" ", "_")
-    path = PROPHET_DIR / f"{safe_name}.pkl"
-    payload = {
-        "model": model,
-        "junction": junction,
-        "mae": mae,
-    }
-    joblib.dump(payload, path)
-    return path
+    return model, mae, smape_val, naive_mae
 
 
 def main():
     print("=" * 60)
-    print("GridSense — Step 6: Train Prophet Junction Forecasters")
+    print("GridSense v2 — Train Prophet Corridor Forecasters")
+    print("Enhancements: regressors (weekend, peak hours), multiplicative seasonality")
     print("=" * 60)
 
     if not CLEAN_CSV.exists():
-        print(f"[06_forecast] ERROR: {CLEAN_CSV} not found. Run 01_ingest.py first.")
+        print(f"ERROR: {CLEAN_CSV} not found.")
         sys.exit(1)
 
     df = load_data(CLEAN_CSV)
-    target_junctions = get_target_junctions(df)
 
-    results = []
-    failed = []
+    results, failed = [], []
 
-    for i, junction in enumerate(target_junctions):
-        print(f"\n[06_forecast] [{i+1}/{len(target_junctions)}] {junction} …")
-        hourly = build_hourly_series(df, junction)
-        print(f"  Hourly rows: {len(hourly)}  Total incidents: {hourly['y'].sum()}")
+    for i, corridor in enumerate(TARGET_CORRIDORS):
+        count = len(df[df["corridor"] == corridor])
+        print(f"\n[{i+1}/{len(TARGET_CORRIDORS)}] {corridor} ({count} incidents)")
 
-        model, mae = train_prophet_model(hourly, junction)
-
-        if model is None:
-            print(f"  ⚠️  Skipped (insufficient data)")
-            failed.append(junction)
+        if count < MIN_INCIDENTS:
+            print(f"  Skipped (< {MIN_INCIDENTS} incidents)")
+            failed.append(corridor)
             continue
 
-        path = save_model(model, junction, mae)
-        mae_str = f"{mae:.3f}" if mae is not None else "n/a"
-        print(f"  ✅ Saved → {path.name}  MAE={mae_str}")
-        results.append({"junction": junction, "mae": mae})
+        hourly = build_hourly_series(df, corridor)
+        print(f"  Hourly rows: {len(hourly)}  mean/hr: {hourly['y'].mean():.3f}  max: {hourly['y'].max()}")
 
-    print(f"\n[06_forecast] ── Summary ──")
-    print(f"  Trained: {len(results)}  Failed/Skipped: {len(failed)}")
+        model, mae, smape_val, naive_mae = train_prophet(hourly, corridor)
+        if model is None:
+            print("  Skipped (insufficient data)")
+            failed.append(corridor)
+            continue
 
+        safe_name = corridor.replace("/", "_").replace(" ", "_")
+        path = PROPHET_DIR / f"{safe_name}.pkl"
+        joblib.dump({
+            "model":           model,
+            "corridor":        corridor,
+            "level":           "corridor",
+            "mae":             mae,
+            "smape":           smape_val,
+            "naive_mae":       naive_mae,
+            "total_incidents": count,
+            "regressors":      ["is_weekend", "is_morning_peak", "is_evening_peak", "is_night"],
+            "version":         "v2",
+        }, path)
+
+        mae_str   = f"{mae:.3f}"   if mae   is not None else "n/a"
+        smape_str = f"{smape_val:.1f}%" if smape_val is not None else "n/a"
+        naive_str = f"{naive_mae:.3f}" if naive_mae is not None else "n/a"
+        improv = f"{(naive_mae - mae) / naive_mae * 100:+.1f}%" if (naive_mae and mae) else "n/a"
+        print(f"  Saved -> {path.name}  MAE={mae_str}  Naive={naive_str}  Improv={improv}  SMAPE={smape_str}")
+        results.append({"corridor": corridor, "mae": mae, "smape": smape_val, "naive_mae": naive_mae, "incidents": count})
+
+    # Summary
+    print(f"\n{'─'*50}")
+    print(f"Trained: {len(results)}  Failed/Skipped: {len(failed)}")
     if results:
-        maes = [r["mae"] for r in results if r["mae"] is not None]
+        maes   = [r["mae"]   for r in results if r["mae"]   is not None]
+        smapes = [r["smape"] for r in results if r["smape"] is not None]
         if maes:
-            print(f"  Avg MAE: {np.mean(maes):.3f}  Min: {min(maes):.3f}  Max: {max(maes):.3f}")
+            naive_maes = [r["naive_mae"] for r in results if r.get("naive_mae") is not None]
+            print(f"\n  MAE   — mean: {np.mean(maes):.3f}  min: {min(maes):.3f}  max: {max(maes):.3f}")
+            if naive_maes:
+                print(f"  Naive — mean: {np.mean(naive_maes):.3f}")
+                mean_improv = np.mean([(n - m) / n * 100 for m, n in zip(maes, naive_maes) if n > 0])
+                print(f"  Prophet vs Naive improvement: {mean_improv:+.1f}%")
+        if smapes:
+            print(f"  SMAPE — mean: {np.mean(smapes):.1f}%  min: {min(smapes):.1f}%  max: {max(smapes):.1f}%")
 
-    if failed:
-        print(f"  Skipped junctions: {failed[:5]}")
-
-    print(f"\n[06_forecast] Prophet models saved to: {PROPHET_DIR}")
-    print(f"[06_forecast] Model files: {len(list(PROPHET_DIR.glob('*.pkl')))}")
-    print("\n[06_forecast] ✅ Done.")
+    eval_out = {
+        "version": "v2",
+        "corridors": results,
+        "mean_mae":   round(float(np.mean([r["mae"] for r in results if r["mae"] is not None])), 3),
+        "mean_smape": round(float(np.mean([r["smape"] for r in results if r["smape"] is not None])), 1),
+        "mean_naive_mae": round(float(np.mean([r["naive_mae"] for r in results if r.get("naive_mae") is not None])), 3) if any(r.get("naive_mae") for r in results) else None,
+    }
+    with open(OUT_EVAL, "w") as f:
+        json.dump(eval_out, f, indent=2)
+    print(f"\nEval summary → {OUT_EVAL}")
+    print("\n✅ Done.")
 
 
 if __name__ == "__main__":

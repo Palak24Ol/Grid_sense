@@ -1,23 +1,23 @@
 {
   "CBD 2": [
-    "Bellary Road 2",
-    "Old Madras Road",
-    "Bellary Road 1",
-    "Magadi Road",
     "ORR North 1",
-    "Tumkur Road"
+    "Tumkur Road",
+    "Bellary Road 1",
+    "Old Madras Road",
+    "Magadi Road",
+    "Bellary Road 2"
   ],
   "ORR West 1": [
     "Mysore Road"
   ],
   "ORR North 1": [
     "Airport New South Road",
-    "Tumkur Road",
-    "Bellary Road 2",
-    "Magadi Road",
-    "Hennur Main Road",
     "CBD 2",
-    "Bellary Road 1"
+    "Bellary Road 2",
+    "Bellary Road 1",
+    "Hennur Main Road",
+    "Magadi Road",
+    "Tumkur Road"
   ],
   "ORR East 1": [
     "ORR East 2",
@@ -29,57 +29,57 @@
     "Tumkur Road"
   ],
   "Magadi Road": [
+    "ORR North 1",
+    "CBD 2",
     "Bellary Road 2",
     "Bellary Road 1",
-    "CBD 2",
-    "ORR North 1",
     "Tumkur Road"
   ],
   "Old Madras Road": [
-    "CBD 2",
     "Mysore Road",
+    "CBD 2",
     "CBD 1"
   ],
   "Bellary Road 1": [
-    "West of Chord Road",
-    "Bellary Road 2",
-    "Magadi Road",
-    "CBD 2",
     "ORR North 1",
-    "Tumkur Road"
+    "CBD 2",
+    "West of Chord Road",
+    "Tumkur Road",
+    "Magadi Road",
+    "Bellary Road 2"
   ],
   "Mysore Road": [
+    "West of Chord Road",
     "Hosur Road",
-    "Old Madras Road",
     "ORR West 1",
-    "West of Chord Road"
+    "Old Madras Road"
   ],
   "Hosur Road": [
+    "Mysore Road",
     "IRR(Thanisandra road)",
-    "ORR East 1",
-    "Mysore Road"
+    "ORR East 1"
   ],
   "Bellary Road 2": [
-    "Tumkur Road",
-    "Magadi Road",
-    "CBD 2",
     "ORR North 1",
-    "Bellary Road 1"
+    "CBD 2",
+    "Bellary Road 1",
+    "Magadi Road",
+    "Tumkur Road"
   ],
   "West of Chord Road": [
-    "Bellary Road 1",
+    "Mysore Road",
     "Tumkur Road",
-    "Mysore Road"
+    "Bellary Road 1"
   ],
   "Bannerghata Road": [],
   "Tumkur Road": [
-    "West of Chord Road",
-    "Bellary Road 2",
-    "Magadi Road",
-    "CBD 2",
-    "ORR North 2",
     "ORR North 1",
-    "Bellary Road 1"
+    "ORR North 2",
+    "CBD 2",
+    "West of Chord Road",
+    "Bellary Road 1",
+    "Magadi Road",
+    "Bellary Road 2"
   ],
   "IRR(Thanisandra road)": [
     "Hosur Road"
