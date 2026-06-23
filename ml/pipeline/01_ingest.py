@@ -42,10 +42,11 @@ HIGH_PRIORITY_CORRIDORS = frozenset(
         "ORR East 2",
         "Magadi Road",
         "Old Madras Road",
-        "Bannerghata Road",
+        "Bannerghatta Road",
         "West of Chord Road",
         "CBD 2",
         "ORR West 1",
+        "ORR West 2",
     ]
 )
 
@@ -129,38 +130,6 @@ def apply_staleness_filter(df: pd.DataFrame) -> pd.DataFrame:
         f"[01_ingest] Raw active: {raw_active:,}  "
         f"Stale flagged: {stale_count:,}  "
         f"Corrected active: {raw_active - stale_count:,}"
-    )
-    return df
-
-
-def deduplicate_events(df: pd.DataFrame) -> pd.DataFrame:
-    """Remove near-duplicate event reports.
-
-    Clusters events by (police_station, event_cause, corridor) within
-    a +/-15-minute window. Keeps the earliest report in each cluster.
-    """
-    df = df.sort_values("start_datetime").reset_index(drop=True)
-    keep = pd.Series(True, index=df.index)
-
-    for (station, cause, corridor), group in df.groupby(
-        ["police_station", "event_cause", "corridor"], dropna=False
-    ):
-        if len(group) < 2:
-            continue
-        times = group["start_datetime"].values
-        idxs = group.index.values
-        for i in range(1, len(times)):
-            if pd.notna(times[i]) and pd.notna(times[i - 1]):
-                diff_mins = (times[i] - times[i - 1]) / np.timedelta64(1, "m")
-                if abs(diff_mins) <= 15:
-                    keep.iloc[idxs[i]] = False
-
-    before = len(df)
-    df = df[keep].reset_index(drop=True)
-    removed = before - len(df)
-    print(
-        f"[01_ingest] Deduplication: {before:,} → {len(df):,} "
-        f"({removed:,} duplicates removed, {removed / before * 100:.1f}%)"
     )
     return df
 
@@ -301,7 +270,6 @@ def main():
     df = parse_datetimes(df)
     df = normalise_boolean(df)
     df = apply_staleness_filter(df)
-    df = deduplicate_events(df)
     df = compute_derived_fields(df)
     validate(df)
 
