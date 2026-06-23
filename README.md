@@ -57,7 +57,7 @@ Given a new incident (cause, location/corridor, time, vehicle type), GridSense:
 4. **Models cascade risk** for planned events (processions, protests, VIP movement, public events) — how much a planned event historically inflates unplanned-incident rates on the same corridor in the following 3 hours, and on adjacent corridors.
 5. **Learns from outcomes.** Every triage prediction is logged; once an incident resolves, the actual duration/closure/officer-count can be recorded, closing the "no post-event learning system" gap named in the brief.
 6. Surfaces **chronic blackspots**, **neglected stations** (incidents that take far longer to clear than the historical norm for their cause), and a **rainfall-surge replay** of the dataset's worst weather day, so commanders can pre-position resources before the next storm.
-7. **Live traffic + weather integration.** Real-time Bengaluru road congestion (TomTom Traffic Flow API) on the command center map, actual turn-by-turn diversion routes (TomTom Routing API) on the deployment map, and live weather conditions (OpenWeatherMap API) on the surge screen — automatically surfacing a 🌧️ RAIN DETECTED alert when precipitation is detected, since rainfall is the dataset's strongest surge trigger (4.3× incident spike on March 7, 2024).
+7. **Live traffic + weather integration**:  Real-time Bengaluru road congestion (TomTom Traffic Flow API) and live incident pins (TomTom Traffic Incidents API v5) on the command center map — 100 highest-severity incidents ranked by road closure status, magnitude of delay, and raw delay seconds, auto-refreshing every 90 seconds, with a filter bar exposing All / Act Now / Major Only / Clear views and Major Only set as the default load state — actual turn-by-turn diversion routes (TomTom Routing API) on the deployment map, and live weather conditions (OpenWeatherMap API) on the surge screen — automatically surfacing a 🌧️ RAIN DETECTED alert when precipitation is detected, since rainfall is the dataset's strongest surge trigger (4.3× incident spike on March 7, 2024).
 ---
 
 ## 3. The Dataset
@@ -309,7 +309,7 @@ Verified directly from `frontend/package.json`:
 
 **9 screens** (`frontend/src/App.jsx`): Command Center Map, Triage, Planned Events, Forecast, Deployment, Logistics, Blackspot, Surge, and Learning — one screen per backend module.The officer-facing sidebar surfaces 8 of these screens in plain, field-friendly language; the Learning screen remains accessible directly via `/learning` for admin and data-team use.
 
-- **TomTom Traffic API** for live congestion overlay and real diversion route calculation
+- **TomTom Traffic API** for live congestion overlay and real diversion route calculation. TomTom Traffic Incidents API v5 for live incident pin placement — replaces static ASTRAM coordinate rendering on the command center map with real-time incident locations derived from live TomTom data.
 
 - **OpenWeatherMap API** for live Bengaluru weather on the surge screen with auto rain detection
 
@@ -507,8 +507,9 @@ This starts PostgreSQL 15 on `localhost:5433`, the FastAPI backend on `localhost
 # 1. Backend dependencies
 pip install -r requirements.txt
 
-# 2. Database setup
+# 2. Database & Environment setup
 cp .env.example .env          # defaults to localhost:5433 — adjust if needed
+# Edit backend/.env and add: OPENWEATHER_API_KEY=your_openweathermap_key_here
 alembic upgrade head
 python scripts/seed_db.py
 
@@ -597,8 +598,8 @@ This last finding is, if anything, a useful illustration of the project's own "H
 
 ## 13. Future Scope
 
-1. **Live traffic feed integration** ✅ **Done** — TomTom Traffic Flow API now powers the live congestion layer on the command center map, and TomTom Routing API draws real diversion routes on the deployment map.
-2. ~~**Live weather feed integration**~~ ✅ **Done** — OpenWeatherMap API now shows real-time Bengaluru temperature, humidity, and wind on the Rain & Surge Alert screen, with automatic RAIN DETECTED alert when precipitation is active.
+1. **Live traffic feed integration** ✅ Done — TomTom Traffic Flow API powers the live congestion layer, and TomTom Traffic Incidents API v5 now powers real-time incident pins on the command center map. Pins are sourced from live TomTom data (not historical ASTRAM coordinates), ranked by severity (road closures → magnitude of delay → raw delay seconds), capped at the top 100 worst incidents, and auto-refresh every 90 seconds. Incident categories are mapped from TomTom's 14 iconCategory values with magnitude-aware labels for category 6 (traffic jam), which is TomTom's catch-all for slow traffic in India.
+2. **Live weather feed integration** ✅ **Done** — OpenWeatherMap API now shows real-time Bengaluru temperature, humidity, and wind on the Rain & Surge Alert screen. Additionally, the backend `prediction_service` fetches live weather post-inference to compute a `weather_risk_multiplier`. This dynamically adjusts the ML-predicted clearance duration and closure probability on the fly based on live rain/wind without breaking the original feature vector shape.
 3. **Closing the learning loop operationally** — the `/learning/outcome/{id}` endpoint exists and is wired to the database; the next step is a scheduled job that periodically refreshes the duration lookup table and retrains the classifiers on accumulated actual outcomes.
 4. **Regenerating the blackspot/cascade/surge artifacts** from the current pipeline code so the three analytics modules match the rest of the system's reproducibility standard (Section 11).
 
