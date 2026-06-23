@@ -1,0 +1,77 @@
+{
+  "source_corridor": "ORR East 2",
+  "mode": "simulation_decision_support",
+  "spread_forecast": "Corridor relationship + road importance + neighbor influence simulation.",
+  "affected_roads": [
+    {
+      "corridor": "Varthur Road",
+      "hop_distance": 1,
+      "congestion_probability": 0.391,
+      "estimated_spread_time_mins": 17.3,
+      "projected_stress_score": 36.5,
+      "explanation": "Spread risk uses corridor relationship hop=1, source stress=45.2, road importance=1.2, neighbor influence=35.6."
+    },
+    {
+      "corridor": "ORR East 1",
+      "hop_distance": 1,
+      "congestion_probability": 0.429,
+      "estimated_spread_time_mins": 18.7,
+      "projected_stress_score": 42.1,
+      "explanation": "Spread risk uses corridor relationship hop=1, source stress=45.2, road importance=17.5, neighbor influence=35.0."
+    },
+    {
+      "corridor": "Old Airport Road",
+      "hop_distance": 1,
+      "congestion_probability": 0.389,
+      "estimated_spread_time_mins": 20.1,
+      "projected_stress_score": 35.6,
+      "explanation": "Spread risk uses corridor relationship hop=1, source stress=45.2, road importance=1.2, neighbor influence=35.8."
+    },
+    {
+      "corridor": "Hosur Road",
+      "hop_distance": 2,
+      "congestion_probability": 0.402,
+      "estimated_spread_time_mins": 28.5,
+      "projected_stress_score": 45.1,
+      "explanation": "Spread risk uses corridor relationship hop=2, source stress=45.2, road importance=25.3, neighbor influence=53.0."
+    }
+  ],
+  "forecast_windows": {
+    "5_min": [],
+    "15_min": [],
+    "30_min": [
+      {
+        "corridor": "Varthur Road",
+        "hop_distance": 1,
+        "congestion_probability": 0.391,
+        "estimated_spread_time_mins": 17.3,
+        "projected_stress_score": 36.5,
+        "explanation": "Spread risk uses corridor relationship hop=1, source stress=45.2, road importance=1.2, neighbor influence=35.6."
+      },
+      {
+        "corridor": "ORR East 1",
+        "hop_distance": 1,
+        "congestion_probability": 0.429,
+        "estimated_spread_time_mins": 18.7,
+        "projected_stress_score": 42.1,
+        "explanation": "Spread risk uses corridor relationship hop=1, source stress=45.2, road importance=17.5, neighbor influence=35.0."
+      },
+      {
+        "corridor": "Old Airport Road",
+        "hop_distance": 1,
+        "congestion_probability": 0.389,
+        "estimated_spread_time_mins": 20.1,
+        "projected_stress_score": 35.6,
+        "explanation": "Spread risk uses corridor relationship hop=1, source stress=45.2, road importance=1.2, neighbor influence=35.8."
+      },
+      {
+        "corridor": "Hosur Road",
+        "hop_distance": 2,
+        "congestion_probability": 0.402,
+        "estimated_spread_time_mins": 28.5,
+        "projected_stress_score": 45.1,
+        "explanation": "Spread risk uses corridor relationship hop=2, source stress=45.2, road importance=25.3, neighbor influence=53.0."
+      }
+    ]
+  }
+}

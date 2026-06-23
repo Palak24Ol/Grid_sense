@@ -1,0 +1,35 @@
+{
+  "mode": "simulation_decision_support",
+  "routes": [
+    {
+      "route_id": "route_1",
+      "corridor": "ORR East 2",
+      "distance_km": 6.5,
+      "stress_score": 45.2,
+      "travel_time_mins": 17.0,
+      "cost_breakdown": {
+        "fuel_cost": 62.33,
+        "time_cost": 51.02,
+        "idle_cost": 12.36,
+        "economic_cost": 125.71
+      },
+      "explanation": "Cost combines fuel (62), travel-time value (51), and idle delay (12) under stress 45.2."
+    },
+    {
+      "route_id": "route_2",
+      "corridor": "Mysore Road",
+      "distance_km": 8.0,
+      "stress_score": 44.1,
+      "travel_time_mins": 20.6,
+      "cost_breakdown": {
+        "fuel_cost": 76.47,
+        "time_cost": 61.8,
+        "idle_cost": 14.61,
+        "economic_cost": 152.88
+      },
+      "explanation": "Cost combines fuel (76), travel-time value (62), and idle delay (15) under stress 44.1."
+    }
+  ],
+  "best_route_id": "route_1",
+  "explanation_layer": "Economic cost is decomposed into fuel, time, and idle components for decision support."
+}

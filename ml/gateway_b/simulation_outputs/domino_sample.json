@@ -1,0 +1,124 @@
+{
+  "source_corridor": "ORR East 2",
+  "scenario": "prototype domino spread after incremental vehicle pressure",
+  "mode": "simulation_decision_support",
+  "critical_threshold": 80,
+  "tipping_point": null,
+  "scenarios": [
+    {
+      "extra_vehicles": 5,
+      "source_before_stress": 45.2,
+      "source_after_stress": 54.2,
+      "source_after_level": "Moderate",
+      "critical_threshold_crossed": false,
+      "critical_roads": [],
+      "impacted_roads": [
+        {
+          "corridor": "Varthur Road",
+          "before_stress": 28.7,
+          "after_stress": 32.2,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 0.7
+        },
+        {
+          "corridor": "ORR East 1",
+          "before_stress": 33.5,
+          "after_stress": 37.4,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 0.8
+        },
+        {
+          "corridor": "Old Airport Road",
+          "before_stress": 27.8,
+          "after_stress": 31.3,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 0.7
+        },
+        {
+          "corridor": "Hosur Road",
+          "before_stress": 37.1,
+          "after_stress": 38.9,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 0.4
+        }
+      ]
+    },
+    {
+      "extra_vehicles": 10,
+      "source_before_stress": 45.2,
+      "source_after_stress": 63.2,
+      "source_after_level": "High Stress",
+      "critical_threshold_crossed": false,
+      "critical_roads": [],
+      "impacted_roads": [
+        {
+          "corridor": "Varthur Road",
+          "before_stress": 28.7,
+          "after_stress": 35.7,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 1.4
+        },
+        {
+          "corridor": "ORR East 1",
+          "before_stress": 33.5,
+          "after_stress": 41.2,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 1.5
+        },
+        {
+          "corridor": "Old Airport Road",
+          "before_stress": 27.8,
+          "after_stress": 34.8,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 1.4
+        },
+        {
+          "corridor": "Hosur Road",
+          "before_stress": 37.1,
+          "after_stress": 40.7,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 0.7
+        }
+      ]
+    },
+    {
+      "extra_vehicles": 15,
+      "source_before_stress": 45.2,
+      "source_after_stress": 72.2,
+      "source_after_level": "High Stress",
+      "critical_threshold_crossed": false,
+      "critical_roads": [],
+      "impacted_roads": [
+        {
+          "corridor": "Varthur Road",
+          "before_stress": 28.7,
+          "after_stress": 39.3,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 2.1
+        },
+        {
+          "corridor": "ORR East 1",
+          "before_stress": 33.5,
+          "after_stress": 45.1,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 2.3
+        },
+        {
+          "corridor": "Old Airport Road",
+          "before_stress": 27.8,
+          "after_stress": 38.3,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 2.1
+        },
+        {
+          "corridor": "Hosur Road",
+          "before_stress": 37.1,
+          "after_stress": 42.5,
+          "after_level": "Moderate",
+          "estimated_wait_added_mins": 1.1
+        }
+      ]
+    }
+  ],
+  "explanation": "Tests +5, +10, and +15 vehicle pressure and flags the first Critical threshold crossing."
+}

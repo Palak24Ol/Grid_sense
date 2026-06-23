@@ -1,0 +1,42 @@
+{
+  "gateway": "B",
+  "name": "Traffic Intelligence",
+  "positioning": "Simulation, forecasting, and decision support. Not high-accuracy production ML.",
+  "kept_features": [
+    "Road Stress",
+    "Shockwave",
+    "Vehicle Surge",
+    "Domino",
+    "Congestion Cost"
+  ],
+  "evaluation_policy": {
+    "claim": "Use as prototype simulation layer.",
+    "do_not_claim": "Do not claim production-grade congestion prediction accuracy without live traffic labels.",
+    "reason": "Current data is incident history, not continuous live vehicle flow/speed ground truth."
+  },
+  "generated_outputs": {
+    "simulation_outputs": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_b\\simulation_outputs",
+    "feature_importance": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_b\\feature_importance",
+    "risk_profiles": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_b\\risk_profiles",
+    "evaluations": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_b\\evaluations"
+  },
+  "copied_artifacts": {
+    "risk_profiles": [
+      "traffic_intelligence_profile.json",
+      "corridor_risk_index.json",
+      "blackspot_scores.json",
+      "surge_profile.json"
+    ],
+    "feature_importance": [
+      "traffic_intelligence_feature_importance.json",
+      "full_feature_importance_ranked.csv",
+      "closure_feature_importance.json"
+    ],
+    "evaluations": [
+      "traffic_intelligence_evaluation.json",
+      "closure_threshold_analysis.json",
+      "feature_ablation_report.json"
+    ]
+  },
+  "stress_leaderboard_count": 21
+}

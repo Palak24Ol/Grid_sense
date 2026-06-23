@@ -1,0 +1,27 @@
+{
+  "corridor": "ORR East 2",
+  "mode": "simulation_decision_support",
+  "current_vehicles_proxy": 29.8,
+  "incoming_vehicle_rate_per_min_proxy": 3.45,
+  "outgoing_vehicle_rate_per_min_proxy": 2.41,
+  "flow_balance_index": 1.43,
+  "vehicle_surge_index": 1.04,
+  "interpretation": "Flow balance above 1.0 means vehicles are entering faster than they leave; current proxy balance is 1.43.",
+  "windows": [
+    {
+      "minutes": 5,
+      "net_accumulated_vehicles": 5.2,
+      "additional_waiting_time_mins": 0.5
+    },
+    {
+      "minutes": 15,
+      "net_accumulated_vehicles": 15.6,
+      "additional_waiting_time_mins": 1.6
+    },
+    {
+      "minutes": 30,
+      "net_accumulated_vehicles": 31.1,
+      "additional_waiting_time_mins": 3.1
+    }
+  ]
+}
