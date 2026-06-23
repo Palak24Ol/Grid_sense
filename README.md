@@ -1,6 +1,6 @@
 # 🚦 GridSense — Event-Driven Traffic Congestion Intelligence Platform
 
-![Status](https://img.shields.io/badge/Status-Active-success) ![License](https://img.shields.io/badge/License-MIT-blue) ![Python](https://img.shields.io/badge/Python-3.10%2B-yellow) ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688) ![React](https://img.shields.io/badge/React%2019-Frontend-61dafb) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
+![Status](https://img.shields.io/badge/Status-Active-success) ![Python](https://img.shields.io/badge/Python-3.10%2B-yellow) ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688) ![React](https://img.shields.io/badge/React%2019-Frontend-61dafb) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](http://15.207.223.137:5173) [![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-blue)](http://15.207.223.137:8000/docs)
 
 > 🚀 **Live Demo:** http://15.207.223.137:5173 | 📖 **API Docs:** http://15.207.223.137:8000/docs
@@ -26,7 +26,7 @@ GridSense is a full-stack (ML + FastAPI + React) decision-support platform built
 11. [Verification Methodology](#11-verification-methodology--how-this-readme-was-fact-checked)
 12. [Known Limitations & Honest Caveats](#12-known-limitations--honest-caveats)
 13. [Future Scope](#13-future-scope)
-14. [License & Acknowledgments](#14-license--acknowledgments)
+ 
 
 ---
 
@@ -604,8 +604,4 @@ This last finding is, if anything, a useful illustration of the project's own "H
 
 ---
 
-## 14. License & Acknowledgments
-
-Licensed under the **MIT License** (see `LICENSE`, © 2024 GridSense).
-
-Built against the anonymized **ASTraM (Actionable Intelligence for Sustainable Traffic Management)** incident dataset published as part of the hackathon's "Event-Driven Congestion (Planned & Unplanned)" problem statement, sourced from Bengaluru Traffic Police's traffic-incident reporting platform.
+ 
