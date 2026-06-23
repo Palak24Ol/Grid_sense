@@ -1,0 +1,276 @@
+{
+  "task": "corridor_risk_classification",
+  "target": "Historical corridor risk label: Low, Medium, High, Critical",
+  "rows": 23,
+  "class_distribution": {
+    "Low": 6,
+    "Critical": 6,
+    "Medium": 6,
+    "High": 5
+  },
+  "feature_columns": [
+    "closure_rate",
+    "incident_frequency",
+    "priority_frequency",
+    "average_duration",
+    "station_count",
+    "zone_count"
+  ],
+  "candidate_models": {
+    "random_forest": {
+      "metrics": {
+        "accuracy": 0.4444444444444444,
+        "precision": 0.6458333333333334,
+        "recall": 0.4583333333333333,
+        "f1": 0.49999999999999994,
+        "labels": [
+          "Critical",
+          "High",
+          "Low",
+          "Medium"
+        ],
+        "confusion_matrix": [
+          [
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            2,
+            0,
+            1
+          ]
+        ]
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "average_duration",
+          "importance": 0.2886816829840459,
+          "importance_pct": 28.86816829840459,
+          "cumulative_importance_pct": 28.86816829840459
+        },
+        {
+          "rank": 2,
+          "feature": "zone_count",
+          "importance": 0.20721552143247263,
+          "importance_pct": 20.721552143247262,
+          "cumulative_importance_pct": 49.58972044165185
+        },
+        {
+          "rank": 3,
+          "feature": "closure_rate",
+          "importance": 0.1923623770949812,
+          "importance_pct": 19.23623770949812,
+          "cumulative_importance_pct": 68.82595815114996
+        },
+        {
+          "rank": 4,
+          "feature": "incident_frequency",
+          "importance": 0.15831153860453717,
+          "importance_pct": 15.831153860453718,
+          "cumulative_importance_pct": 84.65711201160369
+        },
+        {
+          "rank": 5,
+          "feature": "station_count",
+          "importance": 0.15342887988396317,
+          "importance_pct": 15.342887988396317,
+          "cumulative_importance_pct": 100.0
+        },
+        {
+          "rank": 6,
+          "feature": "priority_frequency",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 100.0
+        }
+      ]
+    },
+    "xgboost": {
+      "metrics": {
+        "accuracy": 0.4444444444444444,
+        "precision": 0.375,
+        "recall": 0.5,
+        "f1": 0.41666666666666663,
+        "labels": [
+          "Critical",
+          "High",
+          "Low",
+          "Medium"
+        ],
+        "confusion_matrix": [
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "average_duration",
+          "importance": 0.31897321343421936,
+          "importance_pct": 31.897324670572175,
+          "cumulative_importance_pct": 31.897324670572175
+        },
+        {
+          "rank": 2,
+          "feature": "zone_count",
+          "importance": 0.25101321935653687,
+          "importance_pct": 25.10132455392587,
+          "cumulative_importance_pct": 56.998649224498045
+        },
+        {
+          "rank": 3,
+          "feature": "closure_rate",
+          "importance": 0.19008922576904297,
+          "importance_pct": 19.008924559689643,
+          "cumulative_importance_pct": 76.00757378418767
+        },
+        {
+          "rank": 4,
+          "feature": "incident_frequency",
+          "importance": 0.14121443033218384,
+          "importance_pct": 14.121444506199829,
+          "cumulative_importance_pct": 90.1290182903875
+        },
+        {
+          "rank": 5,
+          "feature": "station_count",
+          "importance": 0.09870980679988861,
+          "importance_pct": 9.870981709612488,
+          "cumulative_importance_pct": 100.0
+        },
+        {
+          "rank": 6,
+          "feature": "priority_frequency",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 100.0
+        }
+      ]
+    },
+    "lightgbm": {
+      "metrics": {
+        "accuracy": 0.2222222222222222,
+        "precision": 0.05555555555555555,
+        "recall": 0.25,
+        "f1": 0.09090909090909091,
+        "labels": [
+          "Critical",
+          "High",
+          "Low",
+          "Medium"
+        ],
+        "confusion_matrix": [
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "closure_rate",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 0.0
+        },
+        {
+          "rank": 2,
+          "feature": "incident_frequency",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 0.0
+        },
+        {
+          "rank": 3,
+          "feature": "priority_frequency",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 0.0
+        },
+        {
+          "rank": 4,
+          "feature": "average_duration",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 0.0
+        },
+        {
+          "rank": 5,
+          "feature": "station_count",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 0.0
+        },
+        {
+          "rank": 6,
+          "feature": "zone_count",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 0.0
+        }
+      ]
+    }
+  },
+  "best_model": "random_forest",
+  "selection_metric": "macro F1, then accuracy",
+  "note": "Risk labels are generated from historical aggregate statistics."
+}

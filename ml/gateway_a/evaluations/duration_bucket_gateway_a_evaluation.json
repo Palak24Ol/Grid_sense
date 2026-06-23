@@ -1,0 +1,870 @@
+{
+  "task": "duration_bucket_prediction",
+  "target": "Short=0-30 mins, Medium=30-90 mins, Long=90+ mins",
+  "rows": 2950,
+  "class_distribution": {
+    "Medium": 1073,
+    "Long": 967,
+    "Short": 910
+  },
+  "feature_metadata": {
+    "cross_fold_target_encoding": [
+      "event_cause",
+      "corridor",
+      "police_station",
+      "zone",
+      "cause_corridor_key",
+      "cause_station_key"
+    ],
+    "frequency_encoding": [
+      "event_cause",
+      "corridor",
+      "police_station",
+      "zone",
+      "cause_corridor_key",
+      "cause_station_key"
+    ],
+    "interactions": [
+      "cause_corridor_key",
+      "cause_station_key"
+    ],
+    "station_load": "incident count per police station from training split",
+    "station_closure_rate": "cross-fold closure target encoding by police station",
+    "zone_closure_rate": "cross-fold closure target encoding by zone"
+  },
+  "candidate_models": {
+    "random_forest": {
+      "metrics": {
+        "accuracy": 0.5084745762711864,
+        "macro_precision": 0.507536159366705,
+        "macro_recall": 0.5108611876535722,
+        "macro_f1": 0.5076424134915584,
+        "labels": [
+          "Long",
+          "Medium",
+          "Short"
+        ],
+        "confusion_matrix": [
+          [
+            130,
+            34,
+            29
+          ],
+          [
+            33,
+            89,
+            93
+          ],
+          [
+            41,
+            60,
+            81
+          ]
+        ]
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "event_cause_duration_target_0_rate",
+          "importance": 0.058730566630525054,
+          "importance_pct": 5.873056663052506,
+          "cumulative_importance_pct": 5.873056663052506
+        },
+        {
+          "rank": 2,
+          "feature": "event_cause_duration_target_1_rate",
+          "importance": 0.057470692059876566,
+          "importance_pct": 5.747069205987657,
+          "cumulative_importance_pct": 11.620125869040164
+        },
+        {
+          "rank": 3,
+          "feature": "cause_corridor_key_duration_target_0_rate",
+          "importance": 0.04989059804143101,
+          "importance_pct": 4.989059804143102,
+          "cumulative_importance_pct": 16.609185673183266
+        },
+        {
+          "rank": 4,
+          "feature": "cause_station_key_duration_target_0_rate",
+          "importance": 0.04690907969665512,
+          "importance_pct": 4.6909079696655125,
+          "cumulative_importance_pct": 21.30009364284878
+        },
+        {
+          "rank": 5,
+          "feature": "cause_station_key_duration_target_1_rate",
+          "importance": 0.042536851477738,
+          "importance_pct": 4.253685147773801,
+          "cumulative_importance_pct": 25.553778790622577
+        },
+        {
+          "rank": 6,
+          "feature": "cause_station_key_duration_target_2_rate",
+          "importance": 0.04160039191124809,
+          "importance_pct": 4.16003919112481,
+          "cumulative_importance_pct": 29.713817981747386
+        },
+        {
+          "rank": 7,
+          "feature": "latitude",
+          "importance": 0.04060567277126144,
+          "importance_pct": 4.060567277126145,
+          "cumulative_importance_pct": 33.77438525887353
+        },
+        {
+          "rank": 8,
+          "feature": "cause_corridor_key_duration_target_1_rate",
+          "importance": 0.04041654327871217,
+          "importance_pct": 4.041654327871218,
+          "cumulative_importance_pct": 37.81603958674475
+        },
+        {
+          "rank": 9,
+          "feature": "event_cause_duration_target_2_rate",
+          "importance": 0.0396428303814966,
+          "importance_pct": 3.9642830381496608,
+          "cumulative_importance_pct": 41.78032262489441
+        },
+        {
+          "rank": 10,
+          "feature": "longitude",
+          "importance": 0.03931003411348799,
+          "importance_pct": 3.9310034113488,
+          "cumulative_importance_pct": 45.71132603624321
+        },
+        {
+          "rank": 11,
+          "feature": "cause_corridor_key_duration_target_2_rate",
+          "importance": 0.038513721375744894,
+          "importance_pct": 3.85137213757449,
+          "cumulative_importance_pct": 49.5626981738177
+        },
+        {
+          "rank": 12,
+          "feature": "hour_of_day",
+          "importance": 0.03503429313608097,
+          "importance_pct": 3.5034293136080974,
+          "cumulative_importance_pct": 53.066127487425796
+        },
+        {
+          "rank": 13,
+          "feature": "police_station_duration_target_1_rate",
+          "importance": 0.03452335293406426,
+          "importance_pct": 3.4523352934064264,
+          "cumulative_importance_pct": 56.51846278083222
+        },
+        {
+          "rank": 14,
+          "feature": "station_closure_rate",
+          "importance": 0.03389882963130324,
+          "importance_pct": 3.3898829631303244,
+          "cumulative_importance_pct": 59.90834574396254
+        },
+        {
+          "rank": 15,
+          "feature": "police_station_duration_target_2_rate",
+          "importance": 0.03239713602767589,
+          "importance_pct": 3.2397136027675897,
+          "cumulative_importance_pct": 63.148059346730136
+        },
+        {
+          "rank": 16,
+          "feature": "police_station_duration_target_0_rate",
+          "importance": 0.03212612656152346,
+          "importance_pct": 3.2126126561523463,
+          "cumulative_importance_pct": 66.36067200288248
+        },
+        {
+          "rank": 17,
+          "feature": "zone_closure_rate",
+          "importance": 0.027161762092644773,
+          "importance_pct": 2.7161762092644777,
+          "cumulative_importance_pct": 69.07684821214696
+        },
+        {
+          "rank": 18,
+          "feature": "corridor_duration_target_2_rate",
+          "importance": 0.025566627179887075,
+          "importance_pct": 2.556662717988708,
+          "cumulative_importance_pct": 71.63351093013567
+        },
+        {
+          "rank": 19,
+          "feature": "corridor_duration_target_1_rate",
+          "importance": 0.025022958677042864,
+          "importance_pct": 2.502295867704287,
+          "cumulative_importance_pct": 74.13580679783995
+        },
+        {
+          "rank": 20,
+          "feature": "zone_duration_target_0_rate",
+          "importance": 0.024871918354164014,
+          "importance_pct": 2.4871918354164015,
+          "cumulative_importance_pct": 76.62299863325636
+        },
+        {
+          "rank": 21,
+          "feature": "corridor_duration_target_0_rate",
+          "importance": 0.024486439149930966,
+          "importance_pct": 2.448643914993097,
+          "cumulative_importance_pct": 79.07164254824946
+        },
+        {
+          "rank": 22,
+          "feature": "zone_duration_target_1_rate",
+          "importance": 0.024469380124496915,
+          "importance_pct": 2.446938012449692,
+          "cumulative_importance_pct": 81.51858056069915
+        },
+        {
+          "rank": 23,
+          "feature": "event_cause_freq",
+          "importance": 0.022928594383021687,
+          "importance_pct": 2.292859438302169,
+          "cumulative_importance_pct": 83.81143999900131
+        },
+        {
+          "rank": 24,
+          "feature": "zone_duration_target_2_rate",
+          "importance": 0.022156595446866285,
+          "importance_pct": 2.2156595446866287,
+          "cumulative_importance_pct": 86.02709954368794
+        },
+        {
+          "rank": 25,
+          "feature": "day_of_week",
+          "importance": 0.02159921118512597,
+          "importance_pct": 2.1599211185125973,
+          "cumulative_importance_pct": 88.18702066220054
+        },
+        {
+          "rank": 26,
+          "feature": "cause_station_key_freq",
+          "importance": 0.020359350865640547,
+          "importance_pct": 2.035935086564055,
+          "cumulative_importance_pct": 90.2229557487646
+        },
+        {
+          "rank": 27,
+          "feature": "station_load",
+          "importance": 0.01959323641863533,
+          "importance_pct": 1.9593236418635334,
+          "cumulative_importance_pct": 92.18227939062812
+        },
+        {
+          "rank": 28,
+          "feature": "police_station_freq",
+          "importance": 0.018895851935906028,
+          "importance_pct": 1.8895851935906032,
+          "cumulative_importance_pct": 94.07186458421873
+        },
+        {
+          "rank": 29,
+          "feature": "month",
+          "importance": 0.01885787127429102,
+          "importance_pct": 1.8857871274291023,
+          "cumulative_importance_pct": 95.95765171164784
+        },
+        {
+          "rank": 30,
+          "feature": "cause_corridor_key_freq",
+          "importance": 0.014143925460886839,
+          "importance_pct": 1.4143925460886841,
+          "cumulative_importance_pct": 97.37204425773652
+        },
+        {
+          "rank": 31,
+          "feature": "corridor_freq",
+          "importance": 0.010114486639041364,
+          "importance_pct": 1.0114486639041365,
+          "cumulative_importance_pct": 98.38349292164065
+        },
+        {
+          "rank": 32,
+          "feature": "zone_freq",
+          "importance": 0.009387527679384677,
+          "importance_pct": 0.9387527679384678,
+          "cumulative_importance_pct": 99.32224568957912
+        },
+        {
+          "rank": 33,
+          "feature": "is_high_priority_corridor",
+          "importance": 0.0024555578860240212,
+          "importance_pct": 0.24555578860240215,
+          "cumulative_importance_pct": 99.56780147818152
+        },
+        {
+          "rank": 34,
+          "feature": "requires_road_closure",
+          "importance": 0.002261131260885121,
+          "importance_pct": 0.2261131260885121,
+          "cumulative_importance_pct": 99.79391460427004
+        },
+        {
+          "rank": 35,
+          "feature": "is_non_corridor",
+          "importance": 0.0020608539572996797,
+          "importance_pct": 0.206085395729968,
+          "cumulative_importance_pct": 100.00000000000003
+        }
+      ]
+    },
+    "xgboost": {
+      "metrics": {
+        "accuracy": 0.49830508474576274,
+        "macro_precision": 0.5002549909559858,
+        "macro_recall": 0.4936391118220254,
+        "macro_f1": 0.49496135811925285,
+        "labels": [
+          "Long",
+          "Medium",
+          "Short"
+        ],
+        "confusion_matrix": [
+          [
+            117,
+            52,
+            24
+          ],
+          [
+            24,
+            116,
+            75
+          ],
+          [
+            36,
+            85,
+            61
+          ]
+        ]
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "event_cause_duration_target_0_rate",
+          "importance": 0.12025296688079834,
+          "importance_pct": 12.025296374495795,
+          "cumulative_importance_pct": 12.025296374495795
+        },
+        {
+          "rank": 2,
+          "feature": "event_cause_duration_target_1_rate",
+          "importance": 0.058884695172309875,
+          "importance_pct": 5.888469363677183,
+          "cumulative_importance_pct": 17.913765738172977
+        },
+        {
+          "rank": 3,
+          "feature": "cause_station_key_duration_target_0_rate",
+          "importance": 0.03556681424379349,
+          "importance_pct": 3.5566813316316552,
+          "cumulative_importance_pct": 21.47044706980463
+        },
+        {
+          "rank": 4,
+          "feature": "police_station_freq",
+          "importance": 0.030873777344822884,
+          "importance_pct": 3.0873776539726423,
+          "cumulative_importance_pct": 24.557824723777273
+        },
+        {
+          "rank": 5,
+          "feature": "cause_station_key_duration_target_2_rate",
+          "importance": 0.02956421487033367,
+          "importance_pct": 2.956421409938671,
+          "cumulative_importance_pct": 27.514246133715947
+        },
+        {
+          "rank": 6,
+          "feature": "station_load",
+          "importance": 0.02863124944269657,
+          "importance_pct": 2.863124869607858,
+          "cumulative_importance_pct": 30.377371003323805
+        },
+        {
+          "rank": 7,
+          "feature": "cause_station_key_duration_target_1_rate",
+          "importance": 0.028291160240769386,
+          "importance_pct": 2.8291159503019916,
+          "cumulative_importance_pct": 33.2064869536258
+        },
+        {
+          "rank": 8,
+          "feature": "cause_corridor_key_duration_target_0_rate",
+          "importance": 0.027861246839165688,
+          "importance_pct": 2.7861246112627076,
+          "cumulative_importance_pct": 35.992611564888506
+        },
+        {
+          "rank": 9,
+          "feature": "zone_freq",
+          "importance": 0.02665521577000618,
+          "importance_pct": 2.6655215074917282,
+          "cumulative_importance_pct": 38.65813307238023
+        },
+        {
+          "rank": 10,
+          "feature": "cause_corridor_key_duration_target_2_rate",
+          "importance": 0.026261501014232635,
+          "importance_pct": 2.626150032941065,
+          "cumulative_importance_pct": 41.28428310532129
+        },
+        {
+          "rank": 11,
+          "feature": "police_station_duration_target_0_rate",
+          "importance": 0.02614043839275837,
+          "importance_pct": 2.6140437711093334,
+          "cumulative_importance_pct": 43.89832687643063
+        },
+        {
+          "rank": 12,
+          "feature": "police_station_duration_target_1_rate",
+          "importance": 0.026097476482391357,
+          "importance_pct": 2.6097475801846644,
+          "cumulative_importance_pct": 46.5080744566153
+        },
+        {
+          "rank": 13,
+          "feature": "cause_corridor_key_duration_target_1_rate",
+          "importance": 0.025829289108514786,
+          "importance_pct": 2.58292884349636,
+          "cumulative_importance_pct": 49.09100330011166
+        },
+        {
+          "rank": 14,
+          "feature": "corridor_freq",
+          "importance": 0.025770284235477448,
+          "importance_pct": 2.5770283563464935,
+          "cumulative_importance_pct": 51.66803165645815
+        },
+        {
+          "rank": 15,
+          "feature": "station_closure_rate",
+          "importance": 0.025508880615234375,
+          "importance_pct": 2.5508879950038494,
+          "cumulative_importance_pct": 54.218919651461995
+        },
+        {
+          "rank": 16,
+          "feature": "police_station_duration_target_2_rate",
+          "importance": 0.025258976966142654,
+          "importance_pct": 2.525897630746352,
+          "cumulative_importance_pct": 56.744817282208345
+        },
+        {
+          "rank": 17,
+          "feature": "event_cause_freq",
+          "importance": 0.025133121758699417,
+          "importance_pct": 2.5133121103302214,
+          "cumulative_importance_pct": 59.25812939253857
+        },
+        {
+          "rank": 18,
+          "feature": "zone_duration_target_0_rate",
+          "importance": 0.02495574578642845,
+          "importance_pct": 2.4955745135656686,
+          "cumulative_importance_pct": 61.75370390610424
+        },
+        {
+          "rank": 19,
+          "feature": "cause_corridor_key_freq",
+          "importance": 0.02438480406999588,
+          "importance_pct": 2.438480343411258,
+          "cumulative_importance_pct": 64.19218424951549
+        },
+        {
+          "rank": 20,
+          "feature": "longitude",
+          "importance": 0.024331074208021164,
+          "importance_pct": 2.4331073573538977,
+          "cumulative_importance_pct": 66.6252916068694
+        },
+        {
+          "rank": 21,
+          "feature": "corridor_duration_target_1_rate",
+          "importance": 0.02421126887202263,
+          "importance_pct": 2.421126824066461,
+          "cumulative_importance_pct": 69.04641843093586
+        },
+        {
+          "rank": 22,
+          "feature": "month",
+          "importance": 0.0241727065294981,
+          "importance_pct": 2.4172705899145672,
+          "cumulative_importance_pct": 71.46368902085042
+        },
+        {
+          "rank": 23,
+          "feature": "cause_station_key_freq",
+          "importance": 0.02412545122206211,
+          "importance_pct": 2.4125450592941964,
+          "cumulative_importance_pct": 73.87623408014463
+        },
+        {
+          "rank": 24,
+          "feature": "corridor_duration_target_2_rate",
+          "importance": 0.023764271289110184,
+          "importance_pct": 2.376427066940854,
+          "cumulative_importance_pct": 76.25266114708548
+        },
+        {
+          "rank": 25,
+          "feature": "latitude",
+          "importance": 0.023476136848330498,
+          "importance_pct": 2.347613623614254,
+          "cumulative_importance_pct": 78.60027477069973
+        },
+        {
+          "rank": 26,
+          "feature": "hour_of_day",
+          "importance": 0.022939475253224373,
+          "importance_pct": 2.2939474655030954,
+          "cumulative_importance_pct": 80.89422223620282
+        },
+        {
+          "rank": 27,
+          "feature": "zone_closure_rate",
+          "importance": 0.022888341918587685,
+          "importance_pct": 2.288834132172767,
+          "cumulative_importance_pct": 83.18305636837559
+        },
+        {
+          "rank": 28,
+          "feature": "corridor_duration_target_0_rate",
+          "importance": 0.0226825512945652,
+          "importance_pct": 2.2682550703071596,
+          "cumulative_importance_pct": 85.45131143868275
+        },
+        {
+          "rank": 29,
+          "feature": "zone_duration_target_1_rate",
+          "importance": 0.022378118708729744,
+          "importance_pct": 2.2378118125174837,
+          "cumulative_importance_pct": 87.68912325120023
+        },
+        {
+          "rank": 30,
+          "feature": "requires_road_closure",
+          "importance": 0.02230287715792656,
+          "importance_pct": 2.230287657633373,
+          "cumulative_importance_pct": 89.91941090883361
+        },
+        {
+          "rank": 31,
+          "feature": "event_cause_duration_target_2_rate",
+          "importance": 0.022198215126991272,
+          "importance_pct": 2.219821454812772,
+          "cumulative_importance_pct": 92.13923236364639
+        },
+        {
+          "rank": 32,
+          "feature": "zone_duration_target_2_rate",
+          "importance": 0.02200411818921566,
+          "importance_pct": 2.200411761541358,
+          "cumulative_importance_pct": 94.33964412518773
+        },
+        {
+          "rank": 33,
+          "feature": "day_of_week",
+          "importance": 0.020675070583820343,
+          "importance_pct": 2.0675070044675876,
+          "cumulative_importance_pct": 96.40715112965532
+        },
+        {
+          "rank": 34,
+          "feature": "is_high_priority_corridor",
+          "importance": 0.019178329035639763,
+          "importance_pct": 1.9178328535525875,
+          "cumulative_importance_pct": 98.32498398320791
+        },
+        {
+          "rank": 35,
+          "feature": "is_non_corridor",
+          "importance": 0.016750160604715347,
+          "importance_pct": 1.6750160167920882,
+          "cumulative_importance_pct": 100.0
+        }
+      ]
+    },
+    "lightgbm": {
+      "metrics": {
+        "accuracy": 0.4847457627118644,
+        "macro_precision": 0.49385918003565066,
+        "macro_recall": 0.4835490131429401,
+        "macro_f1": 0.4875782393516149,
+        "labels": [
+          "Long",
+          "Medium",
+          "Short"
+        ],
+        "confusion_matrix": [
+          [
+            111,
+            44,
+            38
+          ],
+          [
+            24,
+            102,
+            89
+          ],
+          [
+            35,
+            74,
+            73
+          ]
+        ]
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "latitude",
+          "importance": 1579.0,
+          "importance_pct": 6.2903354314397255,
+          "cumulative_importance_pct": 6.2903354314397255
+        },
+        {
+          "rank": 2,
+          "feature": "longitude",
+          "importance": 1458.0,
+          "importance_pct": 5.808302127320532,
+          "cumulative_importance_pct": 12.098637558760258
+        },
+        {
+          "rank": 3,
+          "feature": "station_closure_rate",
+          "importance": 1394.0,
+          "importance_pct": 5.553342363158314,
+          "cumulative_importance_pct": 17.651979921918574
+        },
+        {
+          "rank": 4,
+          "feature": "hour_of_day",
+          "importance": 1270.0,
+          "importance_pct": 5.059357820094017,
+          "cumulative_importance_pct": 22.71133774201259
+        },
+        {
+          "rank": 5,
+          "feature": "cause_station_key_duration_target_1_rate",
+          "importance": 1201.0,
+          "importance_pct": 4.784479324356624,
+          "cumulative_importance_pct": 27.495817066369217
+        },
+        {
+          "rank": 6,
+          "feature": "cause_station_key_duration_target_0_rate",
+          "importance": 1136.0,
+          "importance_pct": 4.525535813879372,
+          "cumulative_importance_pct": 32.021352880248585
+        },
+        {
+          "rank": 7,
+          "feature": "cause_station_key_duration_target_2_rate",
+          "importance": 1122.0,
+          "importance_pct": 4.469763365468887,
+          "cumulative_importance_pct": 36.49111624571748
+        },
+        {
+          "rank": 8,
+          "feature": "police_station_duration_target_1_rate",
+          "importance": 1036.0,
+          "importance_pct": 4.1271611823759065,
+          "cumulative_importance_pct": 40.61827742809338
+        },
+        {
+          "rank": 9,
+          "feature": "police_station_duration_target_0_rate",
+          "importance": 1018.0,
+          "importance_pct": 4.055453748705283,
+          "cumulative_importance_pct": 44.67373117679866
+        },
+        {
+          "rank": 10,
+          "feature": "police_station_duration_target_2_rate",
+          "importance": 1003.0,
+          "importance_pct": 3.995697553979763,
+          "cumulative_importance_pct": 48.66942873077843
+        },
+        {
+          "rank": 11,
+          "feature": "cause_corridor_key_duration_target_1_rate",
+          "importance": 918.0,
+          "importance_pct": 3.6570791172018167,
+          "cumulative_importance_pct": 52.32650784798024
+        },
+        {
+          "rank": 12,
+          "feature": "corridor_duration_target_1_rate",
+          "importance": 881.0,
+          "importance_pct": 3.509680503545534,
+          "cumulative_importance_pct": 55.83618835152577
+        },
+        {
+          "rank": 13,
+          "feature": "zone_duration_target_0_rate",
+          "importance": 819.0,
+          "importance_pct": 3.262688232013385,
+          "cumulative_importance_pct": 59.09887658353916
+        },
+        {
+          "rank": 14,
+          "feature": "zone_duration_target_2_rate",
+          "importance": 818.0,
+          "importance_pct": 3.2587044856983507,
+          "cumulative_importance_pct": 62.35758106923751
+        },
+        {
+          "rank": 15,
+          "feature": "corridor_duration_target_0_rate",
+          "importance": 807.0,
+          "importance_pct": 3.2148832762329693,
+          "cumulative_importance_pct": 65.57246434547048
+        },
+        {
+          "rank": 16,
+          "feature": "zone_closure_rate",
+          "importance": 784.0,
+          "importance_pct": 3.1232571109871725,
+          "cumulative_importance_pct": 68.69572145645765
+        },
+        {
+          "rank": 17,
+          "feature": "zone_duration_target_1_rate",
+          "importance": 772.0,
+          "importance_pct": 3.0754521552067566,
+          "cumulative_importance_pct": 71.77117361166441
+        },
+        {
+          "rank": 18,
+          "feature": "cause_corridor_key_duration_target_2_rate",
+          "importance": 763.0,
+          "importance_pct": 3.0395984383714447,
+          "cumulative_importance_pct": 74.81077205003585
+        },
+        {
+          "rank": 19,
+          "feature": "corridor_duration_target_2_rate",
+          "importance": 723.0,
+          "importance_pct": 2.880248585770058,
+          "cumulative_importance_pct": 77.69102063580591
+        },
+        {
+          "rank": 20,
+          "feature": "cause_corridor_key_duration_target_0_rate",
+          "importance": 704.0,
+          "importance_pct": 2.8045574057844,
+          "cumulative_importance_pct": 80.4955780415903
+        },
+        {
+          "rank": 21,
+          "feature": "event_cause_duration_target_1_rate",
+          "importance": 686.0,
+          "importance_pct": 2.7328499721137756,
+          "cumulative_importance_pct": 83.22842801370409
+        },
+        {
+          "rank": 22,
+          "feature": "day_of_week",
+          "importance": 685.0,
+          "importance_pct": 2.728866225798741,
+          "cumulative_importance_pct": 85.95729423950283
+        },
+        {
+          "rank": 23,
+          "feature": "event_cause_duration_target_0_rate",
+          "importance": 632.0,
+          "importance_pct": 2.517727671101904,
+          "cumulative_importance_pct": 88.47502191060474
+        },
+        {
+          "rank": 24,
+          "feature": "month",
+          "importance": 614.0,
+          "importance_pct": 2.4460202374312803,
+          "cumulative_importance_pct": 90.92104214803601
+        },
+        {
+          "rank": 25,
+          "feature": "police_station_freq",
+          "importance": 519.0,
+          "importance_pct": 2.0675643375029877,
+          "cumulative_importance_pct": 92.98860648553901
+        },
+        {
+          "rank": 26,
+          "feature": "event_cause_duration_target_2_rate",
+          "importance": 478.0,
+          "importance_pct": 1.9042307385865667,
+          "cumulative_importance_pct": 94.89283722412557
+        },
+        {
+          "rank": 27,
+          "feature": "cause_station_key_freq",
+          "importance": 386.0,
+          "importance_pct": 1.5377260776033783,
+          "cumulative_importance_pct": 96.43056330172894
+        },
+        {
+          "rank": 28,
+          "feature": "cause_corridor_key_freq",
+          "importance": 286.0,
+          "importance_pct": 1.1393514460999123,
+          "cumulative_importance_pct": 97.56991474782886
+        },
+        {
+          "rank": 29,
+          "feature": "corridor_freq",
+          "importance": 248.0,
+          "importance_pct": 0.9879690861285954,
+          "cumulative_importance_pct": 98.55788383395745
+        },
+        {
+          "rank": 30,
+          "feature": "zone_freq",
+          "importance": 160.0,
+          "importance_pct": 0.6373994104055454,
+          "cumulative_importance_pct": 99.195283244363
+        },
+        {
+          "rank": 31,
+          "feature": "event_cause_freq",
+          "importance": 101.0,
+          "importance_pct": 0.4023583778185005,
+          "cumulative_importance_pct": 99.5976416221815
+        },
+        {
+          "rank": 32,
+          "feature": "requires_road_closure",
+          "importance": 50.0,
+          "importance_pct": 0.19918731575173293,
+          "cumulative_importance_pct": 99.79682893793324
+        },
+        {
+          "rank": 33,
+          "feature": "is_high_priority_corridor",
+          "importance": 39.0,
+          "importance_pct": 0.1553661062863517,
+          "cumulative_importance_pct": 99.95219504421958
+        },
+        {
+          "rank": 34,
+          "feature": "is_non_corridor",
+          "importance": 12.0,
+          "importance_pct": 0.0478049557804159,
+          "cumulative_importance_pct": 100.0
+        },
+        {
+          "rank": 35,
+          "feature": "station_load",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 100.0
+        }
+      ]
+    }
+  },
+  "best_model": "random_forest",
+  "selection_metric": "macro F1, then accuracy"
+}

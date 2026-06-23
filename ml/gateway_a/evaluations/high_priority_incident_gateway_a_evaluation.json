@@ -1,0 +1,1439 @@
+{
+  "task": "high_priority_incident_prediction",
+  "target": "priority == High",
+  "rows": 7520,
+  "positive_rate": 0.6214095744680851,
+  "feature_metadata": {
+    "cross_fold_target_encoding": [
+      "event_cause",
+      "corridor",
+      "police_station",
+      "zone",
+      "cause_corridor_key",
+      "cause_station_key"
+    ],
+    "frequency_encoding": [
+      "event_cause",
+      "corridor",
+      "police_station",
+      "zone",
+      "cause_corridor_key",
+      "cause_station_key"
+    ],
+    "interactions": [
+      "cause_corridor_key",
+      "cause_station_key"
+    ],
+    "station_load": "incident count per police station from training split",
+    "station_closure_rate": "cross-fold closure target encoding by police station",
+    "zone_closure_rate": "cross-fold closure target encoding by zone"
+  },
+  "candidate_models": {
+    "random_forest": {
+      "metrics": {
+        "accuracy": 0.9986702127659575,
+        "precision": 1.0,
+        "recall": 0.9978609625668449,
+        "f1": 0.9989293361884368,
+        "roc_auc": 0.9999981203537494,
+        "confusion_matrix": {
+          "tn": 569,
+          "fp": 0,
+          "fn": 2,
+          "tp": 933
+        },
+        "threshold_analysis": [
+          {
+            "threshold": 0.1,
+            "accuracy": 0.9993351063829787,
+            "precision": 0.9989316239316239,
+            "recall": 1.0,
+            "f1": 0.9994655264564404,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 0,
+              "tp": 935
+            }
+          },
+          {
+            "threshold": 0.15,
+            "accuracy": 0.9993351063829787,
+            "precision": 0.9989316239316239,
+            "recall": 1.0,
+            "f1": 0.9994655264564404,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 0,
+              "tp": 935
+            }
+          },
+          {
+            "threshold": 0.2,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.25,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.3,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.35,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.4,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.45,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.5,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.55,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.6,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.65,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.7,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.75,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.8,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.85,
+            "accuracy": 0.9973404255319149,
+            "precision": 1.0,
+            "recall": 0.9957219251336898,
+            "f1": 0.9978563772775991,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0042780748663101605,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 4,
+              "tp": 931
+            }
+          },
+          {
+            "threshold": 0.9,
+            "accuracy": 0.995345744680851,
+            "precision": 1.0,
+            "recall": 0.9925133689839573,
+            "f1": 0.9962426194310252,
+            "roc_auc": 0.9999981203537494,
+            "fpr": 0.0,
+            "fnr": 0.0074866310160427805,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 7,
+              "tp": 928
+            }
+          }
+        ],
+        "best_f1_threshold": {
+          "threshold": 0.1,
+          "accuracy": 0.9993351063829787,
+          "precision": 0.9989316239316239,
+          "recall": 1.0,
+          "f1": 0.9994655264564404,
+          "roc_auc": 0.9999981203537494,
+          "fpr": 0.0017574692442882249,
+          "fnr": 0.0,
+          "confusion_matrix": {
+            "tn": 568,
+            "fp": 1,
+            "fn": 0,
+            "tp": 935
+          }
+        }
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "corridor_priority_target_rate",
+          "importance": 0.2305415297373138,
+          "importance_pct": 23.05415297373138,
+          "cumulative_importance_pct": 23.05415297373138
+        },
+        {
+          "rank": 2,
+          "feature": "cause_corridor_key_priority_target_rate",
+          "importance": 0.19112144536360223,
+          "importance_pct": 19.112144536360223,
+          "cumulative_importance_pct": 42.166297510091596
+        },
+        {
+          "rank": 3,
+          "feature": "is_non_corridor",
+          "importance": 0.18813567590611316,
+          "importance_pct": 18.813567590611317,
+          "cumulative_importance_pct": 60.97986510070291
+        },
+        {
+          "rank": 4,
+          "feature": "corridor_freq",
+          "importance": 0.1750528473961903,
+          "importance_pct": 17.50528473961903,
+          "cumulative_importance_pct": 78.48514984032194
+        },
+        {
+          "rank": 5,
+          "feature": "is_high_priority_corridor",
+          "importance": 0.10222164367085007,
+          "importance_pct": 10.222164367085007,
+          "cumulative_importance_pct": 88.70731420740695
+        },
+        {
+          "rank": 6,
+          "feature": "cause_corridor_key_freq",
+          "importance": 0.05445509851658145,
+          "importance_pct": 5.445509851658145,
+          "cumulative_importance_pct": 94.1528240590651
+        },
+        {
+          "rank": 7,
+          "feature": "cause_station_key_priority_target_rate",
+          "importance": 0.020824799236097365,
+          "importance_pct": 2.0824799236097364,
+          "cumulative_importance_pct": 96.23530398267484
+        },
+        {
+          "rank": 8,
+          "feature": "police_station_priority_target_rate",
+          "importance": 0.01279403918982851,
+          "importance_pct": 1.279403918982851,
+          "cumulative_importance_pct": 97.51470790165769
+        },
+        {
+          "rank": 9,
+          "feature": "police_station_freq",
+          "importance": 0.0069390585607036455,
+          "importance_pct": 0.6939058560703646,
+          "cumulative_importance_pct": 98.20861375772805
+        },
+        {
+          "rank": 10,
+          "feature": "cause_station_key_freq",
+          "importance": 0.005813578449858418,
+          "importance_pct": 0.5813578449858418,
+          "cumulative_importance_pct": 98.78997160271389
+        },
+        {
+          "rank": 11,
+          "feature": "station_load",
+          "importance": 0.003858828379967963,
+          "importance_pct": 0.3858828379967963,
+          "cumulative_importance_pct": 99.17585444071068
+        },
+        {
+          "rank": 12,
+          "feature": "event_cause_freq",
+          "importance": 0.002127042576926616,
+          "importance_pct": 0.21270425769266157,
+          "cumulative_importance_pct": 99.38855869840336
+        },
+        {
+          "rank": 13,
+          "feature": "longitude",
+          "importance": 0.0017435138636199756,
+          "importance_pct": 0.17435138636199757,
+          "cumulative_importance_pct": 99.56291008476535
+        },
+        {
+          "rank": 14,
+          "feature": "station_closure_rate",
+          "importance": 0.001710881333202386,
+          "importance_pct": 0.17108813332023862,
+          "cumulative_importance_pct": 99.73399821808559
+        },
+        {
+          "rank": 15,
+          "feature": "event_cause_priority_target_rate",
+          "importance": 0.00062485419468277,
+          "importance_pct": 0.062485419468277,
+          "cumulative_importance_pct": 99.79648363755386
+        },
+        {
+          "rank": 16,
+          "feature": "latitude",
+          "importance": 0.0005810283667294536,
+          "importance_pct": 0.05810283667294536,
+          "cumulative_importance_pct": 99.8545864742268
+        },
+        {
+          "rank": 17,
+          "feature": "zone_priority_target_rate",
+          "importance": 0.0005625977189042746,
+          "importance_pct": 0.05625977189042746,
+          "cumulative_importance_pct": 99.91084624611723
+        },
+        {
+          "rank": 18,
+          "feature": "zone_closure_rate",
+          "importance": 0.00027161880360807364,
+          "importance_pct": 0.027161880360807363,
+          "cumulative_importance_pct": 99.93800812647804
+        },
+        {
+          "rank": 19,
+          "feature": "zone_freq",
+          "importance": 0.00024995670520995615,
+          "importance_pct": 0.024995670520995616,
+          "cumulative_importance_pct": 99.96300379699903
+        },
+        {
+          "rank": 20,
+          "feature": "hour_of_day",
+          "importance": 0.00013954259577061054,
+          "importance_pct": 0.013954259577061054,
+          "cumulative_importance_pct": 99.97695805657611
+        },
+        {
+          "rank": 21,
+          "feature": "day_of_week",
+          "importance": 9.561508162727422e-05,
+          "importance_pct": 0.009561508162727422,
+          "cumulative_importance_pct": 99.98651956473883
+        },
+        {
+          "rank": 22,
+          "feature": "month",
+          "importance": 8.592393533001545e-05,
+          "importance_pct": 0.008592393533001544,
+          "cumulative_importance_pct": 99.99511195827183
+        },
+        {
+          "rank": 23,
+          "feature": "requires_road_closure",
+          "importance": 4.88804172817311e-05,
+          "importance_pct": 0.0048880417281731104,
+          "cumulative_importance_pct": 100.0
+        }
+      ]
+    },
+    "xgboost": {
+      "metrics": {
+        "accuracy": 0.9986702127659575,
+        "precision": 0.9989304812834224,
+        "recall": 0.9989304812834224,
+        "f1": 0.9989304812834224,
+        "roc_auc": 0.9999962407074989,
+        "confusion_matrix": {
+          "tn": 568,
+          "fp": 1,
+          "fn": 1,
+          "tp": 934
+        },
+        "threshold_analysis": [
+          {
+            "threshold": 0.1,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.15,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.2,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.25,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.3,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.35,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.4,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.45,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.5,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.55,
+            "accuracy": 0.9980053191489362,
+            "precision": 0.9989293361884368,
+            "recall": 0.9978609625668449,
+            "f1": 0.9983948635634029,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.6,
+            "accuracy": 0.9980053191489362,
+            "precision": 0.9989293361884368,
+            "recall": 0.9978609625668449,
+            "f1": 0.9983948635634029,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.65,
+            "accuracy": 0.9980053191489362,
+            "precision": 0.9989293361884368,
+            "recall": 0.9978609625668449,
+            "f1": 0.9983948635634029,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.7,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.75,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.8,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.85,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          },
+          {
+            "threshold": 0.9,
+            "accuracy": 0.9986702127659575,
+            "precision": 1.0,
+            "recall": 0.9978609625668449,
+            "f1": 0.9989293361884368,
+            "roc_auc": 0.9999962407074989,
+            "fpr": 0.0,
+            "fnr": 0.0021390374331550803,
+            "confusion_matrix": {
+              "tn": 569,
+              "fp": 0,
+              "fn": 2,
+              "tp": 933
+            }
+          }
+        ],
+        "best_f1_threshold": {
+          "threshold": 0.1,
+          "accuracy": 0.9986702127659575,
+          "precision": 0.9989304812834224,
+          "recall": 0.9989304812834224,
+          "f1": 0.9989304812834224,
+          "roc_auc": 0.9999962407074989,
+          "fpr": 0.0017574692442882249,
+          "fnr": 0.0010695187165775401,
+          "confusion_matrix": {
+            "tn": 568,
+            "fp": 1,
+            "fn": 1,
+            "tp": 934
+          }
+        }
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "is_non_corridor",
+          "importance": 0.6302391290664673,
+          "importance_pct": 63.023916714523544,
+          "cumulative_importance_pct": 63.023916714523544
+        },
+        {
+          "rank": 2,
+          "feature": "corridor_priority_target_rate",
+          "importance": 0.21505360305309296,
+          "importance_pct": 21.50536160465361,
+          "cumulative_importance_pct": 84.52927831917715
+        },
+        {
+          "rank": 3,
+          "feature": "corridor_freq",
+          "importance": 0.1172201931476593,
+          "importance_pct": 11.722020023005129,
+          "cumulative_importance_pct": 96.25129834218228
+        },
+        {
+          "rank": 4,
+          "feature": "cause_corridor_key_priority_target_rate",
+          "importance": 0.017686670646071434,
+          "importance_pct": 1.7686671714692217,
+          "cumulative_importance_pct": 98.01996551365151
+        },
+        {
+          "rank": 5,
+          "feature": "zone_priority_target_rate",
+          "importance": 0.0019406117498874664,
+          "importance_pct": 0.19406118671383663,
+          "cumulative_importance_pct": 98.21402670036534
+        },
+        {
+          "rank": 6,
+          "feature": "police_station_priority_target_rate",
+          "importance": 0.001929450430907309,
+          "importance_pct": 0.19294505474838466,
+          "cumulative_importance_pct": 98.40697175511373
+        },
+        {
+          "rank": 7,
+          "feature": "hour_of_day",
+          "importance": 0.0018432361539453268,
+          "importance_pct": 0.18432362653128362,
+          "cumulative_importance_pct": 98.59129538164501
+        },
+        {
+          "rank": 8,
+          "feature": "longitude",
+          "importance": 0.0016464809887111187,
+          "importance_pct": 0.16464810881907685,
+          "cumulative_importance_pct": 98.75594349046408
+        },
+        {
+          "rank": 9,
+          "feature": "day_of_week",
+          "importance": 0.0016274433583021164,
+          "importance_pct": 0.1627443456631521,
+          "cumulative_importance_pct": 98.91868783612723
+        },
+        {
+          "rank": 10,
+          "feature": "zone_freq",
+          "importance": 0.0013343619648367167,
+          "importance_pct": 0.13343620454582736,
+          "cumulative_importance_pct": 99.05212404067306
+        },
+        {
+          "rank": 11,
+          "feature": "latitude",
+          "importance": 0.0012724912958219647,
+          "importance_pct": 0.12724913727053233,
+          "cumulative_importance_pct": 99.1793731779436
+        },
+        {
+          "rank": 12,
+          "feature": "zone_closure_rate",
+          "importance": 0.001139192027039826,
+          "importance_pct": 0.1139192095869302,
+          "cumulative_importance_pct": 99.29329238753053
+        },
+        {
+          "rank": 13,
+          "feature": "station_closure_rate",
+          "importance": 0.0010937666520476341,
+          "importance_pct": 0.10937667181325293,
+          "cumulative_importance_pct": 99.40266905934378
+        },
+        {
+          "rank": 14,
+          "feature": "requires_road_closure",
+          "importance": 0.001071415957994759,
+          "importance_pct": 0.1071416022729235,
+          "cumulative_importance_pct": 99.50981066161671
+        },
+        {
+          "rank": 15,
+          "feature": "cause_corridor_key_freq",
+          "importance": 0.001029893523082137,
+          "importance_pct": 0.10298935853078461,
+          "cumulative_importance_pct": 99.61280002014749
+        },
+        {
+          "rank": 16,
+          "feature": "cause_station_key_priority_target_rate",
+          "importance": 0.0009638842893764377,
+          "importance_pct": 0.09638843476138982,
+          "cumulative_importance_pct": 99.70918845490888
+        },
+        {
+          "rank": 17,
+          "feature": "police_station_freq",
+          "importance": 0.0006817716057412326,
+          "importance_pct": 0.06817716469335701,
+          "cumulative_importance_pct": 99.77736561960224
+        },
+        {
+          "rank": 18,
+          "feature": "station_load",
+          "importance": 0.0006218593916855752,
+          "importance_pct": 0.06218594292580434,
+          "cumulative_importance_pct": 99.83955156252804
+        },
+        {
+          "rank": 19,
+          "feature": "event_cause_priority_target_rate",
+          "importance": 0.0005012833280488849,
+          "importance_pct": 0.05012833583362008,
+          "cumulative_importance_pct": 99.88967989836166
+        },
+        {
+          "rank": 20,
+          "feature": "cause_station_key_freq",
+          "importance": 0.0004054598102811724,
+          "importance_pct": 0.0405459834778874,
+          "cumulative_importance_pct": 99.93022588183955
+        },
+        {
+          "rank": 21,
+          "feature": "month",
+          "importance": 0.0003841672441922128,
+          "importance_pct": 0.0384167267403427,
+          "cumulative_importance_pct": 99.9686426085799
+        },
+        {
+          "rank": 22,
+          "feature": "event_cause_freq",
+          "importance": 0.0003135738952551037,
+          "importance_pct": 0.03135739142010992,
+          "cumulative_importance_pct": 100.0
+        },
+        {
+          "rank": 23,
+          "feature": "is_high_priority_corridor",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 100.0
+        }
+      ]
+    },
+    "lightgbm": {
+      "metrics": {
+        "accuracy": 0.9986702127659575,
+        "precision": 0.9989304812834224,
+        "recall": 0.9989304812834224,
+        "f1": 0.9989304812834224,
+        "roc_auc": 0.9999943610612483,
+        "confusion_matrix": {
+          "tn": 568,
+          "fp": 1,
+          "fn": 1,
+          "tp": 934
+        },
+        "threshold_analysis": [
+          {
+            "threshold": 0.1,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.15,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.2,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.25,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.3,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.35,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.4,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.45,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.5,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.55,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.6,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.65,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.7,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.75,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.8,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.85,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          },
+          {
+            "threshold": 0.9,
+            "accuracy": 0.9986702127659575,
+            "precision": 0.9989304812834224,
+            "recall": 0.9989304812834224,
+            "f1": 0.9989304812834224,
+            "roc_auc": 0.9999943610612483,
+            "fpr": 0.0017574692442882249,
+            "fnr": 0.0010695187165775401,
+            "confusion_matrix": {
+              "tn": 568,
+              "fp": 1,
+              "fn": 1,
+              "tp": 934
+            }
+          }
+        ],
+        "best_f1_threshold": {
+          "threshold": 0.1,
+          "accuracy": 0.9986702127659575,
+          "precision": 0.9989304812834224,
+          "recall": 0.9989304812834224,
+          "f1": 0.9989304812834224,
+          "roc_auc": 0.9999943610612483,
+          "fpr": 0.0017574692442882249,
+          "fnr": 0.0010695187165775401,
+          "confusion_matrix": {
+            "tn": 568,
+            "fp": 1,
+            "fn": 1,
+            "tp": 934
+          }
+        }
+      },
+      "feature_importance": [
+        {
+          "rank": 1,
+          "feature": "zone_priority_target_rate",
+          "importance": 1037.0,
+          "importance_pct": 13.784394523461385,
+          "cumulative_importance_pct": 13.784394523461385
+        },
+        {
+          "rank": 2,
+          "feature": "cause_corridor_key_priority_target_rate",
+          "importance": 830.0,
+          "importance_pct": 11.032832646550577,
+          "cumulative_importance_pct": 24.817227170011964
+        },
+        {
+          "rank": 3,
+          "feature": "station_closure_rate",
+          "importance": 789.0,
+          "importance_pct": 10.487837298949888,
+          "cumulative_importance_pct": 35.30506446896185
+        },
+        {
+          "rank": 4,
+          "feature": "police_station_priority_target_rate",
+          "importance": 721.0,
+          "importance_pct": 9.583942576099961,
+          "cumulative_importance_pct": 44.88900704506181
+        },
+        {
+          "rank": 5,
+          "feature": "zone_closure_rate",
+          "importance": 627.0,
+          "importance_pct": 8.334441047454472,
+          "cumulative_importance_pct": 53.22344809251628
+        },
+        {
+          "rank": 6,
+          "feature": "latitude",
+          "importance": 572.0,
+          "importance_pct": 7.603349727502326,
+          "cumulative_importance_pct": 60.826797820018605
+        },
+        {
+          "rank": 7,
+          "feature": "is_non_corridor",
+          "importance": 435.0,
+          "importance_pct": 5.782267712348797,
+          "cumulative_importance_pct": 66.60906553236741
+        },
+        {
+          "rank": 8,
+          "feature": "corridor_freq",
+          "importance": 428.0,
+          "importance_pct": 5.689219726173069,
+          "cumulative_importance_pct": 72.29828525854047
+        },
+        {
+          "rank": 9,
+          "feature": "hour_of_day",
+          "importance": 350.0,
+          "importance_pct": 4.652399308786388,
+          "cumulative_importance_pct": 76.95068456732686
+        },
+        {
+          "rank": 10,
+          "feature": "longitude",
+          "importance": 324.0,
+          "importance_pct": 4.306792502990828,
+          "cumulative_importance_pct": 81.25747707031769
+        },
+        {
+          "rank": 11,
+          "feature": "cause_station_key_priority_target_rate",
+          "importance": 314.0,
+          "importance_pct": 4.173866808454074,
+          "cumulative_importance_pct": 85.43134387877177
+        },
+        {
+          "rank": 12,
+          "feature": "corridor_priority_target_rate",
+          "importance": 262.0,
+          "importance_pct": 3.482653196862954,
+          "cumulative_importance_pct": 88.91399707563473
+        },
+        {
+          "rank": 13,
+          "feature": "event_cause_priority_target_rate",
+          "importance": 188.0,
+          "importance_pct": 2.4990030572909743,
+          "cumulative_importance_pct": 91.41300013292569
+        },
+        {
+          "rank": 14,
+          "feature": "police_station_freq",
+          "importance": 171.0,
+          "importance_pct": 2.2730293765784926,
+          "cumulative_importance_pct": 93.68602950950418
+        },
+        {
+          "rank": 15,
+          "feature": "day_of_week",
+          "importance": 115.0,
+          "importance_pct": 1.5286454871726705,
+          "cumulative_importance_pct": 95.21467499667686
+        },
+        {
+          "rank": 16,
+          "feature": "zone_freq",
+          "importance": 106.0,
+          "importance_pct": 1.409012362089592,
+          "cumulative_importance_pct": 96.62368735876645
+        },
+        {
+          "rank": 17,
+          "feature": "cause_corridor_key_freq",
+          "importance": 95.0,
+          "importance_pct": 1.2627940980991625,
+          "cumulative_importance_pct": 97.88648145686561
+        },
+        {
+          "rank": 18,
+          "feature": "cause_station_key_freq",
+          "importance": 79.0,
+          "importance_pct": 1.0501129868403563,
+          "cumulative_importance_pct": 98.93659444370597
+        },
+        {
+          "rank": 19,
+          "feature": "event_cause_freq",
+          "importance": 47.0,
+          "importance_pct": 0.6247507643227436,
+          "cumulative_importance_pct": 99.56134520802871
+        },
+        {
+          "rank": 20,
+          "feature": "month",
+          "importance": 23.0,
+          "importance_pct": 0.3057290974345341,
+          "cumulative_importance_pct": 99.86707430546325
+        },
+        {
+          "rank": 21,
+          "feature": "requires_road_closure",
+          "importance": 10.0,
+          "importance_pct": 0.13292569453675396,
+          "cumulative_importance_pct": 100.0
+        },
+        {
+          "rank": 22,
+          "feature": "is_high_priority_corridor",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 100.0
+        },
+        {
+          "rank": 23,
+          "feature": "station_load",
+          "importance": 0.0,
+          "importance_pct": 0.0,
+          "cumulative_importance_pct": 100.0
+        }
+      ]
+    }
+  },
+  "best_model": "random_forest",
+  "selection_metric": "best threshold F1, then precision, recall, ROC-AUC"
+}
