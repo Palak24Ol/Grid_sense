@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     # ── CORS ───────────────────────────────────────────────────────────────────
     # Comma-separated list of allowed origins
-    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://localhost:5174"
 
     # ── Artifact directory ─────────────────────────────────────────────────────
     # Absolute path to ml/artifacts/ — resolved relative to this file if relative

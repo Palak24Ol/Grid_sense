@@ -1,0 +1,29 @@
+{
+  "threshold": 0.35,
+  "f1": 0.3543,
+  "baseline_rule_f1": 0.32,
+  "feature_cols": [
+    "corridor_encoded",
+    "event_cause_encoded",
+    "vehicle_type_encoded",
+    "hour_of_day",
+    "day_of_week",
+    "month",
+    "hour_sin",
+    "hour_cos",
+    "is_high_priority_corridor",
+    "is_non_corridor",
+    "has_vehicle_type",
+    "has_zone",
+    "police_station_encoded",
+    "zone_encoded",
+    "is_peak_hour",
+    "is_weekend",
+    "is_night",
+    "cause_corridor_key_freq",
+    "cause_priority_key_freq",
+    "cause_closure_rate",
+    "corridor_closure_rate",
+    "cause_corridor_closure_rate"
+  ]
+}

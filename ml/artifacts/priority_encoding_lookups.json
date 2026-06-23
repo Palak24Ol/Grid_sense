@@ -1,0 +1,21 @@
+{
+  "cause_closure_rate": {
+    "accident": 0.0328,
+    "congestion": 0.0489,
+    "construction": 0.2621,
+    "others": 0.0867,
+    "pot_holes": 0.0364,
+    "procession": 0.2243,
+    "protest": 0.2183,
+    "public_event": 0.3907,
+    "road_conditions": 0.1197,
+    "test_demo": 0.0745,
+    "tree_fall": 0.3511,
+    "vehicle_breakdown": 0.0430,
+    "vip_movement": 0.4410,
+    "water_logging": 0.0985
+  },
+  "corridor_density_log": {
+    "__default__": 0.0
+  }
+}
