@@ -1,0 +1,31 @@
+{
+  "gateway": "A",
+  "name": "Operational AI",
+  "purpose": "High-metric models suitable for current incident dataset.",
+  "models": {
+    "high_priority_incident_prediction": {
+      "accuracy": 0.9986702127659575,
+      "precision": 1.0,
+      "recall": 0.9978609625668449,
+      "f1": 0.9989293361884368,
+      "roc_auc": 0.9999962407074988
+    },
+    "duration_bucket_prediction": {
+      "accuracy": 0.5101694915254237,
+      "macro_precision": 0.5031885187349828,
+      "macro_recall": 0.5088294322057426,
+      "macro_f1": 0.5054613930239963
+    },
+    "corridor_risk_classification": {
+      "accuracy": 0.5555555555555556,
+      "precision": 0.5833333333333334,
+      "recall": 0.5833333333333334,
+      "f1": 0.5833333333333334
+    }
+  },
+  "outputs": {
+    "models": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_a\\models",
+    "evaluations": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_a\\evaluations",
+    "artifacts": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_a\\artifacts"
+  }
+}

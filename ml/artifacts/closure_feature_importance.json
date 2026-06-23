@@ -1,0 +1,156 @@
+[
+  {
+    "rank": 1,
+    "feature": "cause_closure_rate",
+    "importance": 0.09143638610839844,
+    "importance_pct": 9.143638440526306,
+    "cumulative_importance_pct": 9.143638440526306
+  },
+  {
+    "rank": 2,
+    "feature": "cause_corridor_closure_rate",
+    "importance": 0.07432518154382706,
+    "importance_pct": 7.43251801594127,
+    "cumulative_importance_pct": 16.576156456467576
+  },
+  {
+    "rank": 3,
+    "feature": "is_night",
+    "importance": 0.05173201858997345,
+    "importance_pct": 5.1732017626389535,
+    "cumulative_importance_pct": 21.74935821910653
+  },
+  {
+    "rank": 4,
+    "feature": "cause_priority_key_freq",
+    "importance": 0.048585861921310425,
+    "importance_pct": 4.858586101632824,
+    "cumulative_importance_pct": 26.607944320739353
+  },
+  {
+    "rank": 5,
+    "feature": "corridor_encoded",
+    "importance": 0.0455787368118763,
+    "importance_pct": 4.557873596290618,
+    "cumulative_importance_pct": 31.16581791702997
+  },
+  {
+    "rank": 6,
+    "feature": "corridor_closure_rate",
+    "importance": 0.04514125734567642,
+    "importance_pct": 4.514125650485499,
+    "cumulative_importance_pct": 35.67994356751547
+  },
+  {
+    "rank": 7,
+    "feature": "hour_cos",
+    "importance": 0.0451112762093544,
+    "importance_pct": 4.511127536909141,
+    "cumulative_importance_pct": 40.191071104424616
+  },
+  {
+    "rank": 8,
+    "feature": "cause_corridor_key_freq",
+    "importance": 0.044638123363256454,
+    "importance_pct": 4.463812253180663,
+    "cumulative_importance_pct": 44.65488335760527
+  },
+  {
+    "rank": 9,
+    "feature": "vehicle_type_encoded",
+    "importance": 0.043947041034698486,
+    "importance_pct": 4.394704021612108,
+    "cumulative_importance_pct": 49.049587379217385
+  },
+  {
+    "rank": 10,
+    "feature": "police_station_encoded",
+    "importance": 0.04392170533537865,
+    "importance_pct": 4.392170451727314,
+    "cumulative_importance_pct": 53.4417578309447
+  },
+  {
+    "rank": 11,
+    "feature": "hour_sin",
+    "importance": 0.04348678141832352,
+    "importance_pct": 4.348678060831911,
+    "cumulative_importance_pct": 57.7904358917766
+  },
+  {
+    "rank": 12,
+    "feature": "has_vehicle_type",
+    "importance": 0.04271060600876808,
+    "importance_pct": 4.271060521322107,
+    "cumulative_importance_pct": 62.061496413098716
+  },
+  {
+    "rank": 13,
+    "feature": "zone_encoded",
+    "importance": 0.040569692850112915,
+    "importance_pct": 4.056969209444351,
+    "cumulative_importance_pct": 66.11846562254307
+  },
+  {
+    "rank": 14,
+    "feature": "hour_of_day",
+    "importance": 0.040483810007572174,
+    "importance_pct": 4.048380925350246,
+    "cumulative_importance_pct": 70.16684654789331
+  },
+  {
+    "rank": 15,
+    "feature": "is_non_corridor",
+    "importance": 0.040187254548072815,
+    "importance_pct": 4.018725379952688,
+    "cumulative_importance_pct": 74.18557192784601
+  },
+  {
+    "rank": 16,
+    "feature": "has_zone",
+    "importance": 0.039978206157684326,
+    "importance_pct": 3.997820541303222,
+    "cumulative_importance_pct": 78.18339246914923
+  },
+  {
+    "rank": 17,
+    "feature": "is_weekend",
+    "importance": 0.039429303258657455,
+    "importance_pct": 3.9429302524229466,
+    "cumulative_importance_pct": 82.12632272157217
+  },
+  {
+    "rank": 18,
+    "feature": "event_cause_encoded",
+    "importance": 0.03754366189241409,
+    "importance_pct": 3.754366119310891,
+    "cumulative_importance_pct": 85.88068884088305
+  },
+  {
+    "rank": 19,
+    "feature": "month",
+    "importance": 0.0368269719183445,
+    "importance_pct": 3.6826971232388708,
+    "cumulative_importance_pct": 89.56338596412193
+  },
+  {
+    "rank": 20,
+    "feature": "day_of_week",
+    "importance": 0.0353175587952137,
+    "importance_pct": 3.5317558137372917,
+    "cumulative_importance_pct": 93.09514177785923
+  },
+  {
+    "rank": 21,
+    "feature": "is_high_priority_corridor",
+    "importance": 0.034859731793403625,
+    "importance_pct": 3.4859731144090538,
+    "cumulative_importance_pct": 96.58111489226827
+  },
+  {
+    "rank": 22,
+    "feature": "is_peak_hour",
+    "importance": 0.034188851714134216,
+    "importance_pct": 3.4188851077317244,
+    "cumulative_importance_pct": 100.0
+  }
+]

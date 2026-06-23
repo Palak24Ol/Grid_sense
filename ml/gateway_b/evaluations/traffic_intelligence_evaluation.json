@@ -1,0 +1,337 @@
+{
+  "target_definition": "Proxy y_congestion_pressure = closure OR congestion cause OR duration >= p75 OR high-priority incident on high-stress road.",
+  "best_model_by_f1": "random_forest",
+  "feature_columns": [
+    "density_ratio",
+    "speed_drop",
+    "delay_ratio",
+    "rolling_mean",
+    "rolling_std",
+    "neighbor_density",
+    "neighbor_speed",
+    "road_centrality",
+    "historical_congestion_frequency",
+    "neighbor_congestion_influence",
+    "weather_risk",
+    "hour_of_day",
+    "day_of_week",
+    "month"
+  ],
+  "rows": 4973,
+  "positive_rate": 0.15946108988538105,
+  "models": {
+    "random_forest": {
+      "model": "random_forest",
+      "folds": [
+        {
+          "precision": 0.1943127962085308,
+          "recall": 0.36936936936936937,
+          "f1": 0.2546583850931677,
+          "roc_auc": 0.6267229572668903,
+          "false_positive_rate": 0.23709902370990238,
+          "false_negative_rate": 0.6306306306306306,
+          "confusion_matrix": {
+            "tn": 547,
+            "fp": 170,
+            "fn": 70,
+            "tp": 41
+          }
+        },
+        {
+          "precision": 0.21610169491525424,
+          "recall": 0.42857142857142855,
+          "f1": 0.28732394366197184,
+          "roc_auc": 0.6275912339547949,
+          "false_positive_rate": 0.2609308885754584,
+          "false_negative_rate": 0.5714285714285714,
+          "confusion_matrix": {
+            "tn": 524,
+            "fp": 185,
+            "fn": 68,
+            "tp": 51
+          }
+        },
+        {
+          "precision": 0.25573770491803277,
+          "recall": 0.5454545454545454,
+          "f1": 0.3482142857142857,
+          "roc_auc": 0.6435455055893012,
+          "false_positive_rate": 0.33138686131386863,
+          "false_negative_rate": 0.45454545454545453,
+          "confusion_matrix": {
+            "tn": 458,
+            "fp": 227,
+            "fn": 65,
+            "tp": 78
+          }
+        },
+        {
+          "precision": 0.2857142857142857,
+          "recall": 0.484472049689441,
+          "f1": 0.35944700460829493,
+          "roc_auc": 0.659609636175701,
+          "false_positive_rate": 0.29235382308845576,
+          "false_negative_rate": 0.515527950310559,
+          "confusion_matrix": {
+            "tn": 472,
+            "fp": 195,
+            "fn": 83,
+            "tp": 78
+          }
+        },
+        {
+          "precision": 0.18495297805642633,
+          "recall": 0.4645669291338583,
+          "f1": 0.2645739910313901,
+          "roc_auc": 0.5737753715165063,
+          "false_positive_rate": 0.37089871611982883,
+          "false_negative_rate": 0.5354330708661418,
+          "confusion_matrix": {
+            "tn": 441,
+            "fp": 260,
+            "fn": 68,
+            "tp": 59
+          }
+        }
+      ],
+      "aggregate_confusion_matrix": {
+        "tn": 2442,
+        "fp": 1037,
+        "fn": 354,
+        "tp": 307
+      },
+      "mean_precision": 0.22736389196250598,
+      "mean_recall": 0.4584868644437285,
+      "mean_f1": 0.3028435220218221,
+      "mean_roc_auc": 0.6262489409006388,
+      "mean_false_positive_rate": 0.29853386256150277,
+      "mean_false_negative_rate": 0.5415131355562715,
+      "feature_importance": {
+        "hour_of_day": 0.2565584480177653,
+        "month": 0.14536934868039325,
+        "day_of_week": 0.14398079358269203,
+        "neighbor_speed": 0.06378408035674184,
+        "weather_risk": 0.0603152355442449,
+        "delay_ratio": 0.0552513084234453,
+        "rolling_mean": 0.045553869797182504,
+        "density_ratio": 0.03786601319019325,
+        "neighbor_density": 0.03730964495006671,
+        "neighbor_congestion_influence": 0.037293795136852485,
+        "rolling_std": 0.03687806926855736,
+        "speed_drop": 0.03504310790635664,
+        "historical_congestion_frequency": 0.03367916319163264,
+        "road_centrality": 0.011117121953875991
+      }
+    },
+    "xgboost": {
+      "model": "xgboost",
+      "folds": [
+        {
+          "precision": 0.48936170212765956,
+          "recall": 0.2072072072072072,
+          "f1": 0.2911392405063291,
+          "roc_auc": 0.6155150966866447,
+          "false_positive_rate": 0.03347280334728033,
+          "false_negative_rate": 0.7927927927927928,
+          "confusion_matrix": {
+            "tn": 693,
+            "fp": 24,
+            "fn": 88,
+            "tp": 23
+          }
+        },
+        {
+          "precision": 0.7083333333333334,
+          "recall": 0.14285714285714285,
+          "f1": 0.23776223776223776,
+          "roc_auc": 0.6324685022104752,
+          "false_positive_rate": 0.009873060648801129,
+          "false_negative_rate": 0.8571428571428571,
+          "confusion_matrix": {
+            "tn": 702,
+            "fp": 7,
+            "fn": 102,
+            "tp": 17
+          }
+        },
+        {
+          "precision": 0.6451612903225806,
+          "recall": 0.13986013986013987,
+          "f1": 0.22988505747126436,
+          "roc_auc": 0.638063396457557,
+          "false_positive_rate": 0.016058394160583942,
+          "false_negative_rate": 0.8601398601398601,
+          "confusion_matrix": {
+            "tn": 674,
+            "fp": 11,
+            "fn": 123,
+            "tp": 20
+          }
+        },
+        {
+          "precision": 0.6875,
+          "recall": 0.20496894409937888,
+          "f1": 0.3157894736842105,
+          "roc_auc": 0.6501624963915558,
+          "false_positive_rate": 0.022488755622188907,
+          "false_negative_rate": 0.7950310559006211,
+          "confusion_matrix": {
+            "tn": 652,
+            "fp": 15,
+            "fn": 128,
+            "tp": 33
+          }
+        },
+        {
+          "precision": 0.46153846153846156,
+          "recall": 0.09448818897637795,
+          "f1": 0.1568627450980392,
+          "roc_auc": 0.5655138328821594,
+          "false_positive_rate": 0.019971469329529243,
+          "false_negative_rate": 0.905511811023622,
+          "confusion_matrix": {
+            "tn": 687,
+            "fp": 14,
+            "fn": 115,
+            "tp": 12
+          }
+        }
+      ],
+      "aggregate_confusion_matrix": {
+        "tn": 3408,
+        "fp": 71,
+        "fn": 556,
+        "tp": 105
+      },
+      "mean_precision": 0.5983789574644071,
+      "mean_recall": 0.15787632460004936,
+      "mean_f1": 0.24628775090441613,
+      "mean_roc_auc": 0.6203446649256784,
+      "mean_false_positive_rate": 0.02037289662167671,
+      "mean_false_negative_rate": 0.8421236753999507,
+      "feature_importance": {
+        "neighbor_speed": 0.18766126036643982,
+        "weather_risk": 0.10035913437604904,
+        "rolling_mean": 0.09130465984344482,
+        "neighbor_congestion_influence": 0.07971778512001038,
+        "delay_ratio": 0.07054810225963593,
+        "hour_of_day": 0.06823167204856873,
+        "neighbor_density": 0.061712101101875305,
+        "historical_congestion_frequency": 0.060589615255594254,
+        "rolling_std": 0.05273718759417534,
+        "density_ratio": 0.05002772435545921,
+        "road_centrality": 0.04799499362707138,
+        "month": 0.04434087127447128,
+        "speed_drop": 0.04265270009636879,
+        "day_of_week": 0.04212205857038498
+      }
+    },
+    "lightgbm": {
+      "model": "lightgbm",
+      "folds": [
+        {
+          "precision": 0.1956521739130435,
+          "recall": 0.40540540540540543,
+          "f1": 0.26392961876832843,
+          "roc_auc": 0.6141580911455389,
+          "false_positive_rate": 0.2580195258019526,
+          "false_negative_rate": 0.5945945945945946,
+          "confusion_matrix": {
+            "tn": 532,
+            "fp": 185,
+            "fn": 66,
+            "tp": 45
+          }
+        },
+        {
+          "precision": 0.22380952380952382,
+          "recall": 0.3949579831932773,
+          "f1": 0.2857142857142857,
+          "roc_auc": 0.6045323630157281,
+          "false_positive_rate": 0.229901269393512,
+          "false_negative_rate": 0.6050420168067226,
+          "confusion_matrix": {
+            "tn": 546,
+            "fp": 163,
+            "fn": 72,
+            "tp": 47
+          }
+        },
+        {
+          "precision": 0.25539568345323743,
+          "recall": 0.4965034965034965,
+          "f1": 0.33729216152019004,
+          "roc_auc": 0.6378183859935684,
+          "false_positive_rate": 0.3021897810218978,
+          "false_negative_rate": 0.5034965034965035,
+          "confusion_matrix": {
+            "tn": 478,
+            "fp": 207,
+            "fn": 72,
+            "tp": 71
+          }
+        },
+        {
+          "precision": 0.27692307692307694,
+          "recall": 0.4472049689440994,
+          "f1": 0.342042755344418,
+          "roc_auc": 0.6445752279139934,
+          "false_positive_rate": 0.2818590704647676,
+          "false_negative_rate": 0.5527950310559007,
+          "confusion_matrix": {
+            "tn": 479,
+            "fp": 188,
+            "fn": 89,
+            "tp": 72
+          }
+        },
+        {
+          "precision": 0.1881918819188192,
+          "recall": 0.4015748031496063,
+          "f1": 0.2562814070351759,
+          "roc_auc": 0.564452357150078,
+          "false_positive_rate": 0.31383737517831667,
+          "false_negative_rate": 0.5984251968503937,
+          "confusion_matrix": {
+            "tn": 481,
+            "fp": 220,
+            "fn": 76,
+            "tp": 51
+          }
+        }
+      ],
+      "aggregate_confusion_matrix": {
+        "tn": 2516,
+        "fp": 963,
+        "fn": 375,
+        "tp": 286
+      },
+      "mean_precision": 0.22799446800354017,
+      "mean_recall": 0.429129331439177,
+      "mean_f1": 0.29705204567647964,
+      "mean_roc_auc": 0.6131072850437813,
+      "mean_false_positive_rate": 0.2771614043720893,
+      "mean_false_negative_rate": 0.5708706685608231,
+      "feature_importance": {
+        "hour_of_day": 1702.0,
+        "day_of_week": 1037.0,
+        "month": 898.0,
+        "density_ratio": 471.0,
+        "neighbor_density": 322.0,
+        "rolling_std": 247.0,
+        "delay_ratio": 201.0,
+        "rolling_mean": 192.0,
+        "weather_risk": 183.0,
+        "road_centrality": 153.0,
+        "neighbor_speed": 133.0,
+        "speed_drop": 10.0,
+        "historical_congestion_frequency": 0.0,
+        "neighbor_congestion_influence": 0.0
+      }
+    }
+  },
+  "skipped_models": {
+    "xgboost": false,
+    "lightgbm": false
+  }
+}

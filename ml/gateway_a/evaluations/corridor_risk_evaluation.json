@@ -1,0 +1,54 @@
+{
+  "task": "corridor_risk_classification",
+  "target": "Historical corridor risk label: Low, Medium, High, Critical",
+  "rows": 23,
+  "class_distribution": {
+    "Low": 6,
+    "Critical": 6,
+    "Medium": 6,
+    "High": 5
+  },
+  "feature_columns": [
+    "closure_rate",
+    "incident_frequency",
+    "priority_frequency",
+    "average_duration"
+  ],
+  "accuracy": 0.5555555555555556,
+  "precision": 0.5833333333333334,
+  "recall": 0.5833333333333334,
+  "f1": 0.5833333333333334,
+  "labels": [
+    "Critical",
+    "High",
+    "Low",
+    "Medium"
+  ],
+  "confusion_matrix": [
+    [
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      1,
+      1,
+      1
+    ]
+  ],
+  "note": "Risk labels are generated from historical aggregate statistics, so this is an operational classifier over engineered labels."
+}

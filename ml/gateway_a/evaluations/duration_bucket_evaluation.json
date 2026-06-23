@@ -1,0 +1,56 @@
+{
+  "task": "duration_bucket_prediction",
+  "target": "Short=0-30 mins, Medium=30-90 mins, Long=90+ mins",
+  "rows": 2950,
+  "class_distribution": {
+    "Medium": 1073,
+    "Long": 967,
+    "Short": 910
+  },
+  "accuracy": 0.5101694915254237,
+  "macro_precision": 0.5031885187349828,
+  "macro_recall": 0.5088294322057426,
+  "macro_f1": 0.5054613930239963,
+  "labels": [
+    "Short",
+    "Medium",
+    "Long"
+  ],
+  "confusion_matrix": [
+    [
+      67,
+      70,
+      45
+    ],
+    [
+      80,
+      102,
+      33
+    ],
+    [
+      30,
+      31,
+      132
+    ]
+  ],
+  "features": {
+    "categorical": [
+      "event_type",
+      "event_cause",
+      "corridor",
+      "junction",
+      "zone",
+      "police_station",
+      "vehicle_type"
+    ],
+    "numeric": [
+      "latitude",
+      "longitude",
+      "hour_of_day",
+      "day_of_week",
+      "month",
+      "is_high_priority_corridor",
+      "is_non_corridor"
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "best_model_by_f1": "random_forest",
+  "feature_importance": {
+    "random_forest": {
+      "hour_of_day": 0.2565584480177653,
+      "month": 0.14536934868039325,
+      "day_of_week": 0.14398079358269203,
+      "neighbor_speed": 0.06378408035674184,
+      "weather_risk": 0.0603152355442449,
+      "delay_ratio": 0.0552513084234453,
+      "rolling_mean": 0.045553869797182504,
+      "density_ratio": 0.03786601319019325,
+      "neighbor_density": 0.03730964495006671,
+      "neighbor_congestion_influence": 0.037293795136852485,
+      "rolling_std": 0.03687806926855736,
+      "speed_drop": 0.03504310790635664,
+      "historical_congestion_frequency": 0.03367916319163264,
+      "road_centrality": 0.011117121953875991
+    },
+    "xgboost": {
+      "neighbor_speed": 0.18766126036643982,
+      "weather_risk": 0.10035913437604904,
+      "rolling_mean": 0.09130465984344482,
+      "neighbor_congestion_influence": 0.07971778512001038,
+      "delay_ratio": 0.07054810225963593,
+      "hour_of_day": 0.06823167204856873,
+      "neighbor_density": 0.061712101101875305,
+      "historical_congestion_frequency": 0.060589615255594254,
+      "rolling_std": 0.05273718759417534,
+      "density_ratio": 0.05002772435545921,
+      "road_centrality": 0.04799499362707138,
+      "month": 0.04434087127447128,
+      "speed_drop": 0.04265270009636879,
+      "day_of_week": 0.04212205857038498
+    },
+    "lightgbm": {
+      "hour_of_day": 1702.0,
+      "day_of_week": 1037.0,
+      "month": 898.0,
+      "density_ratio": 471.0,
+      "neighbor_density": 322.0,
+      "rolling_std": 247.0,
+      "delay_ratio": 201.0,
+      "rolling_mean": 192.0,
+      "weather_risk": 183.0,
+      "road_centrality": 153.0,
+      "neighbor_speed": 133.0,
+      "speed_drop": 10.0,
+      "historical_congestion_frequency": 0.0,
+      "neighbor_congestion_influence": 0.0
+    }
+  },
+  "note": "Use this JSON for frontend bar charts after training."
+}

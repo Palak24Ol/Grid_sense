@@ -1,0 +1,40 @@
+{
+  "gateway": "A",
+  "name": "Operational AI",
+  "summary": {
+    "high_priority_incident_prediction": {
+      "best_model": "random_forest",
+      "metrics": {
+        "accuracy": 0.9986702127659575,
+        "precision": 1.0,
+        "recall": 0.9978609625668449,
+        "f1": 0.9989293361884368,
+        "roc_auc": 0.9999981203537494
+      }
+    },
+    "duration_bucket_prediction": {
+      "best_model": "random_forest",
+      "metrics": {
+        "accuracy": 0.5084745762711864,
+        "macro_precision": 0.507536159366705,
+        "macro_recall": 0.5108611876535722,
+        "macro_f1": 0.5076424134915584
+      }
+    },
+    "corridor_risk_classification": {
+      "best_model": "random_forest",
+      "metrics": {
+        "accuracy": 0.4444444444444444,
+        "precision": 0.6458333333333334,
+        "recall": 0.4583333333333333,
+        "f1": 0.49999999999999994
+      }
+    }
+  },
+  "outputs": {
+    "models": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_a\\models",
+    "evaluations": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_a\\evaluations",
+    "artifacts": "D:\\Flipkart round 2\\GridSense\\ml\\gateway_a\\artifacts",
+    "global_report": "D:\\Flipkart round 2\\GridSense\\ml\\artifacts\\gateway_a_report.json"
+  }
+}

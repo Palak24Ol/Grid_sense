@@ -1,0 +1,37 @@
+{
+  "task": "high_priority_incident_prediction",
+  "target": "priority == High",
+  "rows": 7520,
+  "positive_rate": 0.6214095744680851,
+  "accuracy": 0.9986702127659575,
+  "precision": 1.0,
+  "recall": 0.9978609625668449,
+  "f1": 0.9989293361884368,
+  "roc_auc": 0.9999962407074988,
+  "confusion_matrix": {
+    "tn": 569,
+    "fp": 0,
+    "fn": 2,
+    "tp": 933
+  },
+  "features": {
+    "categorical": [
+      "event_type",
+      "event_cause",
+      "corridor",
+      "junction",
+      "zone",
+      "police_station",
+      "vehicle_type"
+    ],
+    "numeric": [
+      "latitude",
+      "longitude",
+      "hour_of_day",
+      "day_of_week",
+      "month",
+      "is_high_priority_corridor",
+      "is_non_corridor"
+    ]
+  }
+}

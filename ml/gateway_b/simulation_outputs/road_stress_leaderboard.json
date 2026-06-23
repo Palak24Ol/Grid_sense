@@ -1,0 +1,569 @@
+[
+  {
+    "corridor": "ORR East 2",
+    "stress_score": 45.2,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 2.8,
+      "closure_frequency": 1.7,
+      "priority_frequency": 100.0,
+      "duration_risk": 100.0,
+      "station_load": 47.7,
+      "neighbor_influence": 32.8
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 134,
+    "top_police_station": "HAL Old Airport",
+    "top_junction": "MaratahalliBridgeJunc",
+    "latitude": 12.97598,
+    "longitude": 77.695923,
+    "explanation": "ORR East 2 is Moderate because priority frequency=100.0, duration risk=100.0, station load=47.7."
+  },
+  {
+    "corridor": "Mysore Road",
+    "stress_score": 44.1,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 38.3,
+      "closure_frequency": 11.0,
+      "priority_frequency": 99.7,
+      "duration_risk": 5.7,
+      "station_load": 75.8,
+      "neighbor_influence": 40.6
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 213,
+    "top_police_station": "Halasuru Gate",
+    "top_junction": "SatteliteBusStandJunc",
+    "latitude": 12.958088,
+    "longitude": 77.564186,
+    "explanation": "Mysore Road is Moderate because priority frequency=99.7, station load=75.8, neighbor influence=40.6."
+  },
+  {
+    "corridor": "Bellary Road 2",
+    "stress_score": 40.3,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 5.9,
+      "closure_frequency": 3.2,
+      "priority_frequency": 100.0,
+      "duration_risk": 8.3,
+      "station_load": 100.0,
+      "neighbor_influence": 50.8
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 281,
+    "top_police_station": "Yelahanka",
+    "top_junction": "YelhankaCircle",
+    "latitude": 13.105956,
+    "longitude": 77.603271,
+    "explanation": "Bellary Road 2 is Moderate because priority frequency=100.0, station load=100.0, neighbor influence=50.8."
+  },
+  {
+    "corridor": "Tumkur Road",
+    "stress_score": 39.4,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 17.0,
+      "closure_frequency": 2.7,
+      "priority_frequency": 99.1,
+      "duration_risk": 4.9,
+      "station_load": 83.6,
+      "neighbor_influence": 46.4
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 235,
+    "top_police_station": "Yeshwanthpura",
+    "top_junction": "YeshwanthpuraCircle",
+    "latitude": 13.031459,
+    "longitude": 77.533663,
+    "explanation": "Tumkur Road is Moderate because priority frequency=99.1, station load=83.6, neighbor influence=46.4."
+  },
+  {
+    "corridor": "Bellary Road 1",
+    "stress_score": 38.3,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 13.9,
+      "closure_frequency": 4.5,
+      "priority_frequency": 100.0,
+      "duration_risk": 6.8,
+      "station_load": 75.8,
+      "neighbor_influence": 44.9
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 213,
+    "top_police_station": "Sadashivanagar",
+    "top_junction": "MekhriCircle",
+    "latitude": 13.01689,
+    "longitude": 77.586415,
+    "explanation": "Bellary Road 1 is Moderate because priority frequency=100.0, station load=75.8, neighbor influence=44.9."
+  },
+  {
+    "corridor": "Hosur Road",
+    "stress_score": 37.1,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 25.3,
+      "closure_frequency": 6.6,
+      "priority_frequency": 100.0,
+      "duration_risk": 8.2,
+      "station_load": 29.9,
+      "neighbor_influence": 53.0
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 84,
+    "top_police_station": "Madiwala",
+    "top_junction": "Bommanahalli",
+    "latitude": 12.915348,
+    "longitude": 77.624729,
+    "explanation": "Hosur Road is Moderate because priority frequency=100.0, neighbor influence=53.0, station load=29.9."
+  },
+  {
+    "corridor": "Magadi Road",
+    "stress_score": 36.0,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 3.7,
+      "closure_frequency": 3.9,
+      "priority_frequency": 100.0,
+      "duration_risk": 8.3,
+      "station_load": 64.4,
+      "neighbor_influence": 53.3
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 181,
+    "top_police_station": "Kamakshipalya",
+    "top_junction": "LeprosyhospitalJunc",
+    "latitude": 12.985095,
+    "longitude": 77.523157,
+    "explanation": "Magadi Road is Moderate because priority frequency=100.0, station load=64.4, neighbor influence=53.3."
+  },
+  {
+    "corridor": "ORR North 2",
+    "stress_score": 35.7,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 3.7,
+      "closure_frequency": 4.3,
+      "priority_frequency": 100.0,
+      "duration_risk": 6.8,
+      "station_load": 53.0,
+      "neighbor_influence": 61.5
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 149,
+    "top_police_station": "Jalahalli",
+    "top_junction": "BEL Circle",
+    "latitude": 13.041928,
+    "longitude": 77.558822,
+    "explanation": "ORR North 2 is Moderate because priority frequency=100.0, neighbor influence=61.5, station load=53.0."
+  },
+  {
+    "corridor": "West of Chord Road",
+    "stress_score": 35.7,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 17.3,
+      "closure_frequency": 4.9,
+      "priority_frequency": 100.0,
+      "duration_risk": 5.5,
+      "station_load": 14.2,
+      "neighbor_influence": 74.6
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 40,
+    "top_police_station": "Vijayanagara",
+    "top_junction": "KIMCO Junction",
+    "latitude": 12.982937,
+    "longitude": 77.546277,
+    "explanation": "West of Chord Road is Moderate because priority frequency=100.0, neighbor influence=74.6, road importance=17.3."
+  },
+  {
+    "corridor": "ORR West 1",
+    "stress_score": 35.3,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 2.4,
+      "closure_frequency": 3.3,
+      "priority_frequency": 100.0,
+      "duration_risk": 8.6,
+      "station_load": 21.7,
+      "neighbor_influence": 87.2
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 61,
+    "top_police_station": "Banashankari",
+    "top_junction": "MysoreRd-RingRdJunc(Nayandanahallii)",
+    "latitude": 12.921012,
+    "longitude": 77.558958,
+    "explanation": "ORR West 1 is Moderate because priority frequency=100.0, neighbor influence=87.2, station load=21.7."
+  },
+  {
+    "corridor": "ORR North 1",
+    "stress_score": 34.5,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 14.1,
+      "closure_frequency": 8.0,
+      "priority_frequency": 100.0,
+      "duration_risk": 8.7,
+      "station_load": 34.5,
+      "neighbor_influence": 45.6
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 97,
+    "top_police_station": "Banaswadi",
+    "top_junction": "VeerannapalyaJunction(BEL,HO)",
+    "latitude": 13.024644,
+    "longitude": 77.637343,
+    "explanation": "ORR North 1 is Moderate because priority frequency=100.0, neighbor influence=45.6, station load=34.5."
+  },
+  {
+    "corridor": "CBD 2",
+    "stress_score": 33.7,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 10.0,
+      "closure_frequency": 5.1,
+      "priority_frequency": 100.0,
+      "duration_risk": 11.2,
+      "station_load": 27.0,
+      "neighbor_influence": 53.8
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 76,
+    "top_police_station": "Cubbon Park",
+    "top_junction": "PoliceTimmaiahCircle(GPO)",
+    "latitude": 12.983566,
+    "longitude": 77.594788,
+    "explanation": "CBD 2 is Moderate because priority frequency=100.0, neighbor influence=53.8, station load=27.0."
+  },
+  {
+    "corridor": "ORR East 1",
+    "stress_score": 33.5,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 17.5,
+      "closure_frequency": 6.2,
+      "priority_frequency": 100.0,
+      "duration_risk": 6.3,
+      "station_load": 38.8,
+      "neighbor_influence": 35.0
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 109,
+    "top_police_station": "HAL Old Airport",
+    "top_junction": "SilkBoardJunc",
+    "latitude": 12.928248,
+    "longitude": 77.668983,
+    "explanation": "ORR East 1 is Moderate because priority frequency=100.0, station load=38.8, neighbor influence=35.0."
+  },
+  {
+    "corridor": "Old Madras Road",
+    "stress_score": 32.7,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 15.1,
+      "closure_frequency": 5.1,
+      "priority_frequency": 100.0,
+      "duration_risk": 5.9,
+      "station_load": 24.6,
+      "neighbor_influence": 47.0
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 69,
+    "top_police_station": "Banaswadi",
+    "top_junction": "BigBazaarJunction(OldMadrasRd)",
+    "latitude": 12.98101,
+    "longitude": 77.629582,
+    "explanation": "Old Madras Road is Moderate because priority frequency=100.0, neighbor influence=47.0, station load=24.6."
+  },
+  {
+    "corridor": "Hennur Main Road",
+    "stress_score": 30.7,
+    "stress_level": "Moderate",
+    "factors": {
+      "road_importance": 1.3,
+      "closure_frequency": 5.9,
+      "priority_frequency": 100.0,
+      "duration_risk": 13.5,
+      "station_load": 23.8,
+      "neighbor_influence": 45.5
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 67,
+    "top_police_station": "Hennuru",
+    "top_junction": "Nagavara-ORR Junction",
+    "latitude": 13.051386,
+    "longitude": 77.626232,
+    "explanation": "Hennur Main Road is Moderate because priority frequency=100.0, neighbor influence=45.5, station load=23.8."
+  },
+  {
+    "corridor": "Airport New South Road",
+    "stress_score": 29.9,
+    "stress_level": "Healthy",
+    "factors": {
+      "road_importance": 1.0,
+      "closure_frequency": 9.4,
+      "priority_frequency": 100.0,
+      "duration_risk": 12.6,
+      "station_load": 13.5,
+      "neighbor_influence": 45.5
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 38,
+    "top_police_station": "Hennuru",
+    "top_junction": "HennurRoad-ORR Junc",
+    "latitude": 13.028477,
+    "longitude": 77.634022,
+    "explanation": "Airport New South Road is Healthy because priority frequency=100.0, neighbor influence=45.5, station load=13.5."
+  },
+  {
+    "corridor": "IRR(Thanisandra road)",
+    "stress_score": 29.0,
+    "stress_level": "Healthy",
+    "factors": {
+      "road_importance": 0.9,
+      "closure_frequency": 8.5,
+      "priority_frequency": 100.0,
+      "duration_risk": 7.7,
+      "station_load": 12.1,
+      "neighbor_influence": 47.2
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 34,
+    "top_police_station": "Adugodi",
+    "top_junction": "KoramangalaWaterTankJunc",
+    "latitude": 12.937506,
+    "longitude": 77.626945,
+    "explanation": "IRR(Thanisandra road) is Healthy because priority frequency=100.0, neighbor influence=47.2, station load=12.1."
+  },
+  {
+    "corridor": "Varthur Road",
+    "stress_score": 28.7,
+    "stress_level": "Healthy",
+    "factors": {
+      "road_importance": 1.2,
+      "closure_frequency": 12.2,
+      "priority_frequency": 100.0,
+      "duration_risk": 9.8,
+      "station_load": 13.9,
+      "neighbor_influence": 35.6
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 39,
+    "top_police_station": "HAL Old Airport",
+    "top_junction": "MaratahalliBridgeJunc",
+    "latitude": 12.956557,
+    "longitude": 77.716092,
+    "explanation": "Varthur Road is Healthy because priority frequency=100.0, neighbor influence=35.6, station load=13.9."
+  },
+  {
+    "corridor": "CBD 1",
+    "stress_score": 27.9,
+    "stress_level": "Healthy",
+    "factors": {
+      "road_importance": 0.3,
+      "closure_frequency": 11.1,
+      "priority_frequency": 100.0,
+      "duration_risk": 6.2,
+      "station_load": 6.4,
+      "neighbor_influence": 43.7
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 18,
+    "top_police_station": "Shivajinagar",
+    "top_junction": "Shivajinagar(BRV)Junction",
+    "latitude": 12.980941,
+    "longitude": 77.606662,
+    "explanation": "CBD 1 is Healthy because priority frequency=100.0, neighbor influence=43.7, closure frequency=11.1."
+  },
+  {
+    "corridor": "Old Airport Road",
+    "stress_score": 27.8,
+    "stress_level": "Healthy",
+    "factors": {
+      "road_importance": 1.2,
+      "closure_frequency": 8.1,
+      "priority_frequency": 100.0,
+      "duration_risk": 9.7,
+      "station_load": 12.8,
+      "neighbor_influence": 35.8
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 36,
+    "top_police_station": "Jeevanbheemanagar",
+    "top_junction": "ISRO Junction-Airport rd",
+    "latitude": 12.958864,
+    "longitude": 77.661906,
+    "explanation": "Old Airport Road is Healthy because priority frequency=100.0, neighbor influence=35.8, station load=12.8."
+  },
+  {
+    "corridor": "Bannerghata Road",
+    "stress_score": 22.9,
+    "stress_level": "Healthy",
+    "factors": {
+      "road_importance": 2.5,
+      "closure_frequency": 3.9,
+      "priority_frequency": 100.0,
+      "duration_risk": 5.5,
+      "station_load": 23.5,
+      "neighbor_influence": 0.0
+    },
+    "factor_weights": {
+      "road_importance": 0.22,
+      "closure_frequency": 0.18,
+      "priority_frequency": 0.18,
+      "duration_risk": 0.16,
+      "station_load": 0.12,
+      "neighbor_influence": 0.14
+    },
+    "station_incident_load": 66,
+    "top_police_station": "Mico Layout",
+    "top_junction": "BilekahalliJunc",
+    "latitude": 12.896567,
+    "longitude": 77.597923,
+    "explanation": "Bannerghata Road is Healthy because priority frequency=100.0, station load=23.5, duration risk=5.5."
+  }
+]

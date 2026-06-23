@@ -1,0 +1,90 @@
+[
+  {
+    "feature": "cause_closure_rate",
+    "importance": 0.08562307804822922
+  },
+  {
+    "feature": "cause_corridor_closure_rate",
+    "importance": 0.07690205425024033
+  },
+  {
+    "feature": "is_non_corridor",
+    "importance": 0.06043779104948044
+  },
+  {
+    "feature": "is_night",
+    "importance": 0.05595167726278305
+  },
+  {
+    "feature": "vehicle_type_encoded",
+    "importance": 0.04512394219636917
+  },
+  {
+    "feature": "cause_corridor_key_freq",
+    "importance": 0.04430580139160156
+  },
+  {
+    "feature": "corridor_encoded",
+    "importance": 0.04384428635239601
+  },
+  {
+    "feature": "cause_priority_key_freq",
+    "importance": 0.04371380805969238
+  },
+  {
+    "feature": "police_station_encoded",
+    "importance": 0.04296497255563736
+  },
+  {
+    "feature": "has_vehicle_type",
+    "importance": 0.04290974140167236
+  },
+  {
+    "feature": "corridor_closure_rate",
+    "importance": 0.04287455230951309
+  },
+  {
+    "feature": "hour_cos",
+    "importance": 0.04259558767080307
+  },
+  {
+    "feature": "hour_sin",
+    "importance": 0.041165564209222794
+  },
+  {
+    "feature": "zone_encoded",
+    "importance": 0.040054354816675186
+  },
+  {
+    "feature": "hour_of_day",
+    "importance": 0.03907083719968796
+  },
+  {
+    "feature": "has_zone",
+    "importance": 0.037694551050662994
+  },
+  {
+    "feature": "event_cause_encoded",
+    "importance": 0.03763367235660553
+  },
+  {
+    "feature": "month",
+    "importance": 0.037323229014873505
+  },
+  {
+    "feature": "is_peak_hour",
+    "importance": 0.035598646849393845
+  },
+  {
+    "feature": "day_of_week",
+    "importance": 0.0353773832321167
+  },
+  {
+    "feature": "is_weekend",
+    "importance": 0.034611623734235764
+  },
+  {
+    "feature": "is_high_priority_corridor",
+    "importance": 0.03422288969159126
+  }
+]
