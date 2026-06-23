@@ -20,10 +20,11 @@ HIGH_PRIORITY_CORRIDORS: frozenset[str] = frozenset(
         "ORR East 2",
         "Magadi Road",
         "Old Madras Road",
-        "Bannerghata Road",
+        "Bannerghatta Road",
         "West of Chord Road",
         "CBD 2",
         "ORR West 1",
+        "ORR West 2",
     ]
 )
 
