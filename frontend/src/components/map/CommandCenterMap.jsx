@@ -10,7 +10,6 @@ function MapUpdater({ center, zoom }) {
   const prevCenter = useRef(null);
 
   useEffect(() => {
-    // Only fly if the center actually changed (avoids flying on initial mount)
     const key = `${center[0]},${center[1]},${zoom}`;
     if (prevCenter.current === key) return;
     prevCenter.current = key;
@@ -21,7 +20,6 @@ function MapUpdater({ center, zoom }) {
 }
 
 // ─── Priority config ──────────────────────────────────────────────────────
-// Real dataset only has High / Low — no Medium
 const P = {
   High: { bg:'#ef4444', border:'#fca5a5', shadow:'rgba(239,68,68,0.6)',  size:14, pulse:true  },
   Low:  { bg:'#22c55e', border:'#86efac', shadow:'rgba(34,197,94,0.4)',  size:10, pulse:false },
@@ -51,7 +49,6 @@ const createIncidentIcon = (priority) => {
 };
 
 // ─── Stat bar ─────────────────────────────────────────────────────────────
-// Counts come from the actual incidents array — never from corridor aggregates
 function StatBar({ incidents }) {
   const actNow   = incidents.filter(i => i.priority === 'High').length;
   const clear    = incidents.filter(i => i.priority === 'Low').length;
@@ -91,14 +88,23 @@ function StatBar({ incidents }) {
 }
 
 // ─── Filter bar ───────────────────────────────────────────────────────────
+// 'Major' = TomTom incidents that have requires_road_closure OR priority High
+// This trims 493 pins down to only the serious ones for a cleaner demo view
 const FILTERS = [
-  { label:'All',      value:'All'  },
-  { label:'Act Now',  value:'High' },
-  { label:'Clear',    value:'Low'  },
+  { label: 'All',        value: 'All'    },
+  { label: 'Act Now',    value: 'High'   },
+  { label: 'Major Only', value: 'Major'  },
+  { label: 'Clear',      value: 'Low'    },
 ];
 
-function FilterBar({ active, onChange }) {
-  const colors = { High:'#ef4444', Low:'#22c55e', All:'#F9E107' }; // Using Flipkart yellow for 'All' to match Gridlock theme
+const FILTER_COLORS = {
+  All:   '#F9E107',
+  High:  '#ef4444',
+  Major: '#f97316',   // orange — sits between red and green visually
+  Low:   '#22c55e',
+};
+
+function FilterBar({ active, onChange, majorCount }) {
   return (
     <div style={{
       position:'absolute', bottom:28, left:'50%', transform:'translateX(-50%)',
@@ -112,7 +118,11 @@ function FilterBar({ active, onChange }) {
     }}>
       {FILTERS.map(f => {
         const isActive = active === f.value;
-        const color = colors[f.value];
+        const color = FILTER_COLORS[f.value];
+        // Show live count badge on Major Only button
+        const badge = f.value === 'Major' && majorCount > 0
+          ? ` (${majorCount})`
+          : '';
         return (
           <button key={f.value} onClick={() => onChange(f.value)} style={{
             padding:'4px 16px', borderRadius:14, border:'none', cursor:'pointer',
@@ -120,7 +130,8 @@ function FilterBar({ active, onChange }) {
             background: isActive ? color : 'transparent',
             color: isActive ? (f.value === 'All' ? '#181C21' : '#fff') : '#9ca3af',
             transition:'all 0.15s',
-          }}>{f.label}</button>
+            whiteSpace: 'nowrap',
+          }}>{f.label}{badge}</button>
         );
       })}
     </div>
@@ -154,20 +165,18 @@ function IncidentPopup({ inc }) {
   const pc = isHigh ? '#ef4444' : '#22c55e';
   const label = isHigh ? '🚨 Act Now' : '✅ Clear';
 
-  // duration display
   const mins = inc.duration_mins || 45;
   const durationText = mins >= 60
     ? `${(mins / 60).toFixed(1)} hrs`
     : `${mins} mins`;
 
-  // cause: use display version if present, else prettify raw
   const cause = inc.event_cause_display
     || inc.event_cause.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 
   const junction = inc.junction && inc.junction.length < 40
     ? inc.junction
-    : inc.corridor && inc.corridor !== "Non-corridor" 
-      ? `${inc.corridor} Segment` 
+    : inc.corridor && inc.corridor !== "Non-corridor"
+      ? `${inc.corridor} Segment`
       : 'Local Road';
 
   return (
@@ -218,7 +227,7 @@ export default function CommandCenterMap({
   const [incidents,    setIncidents]    = useState([]);
   const [loading,      setLoading]      = useState(true);
   const [error,        setError]        = useState(null);
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeFilter, setActiveFilter] = useState('Major');
   const [lastUpdated,  setLastUpdated]  = useState(null);
 
   const fetchIncidents = useCallback(async () => {
@@ -226,7 +235,6 @@ export default function CommandCenterMap({
     setError(null);
     try {
       const data = await getIncidents();
-      // Normalise: accept both { incidents: [] } and flat array
       const list = Array.isArray(data) ? data : (data.incidents || []);
       setIncidents(list);
       setLastUpdated(new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' }));
@@ -238,11 +246,23 @@ export default function CommandCenterMap({
     }
   }, []);
 
-  useEffect(() => { fetchIncidents(); }, [fetchIncidents]);
+  useEffect(() => {
+    fetchIncidents();
+    const interval = setInterval(fetchIncidents, 90_000);
+    return () => clearInterval(interval);
+  }, [fetchIncidents]);
 
-  const visible = activeFilter === 'All'
-    ? incidents
-    : incidents.filter(i => i.priority === activeFilter);
+  // ── Filter logic ──────────────────────────────────────────────────────
+  // Major = road closed OR High priority — the pins that actually matter
+  const isMajor = (i) => i.requires_road_closure || i.priority === 'High';
+
+  const visible = (() => {
+    if (activeFilter === 'All')   return incidents;
+    if (activeFilter === 'Major') return incidents.filter(isMajor);
+    return incidents.filter(i => i.priority === activeFilter);
+  })();
+
+  const majorCount = incidents.filter(isMajor).length;
 
   return (
     <>
@@ -278,7 +298,13 @@ export default function CommandCenterMap({
         )}
 
         {!loading && incidents.length > 0 && <StatBar incidents={incidents} />}
-        {!loading && incidents.length > 0 && <FilterBar active={activeFilter} onChange={setActiveFilter} />}
+        {!loading && incidents.length > 0 && (
+          <FilterBar
+            active={activeFilter}
+            onChange={setActiveFilter}
+            majorCount={majorCount}
+          />
+        )}
 
         {lastUpdated && (
           <div style={{
@@ -307,14 +333,14 @@ export default function CommandCenterMap({
         >
           <MapUpdater center={viewport.center} zoom={viewport.zoom} />
           <TileLayer
-  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-/>
-<TileLayer
-  url={`https://api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=${import.meta.env.VITE_TOMTOM_KEY}`}
-  attribution='&copy; <a href="https://tomtom.com">TomTom</a>'
-  opacity={0.7}
-/>
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          />
+          <TileLayer
+            url={`https://api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=${import.meta.env.VITE_TOMTOM_KEY}`}
+            attribution='&copy; <a href="https://tomtom.com">TomTom</a>'
+            opacity={0.7}
+          />
           {visible.map(inc => (
             <Marker
               key={inc.id}
